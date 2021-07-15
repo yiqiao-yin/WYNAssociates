@@ -17,3 +17,18 @@ This is the official quantitative and statistical software package by Yin's Capi
 - Copyright © 2010 – Present Yiqiao Yin
 - Contact: Yiqiao Yin
 - Email: Yiqiao.Yin@YinsCapital.com
+
+## Installation and Development
+
+Welcome to install our package. The entire package is written in *python*. One can use the following code to install this Github package.
+
+```
+pip install git+https://github.com/yiqiao-yin/YinPortfolioManagement.git # in command line
+!pip install git+https://github.com/yiqiao-yin/YinPortfolioManagement.git # in jupyter notebook
+```
+
+For developers, one can clone package by simple **git clone** command (assuming in a desired directory).
+
+```
+git clone https://github.com/yiqiao-yin/YinPortfolioManagement.git
+```
