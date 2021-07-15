@@ -23,7 +23,7 @@ from ta.trend import MACD
 import math
 
 # Define function: Yins Timer Algorithm
-def YinsTimer(
+def Yin_Timer(
     start_date,
     end_date,
     ticker,
@@ -199,7 +199,7 @@ def YinsTimer(
 # End function
 
 # Define Function: RSI Timer
-def RSITimer(
+def RSI_Timer(
     start_date =   '2013-01-01',
     end_date   =   '2019-12-6',
     tickers    =   'AAPL',
