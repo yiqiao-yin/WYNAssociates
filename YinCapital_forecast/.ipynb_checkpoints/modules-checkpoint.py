@@ -226,7 +226,7 @@ def Yin_Timer(
             print(f"Reward-Risk Ratio (Daily Data): {round(np.mean(dta_stock['Normalize Return']) / np.std(dta_stock['Normalize Return']), 4)}")
             print("---")
             print("Tail of the 'Buy/Sell Signal' dataframe:")
-            print(pd.DataFrame(data_for_plot).tail())
+            print(pd.DataFrame(stock).tail())
             print("Note: positive values indicate 'sell' and negative values indicate 'buy'.")
             print("---")
             print(f"Basic Statistics for Buy Sell Signals: {basicStats}")
@@ -268,12 +268,12 @@ def Yin_Timer(
 
     # Return
     return {'data': dta_stock, 
-            'resulting matrix': data_for_plot,
+            'resulting matrix': stock,
             'basic statistics': basicStats,
             'estimatedReturn': np.mean(dta_stock['Normalize Return']), 
             'estimatedRisk': np.std(dta_stock['Normalize Return']),
             'ALL_DATA': ALL_DATA
-           }
+           } 
 # End function
 
 # Define Function: RSI Timer
