@@ -18,19 +18,31 @@ def RNN3_Regressor(
         print("------------------------------------------------------------------------------")
         print(
             """
-            MANUAL: Try run the following line by line in a Python Notebook
+            MANUAL: To install this python package, please use the following code.
 
-            # Load
-            %run "../scripts/YinsDL.py"
+            # In a python notebook:
+            # !pip install git+https://github.com/yiqiao-yin/YinPortfolioManagement.git
+            # In a command line:
+            # pip install git+https://github.com/yiqiao-yin/YinPortfolioManagement.git
 
             # Run
             tmp = RNN3_Regressor(
-                    start_date =   '2013-01-01', end_date   =   '2019-12-6',
-                    tickers    =   'AAPL',       cutoff     =   0.8,
-                    l1_units   =   50,           l2_units   =   50,           l3_units   =   50,
-                    optimizer  =   'adam',       loss       =   'mean_squared_error',
-                    epochs     =   50,           batch_size =   64,
-                    plotGraph  =   True,         verbose   =   True )
+                    start_date =   '2013-01-01',
+                    end_date   =   '2019-12-6',
+                    tickers    =   'AAPL',
+                    cutoff     =   0.8,
+                    l1_units   =   50,
+                    l2_units   =   50,
+                    l3_units   =   50,
+                    optimizer  =   'adam',
+                    loss       =   'mean_squared_error',
+                    epochs     =   50,
+                    batch_size =   64,
+                    plotGraph  =   True,
+                    verbose    =   True )
+                    
+            # Cite
+            # All Rights Reserved. © Yiqiao Yin
             """ )
         print("------------------------------------------------------------------------------")
 
