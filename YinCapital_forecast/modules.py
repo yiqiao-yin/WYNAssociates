@@ -41,7 +41,7 @@ def YinsTimer(
         start_date = '2010-01-01'
         end_date   = '2020-01-18'
         ticker = 'FB'
-        temp = YinsMM.YinsTimer(
+        temp = YinsTimer(
                 start_date, end_date, ticker, figsize=(15,6), LB=-0.01, UB=0.01, 
                 plotGraph=True, verbose=True, printManual=True, gotoSEC=True)
         """ )
