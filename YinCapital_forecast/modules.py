@@ -14,7 +14,6 @@ import matplotlib.pyplot as plt
 
 # Import Libraries
 from ta.momentum import RSIIndicator
-from ta.trend import MACD
 
 # import numpy as np
 # import pandas as pd
@@ -24,16 +23,20 @@ import math
 
 # Define function: Yins Timer Algorithm
 def Yin_Timer(
-    start_date,
-    end_date,
-    ticker,
-    figsize=(15,6),
-    LB=-0.01,
-    UB=0.01, 
-    plotGraph=True,
-    verbose=True,
-    printManual=True,
-    gotoSEC=True):
+    start_date       =   '2015-01-01',
+    end_date         =   '2021-01-01',
+    ticker           =   'FB',
+    figsize          =   (15,6),
+    LB               =   -1,
+    UB               =   +1, 
+    pick_SMA         =   1,
+    sma_threshold_1  =   10,
+    sma_threshold_2  =   30,
+    sma_threshold_3  =   100,
+    plotGraph        =   True,
+    verbose          =   True,
+    printManual      =   True,
+    gotoSEC          =   True):
     if printManual:
         print("------------------------------------------------------------------------------")
         print("MANUAL: ")
@@ -48,12 +51,21 @@ def Yin_Timer(
         # pip install git+https://github.com/yiqiao-yin/YinPortfolioManagement.git
         
         # Run
-        start_date = '2010-01-01'
-        end_date   = '2020-01-18'
-        ticker = 'FB'
         temp = YinsTimer(
-                start_date, end_date, ticker, figsize=(15,6), LB=-0.01, UB=0.01, 
-                plotGraph=True, verbose=True, printManual=True, gotoSEC=True)
+            start_date       =   '2015-01-01',
+            end_date         =   '2021-01-01',
+            ticker           =   'FB',
+            figsize          =   (15,6),
+            LB               =   -1,
+            UB               =   +1, 
+            pick_SMA         =   1,
+            sma_threshold_1  =   10,
+            sma_threshold_2  =   30,
+            sma_threshold_3  =   100,
+            plotGraph        =   True,
+            verbose          =   True,
+            printManual      =   True,
+            gotoSEC          =   True)
         """ )
         print("Manual ends here.")
         print("------------------------------------------------------------------------------")
@@ -111,17 +123,81 @@ def Yin_Timer(
                                df_stock['DIST50'] + df_stock['DIST100'] + df_stock['DIST200'])/5
         df_stock['Signal'] = df_stock.apply(chk, axis = 1)
 
-        # Plot
-        import matplotlib.pyplot as plt
-        if plotGraph:
-            # No. 1: the first time-series graph plots adjusted closing price and multiple moving averages
-            data_for_plot = df_stock[['Adj Close', 'SMA12', 'SMA20', 'SMA50', 'SMA100', 'SMA200']]
-            data_for_plot.plot(figsize = figsize)
-            plt.show()
-            # No. 2: the second time-series graph plots signals generated from investigating distance matrix
-            data_for_plot = df_stock[['Signal']]
-            data_for_plot.plot(figsize = figsize)
-            plt.show()
+    # Plot
+    import matplotlib.pyplot as plt
+    if plotGraph:
+        tickers    =   ticker
+        buy_threshold = LB
+        sell_threshold = UB 
+
+        # Get Data
+        stock = dta
+
+        smaData1 = stock['Close']- sma_indicator(stock['Close'], sma_threshold_1, True)
+        smaData2 = stock['Close']- sma_indicator(stock['Close'], sma_threshold_2, True)
+        smaData3 = stock['Close']- sma_indicator(stock['Close'], sma_threshold_3, True)
+
+        # Conditional Buy/Sell => Signals
+        conditionalBuy1 = np.where(smaData1 < buy_threshold, stock['Close'], np.nan)
+        conditionalSell1 = np.where(smaData1 > sell_threshold, stock['Close'], np.nan)
+        conditionalBuy2 = np.where(smaData2 < buy_threshold, stock['Close'], np.nan)
+        conditionalSell2 = np.where(smaData2 > sell_threshold, stock['Close'], np.nan)
+        conditionalBuy3 = np.where(smaData3 < buy_threshold, stock['Close'], np.nan)
+        conditionalSell3 = np.where(smaData3 > sell_threshold, stock['Close'], np.nan)
+
+        # SMA Construction
+        stock['SMA1'] = smaData1
+        stock['SMA2'] = smaData2
+        stock['SMA3'] = smaData3
+        stock['SMA1_Buy'] = conditionalBuy1
+        stock['SMA1_Sell'] = conditionalSell1
+        stock['SMA2_Buy'] = conditionalBuy2
+        stock['SMA2_Sell'] = conditionalSell2
+        stock['SMA3_Buy'] = conditionalBuy3
+        stock['SMA3_Sell'] = conditionalSell3
+
+        strategy = "SMA"
+        title = f'Close Price Buy/Sell Signals using {strategy}'
+
+        fig, axs = plt.subplots(2, sharex=True, figsize=(13,9))
+
+        # fig.suptitle(f'Top: {tickers} Stock Price. Bottom: {strategy}')
+
+        if pick_SMA == 1:
+            if not stock['SMA1_Buy'].isnull().all():
+                axs[0].scatter(stock.index, stock['SMA1_Buy'], color='green', label='Buy Signal', marker='^', alpha=1)
+            if not stock['SMA1_Sell'].isnull().all():
+                axs[0].scatter(stock.index, stock['SMA1_Sell'], color='red', label='Sell Signal', marker='v', alpha=1)
+            axs[0].plot(stock['Close'], label='Close Price', color='blue', alpha=0.35)
+        elif pick_SMA == 2:
+            if not stock['SMA2_Buy'].isnull().all():
+                axs[0].scatter(stock.index, stock['SMA2_Buy'], color='green', label='Buy Signal', marker='^', alpha=1)
+            if not stock['SMA2_Sell'].isnull().all():
+                axs[0].scatter(stock.index, stock['SMA2_Sell'], color='red', label='Sell Signal', marker='v', alpha=1)
+            axs[0].plot(stock['Close'], label='Close Price', color='blue', alpha=0.35)
+        elif pick_SMA == 3:
+            if not stock['SMA3_Buy'].isnull().all():
+                axs[0].scatter(stock.index, stock['SMA3_Buy'], color='green', label='Buy Signal', marker='^', alpha=1)
+            if not stock['SMA3_Sell'].isnull().all():
+                axs[0].scatter(stock.index, stock['SMA3_Sell'], color='red', label='Sell Signal', marker='v', alpha=1)
+            axs[0].plot(stock['Close'], label='Close Price', color='blue', alpha=0.35)
+        else:
+            if not stock['SMA1_Buy'].isnull().all():
+                axs[0].scatter(stock.index, stock['SMA1_Buy'], color='green', label='Buy Signal', marker='^', alpha=1)
+            if not stock['SMA1_Sell'].isnull().all():
+                axs[0].scatter(stock.index, stock['SMA1_Sell'], color='red', label='Sell Signal', marker='v', alpha=1)
+            axs[0].plot(stock['Close'], label='Close Price', color='blue', alpha=0.35)
+
+        # plt.xticks(rotation=45)
+        axs[0].set_title(title)
+        axs[0].set_xlabel('Date', fontsize=18)
+        axs[0].set_ylabel('Close Price', fontsize=18)
+        axs[0].legend(loc='upper left')
+        axs[0].grid()
+
+        axs[1].plot(stock['SMA1'], label='SMA', color = 'green')
+        axs[1].plot(stock['SMA2'], label='SMA', color = 'blue')
+        axs[1].plot(stock['SMA3'], label='SMA', color = 'red')
 
         # Check Statistics:
         SIGNAL      = df_stock['Signal']
