@@ -1,16 +1,26 @@
-# Initiate Environment
+# Import Libraries
 import pandas as pd
 import numpy as np
 import yfinance as yf
 import time
 
-# Initiate Environment
+# Import Libraries
 from scipy import stats
 # import pandas as pd
 # import numpy as np
 # import yfinance as yf
 import matplotlib.pyplot as plt
 # import time
+
+# Import Libraries
+from ta.momentum import RSIIndicator
+from ta.trend import MACD
+
+# import numpy as np
+# import pandas as pd
+# import matplotlib.pyplot as plt
+# import yfinance as yf
+import math
 
 # Define function: Yins Timer Algorithm
 def YinsTimer(
@@ -187,6 +197,113 @@ def YinsTimer(
             'ALL_DATA': ALL_DATA
            }
 # End function
+
+# Define Function: RSI Timer
+def RSITimer(
+    start_date =   '2013-01-01',
+    end_date   =   '2019-12-6',
+    tickers    =   'AAPL',
+    pick_RSI   = 1,
+    rsi_threshold_1 = 10,
+    rsi_threshold_2 = 30,
+    rsi_threshold_3 = 100,
+    buy_threshold = 20,
+    sell_threshold = 80 ):
+    
+    print("------------------------------------------------------------------------------")
+    print("MANUAL: ")
+    print("Try run the following line by line in a Python Notebook.")
+    print(
+    """
+    MANUAL: To install this python package, please use the following code.
+
+    # In a python notebook:
+    # !pip install git+https://github.com/yiqiao-yin/YinPortfolioManagement.git
+    # In a command line:
+    # pip install git+https://github.com/yiqiao-yin/YinPortfolioManagement.git
+
+    # Run
+    start_date = '2010-01-01'
+    end_date   = '2020-01-18'
+    ticker = 'FB'
+    temp = YinsTimer(
+            start_date, end_date, ticker, figsize=(15,6), LB=-0.01, UB=0.01, 
+            plotGraph=True, verbose=True, printManual=True, gotoSEC=True)
+    """ )
+    print("Manual ends here.")
+    print("------------------------------------------------------------------------------")
+
+    # Get Data
+    stock = yf.download(tickers, start_date, end_date)
+    rsiData1 = RSIIndicator(stock['Close'], rsi_threshold_1, True)
+    rsiData2 = RSIIndicator(stock['Close'], rsi_threshold_2, True)
+    rsiData3 = RSIIndicator(stock['Close'], rsi_threshold_3, True)
+
+    # Conditional Buy/Sell => Signals
+    conditionalBuy1 = np.where(rsiData1.rsi() < buy_threshold, stock['Close'], np.nan)
+    conditionalSell1 = np.where(rsiData1.rsi() > sell_threshold, stock['Close'], np.nan)
+    conditionalBuy2 = np.where(rsiData2.rsi() < buy_threshold, stock['Close'], np.nan)
+    conditionalSell2 = np.where(rsiData2.rsi() > sell_threshold, stock['Close'], np.nan)
+    conditionalBuy3 = np.where(rsiData3.rsi() < buy_threshold, stock['Close'], np.nan)
+    conditionalSell3 = np.where(rsiData3.rsi() > sell_threshold, stock['Close'], np.nan)
+
+    # RSI Construction
+    stock['RSI1'] = rsiData1.rsi()
+    stock['RSI2'] = rsiData2.rsi()
+    stock['RSI3'] = rsiData3.rsi()
+    stock['RSI1_Buy'] = conditionalBuy1
+    stock['RSI1_Sell'] = conditionalSell1
+    stock['RSI2_Buy'] = conditionalBuy2
+    stock['RSI2_Sell'] = conditionalSell2
+    stock['RSI3_Buy'] = conditionalBuy3
+    stock['RSI3_Sell'] = conditionalSell3
+
+    strategy = "RSI"
+    title = f'Close Price Buy/Sell Signals using {strategy}'
+
+    fig, axs = plt.subplots(2, sharex=True, figsize=(13,9))
+
+    # fig.suptitle(f'Top: {tickers} Stock Price. Bottom: {strategy}')
+
+    if pick_RSI == 1:
+        if not stock['RSI1_Buy'].isnull().all():
+            axs[0].scatter(stock.index, stock['RSI1_Buy'], color='green', label='Buy Signal', marker='^', alpha=1)
+        if not stock['RSI1_Sell'].isnull().all():
+            axs[0].scatter(stock.index, stock['RSI1_Sell'], color='red', label='Sell Signal', marker='v', alpha=1)
+        axs[0].plot(stock['Close'], label='Close Price', color='blue', alpha=0.35)
+    elif pick_RSI == 2:
+        if not stock['RSI2_Buy'].isnull().all():
+            axs[0].scatter(stock.index, stock['RSI2_Buy'], color='green', label='Buy Signal', marker='^', alpha=1)
+        if not stock['RSI2_Sell'].isnull().all():
+            axs[0].scatter(stock.index, stock['RSI2_Sell'], color='red', label='Sell Signal', marker='v', alpha=1)
+        axs[0].plot(stock['Close'], label='Close Price', color='blue', alpha=0.35)
+    elif pick_RSI == 3:
+        if not stock['RSI3_Buy'].isnull().all():
+            axs[0].scatter(stock.index, stock['RSI3_Buy'], color='green', label='Buy Signal', marker='^', alpha=1)
+        if not stock['RSI3_Sell'].isnull().all():
+            axs[0].scatter(stock.index, stock['RSI3_Sell'], color='red', label='Sell Signal', marker='v', alpha=1)
+        axs[0].plot(stock['Close'], label='Close Price', color='blue', alpha=0.35)
+    else:
+        if not stock['RSI1_Buy'].isnull().all():
+            axs[0].scatter(stock.index, stock['RSI1_Buy'], color='green', label='Buy Signal', marker='^', alpha=1)
+        if not stock['RSI1_Sell'].isnull().all():
+            axs[0].scatter(stock.index, stock['RSI1_Sell'], color='red', label='Sell Signal', marker='v', alpha=1)
+        axs[0].plot(stock['Close'], label='Close Price', color='blue', alpha=0.35)
+
+    # plt.xticks(rotation=45)
+    axs[0].set_title(title)
+    axs[0].set_xlabel('Date', fontsize=18)
+    axs[0].set_ylabel('Close Price', fontsize=18)
+    axs[0].legend(loc='upper left')
+    axs[0].grid()
+
+    axs[1].plot(stock['RSI1'], label='RSI', color = 'green')
+    axs[1].plot(stock['RSI2'], label='RSI', color = 'blue')
+    axs[1].plot(stock['RSI3'], label='RSI', color = 'red')
+    
+    return {
+        "data": stock
+    }
 
 # Define Function: Recurrent Neural Network Regressor
 def RNN_Regressor(
