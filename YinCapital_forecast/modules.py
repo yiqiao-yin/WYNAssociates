@@ -210,6 +210,7 @@ def Yin_Timer(
         axs[1].plot(stock['SMA1'], label='SMA', color = 'green')
         axs[1].plot(stock['SMA2'], label='SMA', color = 'blue')
         axs[1].plot(stock['SMA3'], label='SMA', color = 'red')
+        axs[0].set_ylabel('Price Minus SMA (Rescaled to Max=1)', fontsize=18)
         axs[1].set_xlabel('Date', fontsize=18)
         axs[1].grid()
 
