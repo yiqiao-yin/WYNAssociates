@@ -137,7 +137,7 @@ def Yin_Timer(
         stock = dta
 
         # Scale Data
-        if rescale = True:
+        if rescale == True:
             smaData1 = stock['Close'] - sma_indicator(stock['Close'], sma_threshold_1, True)
             smaData2 = stock['Close'] - sma_indicator(stock['Close'], sma_threshold_2, True)
             smaData3 = stock['Close'] - sma_indicator(stock['Close'], sma_threshold_3, True)
