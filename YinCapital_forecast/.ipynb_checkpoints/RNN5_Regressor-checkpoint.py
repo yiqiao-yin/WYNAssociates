@@ -1,5 +1,5 @@
 # Define Function
-def RNN3_Regressor(
+def RNN5_Regressor(
     start_date =   '2013-01-01',
     end_date   =   '2019-12-6',
     tickers    =   'AAPL',
@@ -37,6 +37,9 @@ def RNN3_Regressor(
                     l1_units   =   50,
                     l2_units   =   50,
                     l3_units   =   50,
+                    l4_units   =   30,
+                    l5_units   =   10,
+                    dropOutRate =  0.2,
                     optimizer  =   'adam',
                     loss       =   'mean_squared_error',
                     epochs     =   50,
@@ -144,11 +147,11 @@ def RNN3_Regressor(
     regressor.add(Dropout(dropOutRate))
 
     # Adding a third LSTM layer and some Dropout regularisation
-    regressor.add(LSTM(units = l3_units))
+    regressor.add(LSTM(units = l3_units, return_sequences = True))
     regressor.add(Dropout(dropOutRate))
     
     # Adding a fourth LSTM layer and some Dropout regularisation
-    regressor.add(LSTM(units = l4_units))
+    regressor.add(LSTM(units = l4_units, return_sequences = True))
     regressor.add(Dropout(dropOutRate))
     
     # Adding a fith LSTM layer and some Dropout regularisation

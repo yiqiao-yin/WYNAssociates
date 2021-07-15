@@ -35,6 +35,7 @@ def RNN3_Regressor(
                     l1_units   =   50,
                     l2_units   =   50,
                     l3_units   =   50,
+                    dropOutRate =  0.2,
                     optimizer  =   'adam',
                     loss       =   'mean_squared_error',
                     epochs     =   50,
