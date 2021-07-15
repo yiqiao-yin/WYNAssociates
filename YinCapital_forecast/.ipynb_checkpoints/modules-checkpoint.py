@@ -1,7 +1,29 @@
+# Initiate Environment
+import pandas as pd
+import numpy as np
+import yfinance as yf
+import time
+
+# Initiate Environment
+from scipy import stats
+# import pandas as pd
+# import numpy as np
+# import yfinance as yf
+import matplotlib.pyplot as plt
+# import time
+
 # Define function: Yins Timer Algorithm
 def YinsTimer(
-    start_date, end_date, ticker, figsize=(15,6), LB=-0.01, UB=0.01, 
-    plotGraph=True, verbose=True, printManual=True, gotoSEC=True):
+    start_date,
+    end_date,
+    ticker,
+    figsize=(15,6),
+    LB=-0.01,
+    UB=0.01, 
+    plotGraph=True,
+    verbose=True,
+    printManual=True,
+    gotoSEC=True):
     if printManual:
         print("------------------------------------------------------------------------------")
         print("MANUAL: ")
@@ -26,11 +48,11 @@ def YinsTimer(
         print("Manual ends here.")
         print("------------------------------------------------------------------------------")
 
-    # Initiate Environment
-    import pandas as pd
-    import numpy as np
-    import yfinance as yf
-    import time
+#     # Initiate Environment
+#     import pandas as pd
+#     import numpy as np
+#     import yfinance as yf
+#     import time
 
     # Time
     start = time.time()
