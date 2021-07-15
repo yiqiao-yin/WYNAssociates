@@ -1,4 +1,172 @@
-# Define Function
+# Define function: Yins Timer Algorithm
+def YinsTimer(
+    start_date, end_date, ticker, figsize=(15,6), LB=-0.01, UB=0.01, 
+    plotGraph=True, verbose=True, printManual=True, gotoSEC=True):
+    if printManual:
+        print("------------------------------------------------------------------------------")
+        print("MANUAL: ")
+        print("Try run the following line by line in a Python Notebook.")
+        print(
+        """
+        MANUAL: To install this python package, please use the following code.
+
+        # In a python notebook:
+        # !pip install git+https://github.com/yiqiao-yin/YinPortfolioManagement.git
+        # In a command line:
+        # pip install git+https://github.com/yiqiao-yin/YinPortfolioManagement.git
+        
+        # Run
+        start_date = '2010-01-01'
+        end_date   = '2020-01-18'
+        ticker = 'FB'
+        temp = YinsMM.YinsTimer(
+                start_date, end_date, ticker, figsize=(15,6), LB=-0.01, UB=0.01, 
+                plotGraph=True, verbose=True, printManual=True, gotoSEC=True)
+        """ )
+        print("Manual ends here.")
+        print("------------------------------------------------------------------------------")
+
+    # Initiate Environment
+    import pandas as pd
+    import numpy as np
+    import yfinance as yf
+    import time
+
+    # Time
+    start = time.time()
+
+    # Get Data
+    dta = yf.download(ticker, start_date, end_date)
+    dta_stock = pd.DataFrame(dta)
+
+    # Define Checking Functions:
+    if LB > 0:
+        print('Lower Bound (LB) for Signal is not in threshold and is set to default value: -0.01')
+        LB = -0.01
+    if UB < 0:
+        print('Upper Bound (UB) for Signal is not in threshold and is set to default value: +0.01')
+        UB = +0.01
+    def chk(row):
+        if row['aveDIST'] < LB or row['aveDIST'] > UB:
+            val = row['aveDIST']
+        else:
+            val = 0
+        return val
+
+    # Generate Data
+    df_stock = dta_stock
+    close = df_stock['Adj Close']
+    df_stock['Normalize Return'] = close / close.shift() - 1
+
+    # Generate Signal:
+    if len(dta_stock) < 200:
+        data_for_plot = []
+        basicStats = []
+        print('Stock went IPO within a year.')
+    else:
+        # Create Features
+        df_stock['SMA12'] = close.rolling(window=12).mean()
+        df_stock['SMA20'] = close.rolling(window=20).mean()
+        df_stock['SMA50'] = close.rolling(window=50).mean()
+        df_stock['SMA100'] = close.rolling(window=100).mean()
+        df_stock['SMA200'] = close.rolling(window=200).mean()
+        df_stock['DIST12'] = close / df_stock['SMA12'] - 1
+        df_stock['DIST20'] = close / df_stock['SMA20'] - 1
+        df_stock['DIST50'] = close / df_stock['SMA50'] - 1
+        df_stock['DIST100'] = close / df_stock['SMA100'] - 1
+        df_stock['DIST200'] = close / df_stock['SMA200'] - 1
+        df_stock['aveDIST'] = (df_stock['DIST12'] + df_stock['DIST20'] + 
+                               df_stock['DIST50'] + df_stock['DIST100'] + df_stock['DIST200'])/5
+        df_stock['Signal'] = df_stock.apply(chk, axis = 1)
+
+        # Plot
+        import matplotlib.pyplot as plt
+        if plotGraph:
+            # No. 1: the first time-series graph plots adjusted closing price and multiple moving averages
+            data_for_plot = df_stock[['Adj Close', 'SMA12', 'SMA20', 'SMA50', 'SMA100', 'SMA200']]
+            data_for_plot.plot(figsize = figsize)
+            plt.show()
+            # No. 2: the second time-series graph plots signals generated from investigating distance matrix
+            data_for_plot = df_stock[['Signal']]
+            data_for_plot.plot(figsize = figsize)
+            plt.show()
+
+        # Check Statistics:
+        SIGNAL      = df_stock['Signal']
+        LENGTH      = len(SIGNAL)
+        count_plus  = 0
+        count_minus = 0
+        for i in range(LENGTH):
+            if float(SIGNAL.iloc[i,]) > 0:
+                count_plus += 1
+        for i in range(LENGTH):
+            if float(SIGNAL.iloc[i,]) < 0:
+                count_minus += 1
+        basicStats = {'AVE_BUY': round(np.sum(count_minus)/LENGTH, 4),
+                      'AVE_SELL': round(np.sum(count_plus)/LENGTH, 4) }
+
+        # Print
+        if verbose:
+            print("----------------------------------------------------------------------------------------------------")
+            print(f"Entered Stock has the following information:")
+            print(f'Ticker: {ticker}')
+            print("---")
+            print(f"Expted Return: {round(np.mean(dta_stock['Normalize Return']), 4)}")
+            print(f"Expted Risk (Volatility): {round(np.std(dta_stock['Normalize Return']), 4)}")
+            print(f"Reward-Risk Ratio (Daily Data): {round(np.mean(dta_stock['Normalize Return']) / np.std(dta_stock['Normalize Return']), 4)}")
+            print("---")
+            print("Tail of the 'Buy/Sell Signal' dataframe:")
+            print(pd.DataFrame(data_for_plot).tail())
+            print("Note: positive values indicate 'sell' and negative values indicate 'buy'.")
+            print("---")
+            print(f"Basic Statistics for Buy Sell Signals: {basicStats}")
+            print("Note: Change LB and UB to ensure average buy sell signals fall beneath 2%.")
+            print("---")
+            url_front = "https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK="
+            url_back = "&type=10-K&dateb=&owner=exclude&count=40"
+            url_all = str(url_front + ticker + url_back)
+            print("For annual report on SEC site, please go to: ")
+            print(url_all)
+            if gotoSEC:
+                import webbrowser
+                webbrowser.open(url_all)
+            print("----------------------------------------------------------------------------------------------------")
+
+    # Get More Data:
+    tck = yf.Ticker(ticker)
+    ALL_DATA = {
+        'get stock info': tck.info,
+        'get historical market data': tck.history(period="max"),
+        'show actions (dividends, splits)': tck.actions,
+        'show dividends': tck.dividends,
+        'show splits': tck.splits,
+        'show financials': [tck.financials, tck.quarterly_financials],
+        'show balance sheet': [tck.balance_sheet, tck.quarterly_balance_sheet],
+        'show cashflow': [tck.cashflow, tck.quarterly_cashflow],
+        'show earnings': [tck.earnings, tck.quarterly_earnings],
+        'show sustainability': tck.sustainability,
+        'show analysts recommendations': tck.recommendations,
+        'show next event (earnings, etc)': tck.calendar
+    }
+
+    # Time
+    end = time.time()
+    if verbose == True: 
+        print('Time Consumption (in sec):', round(end - start, 2))
+        print('Time Consumption (in min):', round((end - start)/60, 2))
+        print('Time Consumption (in hr):', round((end - start)/60/60, 2))
+
+    # Return
+    return {'data': dta_stock, 
+            'resulting matrix': data_for_plot,
+            'basic statistics': basicStats,
+            'estimatedReturn': np.mean(dta_stock['Normalize Return']), 
+            'estimatedRisk': np.std(dta_stock['Normalize Return']),
+            'ALL_DATA': ALL_DATA
+           }
+# End function
+
+# Define Function: Recurrent Neural Network Regressor
 def RNN_Regressor(
     start_date =   '2013-01-01',
     end_date   =   '2019-12-6',
