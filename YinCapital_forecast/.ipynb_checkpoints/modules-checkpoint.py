@@ -137,14 +137,18 @@ def Yin_Timer(
         stock = dta
 
         # Scale Data
-        if rescale == True:
+        if rescale == False:
             smaData1 = stock['Close'] - sma_indicator(stock['Close'], sma_threshold_1, True)
             smaData2 = stock['Close'] - sma_indicator(stock['Close'], sma_threshold_2, True)
             smaData3 = stock['Close'] - sma_indicator(stock['Close'], sma_threshold_3, True)
         else:
-            smaData1 = (stock['Close'] - sma_indicator(stock['Close'], sma_threshold_1, True)) / max(abs((stock['Close'] - sma_indicator(stock['Close'], sma_threshold_1, True))))
-            smaData2 = (stock['Close'] - sma_indicator(stock['Close'], sma_threshold_2, True)) / max(abs((stock['Close'] - sma_indicator(stock['Close'], sma_threshold_2, True))))
-            smaData3 = (stock['Close'] - sma_indicator(stock['Close'], sma_threshold_3, True)) / max(abs((stock['Close'] - sma_indicator(stock['Close'], sma_threshold_3, True))))
+            smaData1 = stock['Close'] - sma_indicator(stock['Close'], sma_threshold_1, True)
+            smaData2 = stock['Close'] - sma_indicator(stock['Close'], sma_threshold_2, True)
+            smaData3 = stock['Close'] - sma_indicator(stock['Close'], sma_threshold_3, True)
+            maxDist = max(abs(stock['Close'] - sma_indicator(stock['Close'], sma_threshold_3, True)))
+            smaData1 = (stock['Close'] - sma_indicator(stock['Close'], sma_threshold_1, True)) / maxDist
+            smaData2 = (stock['Close'] - sma_indicator(stock['Close'], sma_threshold_2, True)) / maxDist
+            smaData3 = (stock['Close'] - sma_indicator(stock['Close'], sma_threshold_3, True)) / maxDist
             
         # Conditional Buy/Sell => Signals
         conditionalBuy1 = np.where(smaData1 < buy_threshold, stock['Close'], np.nan)
@@ -199,7 +203,6 @@ def Yin_Timer(
 
         # plt.xticks(rotation=45)
         axs[0].set_title(title)
-        axs[0].set_xlabel('Date', fontsize=18)
         axs[0].set_ylabel('Close Price', fontsize=18)
         axs[0].legend(loc='upper left')
         axs[0].grid()
@@ -207,6 +210,8 @@ def Yin_Timer(
         axs[1].plot(stock['SMA1'], label='SMA', color = 'green')
         axs[1].plot(stock['SMA2'], label='SMA', color = 'blue')
         axs[1].plot(stock['SMA3'], label='SMA', color = 'red')
+        axs[1].set_xlabel('Date', fontsize=18)
+        axs[1].grid()
 
         # Check Statistics:
         SIGNAL      = df_stock['Signal']
@@ -233,7 +238,7 @@ def Yin_Timer(
             print(f"Reward-Risk Ratio (Daily Data): {round(np.mean(dta_stock['Normalize Return']) / np.std(dta_stock['Normalize Return']), 4)}")
             print("---")
             print("Tail of the 'Buy/Sell Signal' dataframe:")
-            print(pd.DataFrame(stock).tail())
+            print(pd.DataFrame(stock).tail(3))
             print("Note: positive values indicate 'sell' and negative values indicate 'buy'.")
             print("---")
             print(f"Basic Statistics for Buy Sell Signals: {basicStats}")
