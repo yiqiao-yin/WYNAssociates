@@ -126,6 +126,7 @@ def Yin_Timer(
 
     # Plot
     import matplotlib.pyplot as plt
+    from ta.trend import sma_indicator
     if plotGraph:
         tickers    =   ticker
         buy_threshold = LB
