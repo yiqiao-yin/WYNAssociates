@@ -14,6 +14,7 @@ import matplotlib.pyplot as plt
 
 # Import Libraries
 from ta.momentum import RSIIndicator
+from ta.trend import SMAIndicator
 
 # import numpy as np
 # import pandas as pd
