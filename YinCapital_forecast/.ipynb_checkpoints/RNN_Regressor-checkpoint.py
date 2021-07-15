@@ -1,9 +1,10 @@
 # Define Function
-def RNN5_Regressor(
+def RNN_Regressor(
     start_date =   '2013-01-01',
     end_date   =   '2019-12-6',
     tickers    =   'AAPL',
     cutoff     =   0.8,
+    numOfHiddenLayer = 3,
     l1_units   =   50,
     l2_units   =   50,
     l3_units   =   50,
@@ -29,11 +30,12 @@ def RNN5_Regressor(
             # pip install git+https://github.com/yiqiao-yin/YinPortfolioManagement.git
 
             # Run
-            tmp = RNN3_Regressor(
+            tmp = RNN_Regressor(
                     start_date =   '2013-01-01',
                     end_date   =   '2019-12-6',
                     tickers    =   'AAPL',
                     cutoff     =   0.8,
+                    numOfHiddenLayer = 3,
                     l1_units   =   50,
                     l2_units   =   50,
                     l3_units   =   50,
@@ -138,25 +140,66 @@ def RNN5_Regressor(
     begintime = time.time()
     regressor = Sequential()
 
-    # Adding the first LSTM layer and some Dropout regularisation
-    regressor.add(LSTM(units = l1_units, return_sequences = True, input_shape = (X_train.shape[1], 1)))
-    regressor.add(Dropout(dropOutRate))
+    # Design hidden layers
+    if numOfHiddenLayer == 2:
+        # Adding the first LSTM layer and some Dropout regularisation
+        regressor.add(LSTM(units = l1_units, return_sequences = True, input_shape = (X_train.shape[1], 1)))
+        regressor.add(Dropout(dropOutRate))
 
-    # Adding a second LSTM layer and some Dropout regularisation
-    regressor.add(LSTM(units = l2_units, return_sequences = True))
-    regressor.add(Dropout(dropOutRate))
+        # Adding a second LSTM layer and some Dropout regularisation
+        regressor.add(LSTM(units = l2_units))
+        regressor.add(Dropout(dropOutRate))
 
-    # Adding a third LSTM layer and some Dropout regularisation
-    regressor.add(LSTM(units = l3_units, return_sequences = True))
-    regressor.add(Dropout(dropOutRate))
-    
-    # Adding a fourth LSTM layer and some Dropout regularisation
-    regressor.add(LSTM(units = l4_units, return_sequences = True))
-    regressor.add(Dropout(dropOutRate))
-    
-    # Adding a fith LSTM layer and some Dropout regularisation
-    regressor.add(LSTM(units = l5_units))
-    regressor.add(Dropout(dropOutRate))
+    elif numOfHiddenLayer == 3:
+        # Adding the first LSTM layer and some Dropout regularisation
+        regressor.add(LSTM(units = l1_units, return_sequences = True, input_shape = (X_train.shape[1], 1)))
+        regressor.add(Dropout(dropOutRate))
+
+        # Adding a second LSTM layer and some Dropout regularisation
+        regressor.add(LSTM(units = l2_units, return_sequences = True))
+        regressor.add(Dropout(dropOutRate))
+
+        # Adding a third LSTM layer and some Dropout regularisation
+        regressor.add(LSTM(units = l3_units))
+        regressor.add(Dropout(dropOutRate))
+        
+    elif numOfHiddenLayer == 4:
+        # Adding the first LSTM layer and some Dropout regularisation
+        regressor.add(LSTM(units = l1_units, return_sequences = True, input_shape = (X_train.shape[1], 1)))
+        regressor.add(Dropout(dropOutRate))
+
+        # Adding a second LSTM layer and some Dropout regularisation
+        regressor.add(LSTM(units = l2_units, return_sequences = True))
+        regressor.add(Dropout(dropOutRate))
+
+        # Adding a third LSTM layer and some Dropout regularisation
+        regressor.add(LSTM(units = l3_units, return_sequences = True))
+        regressor.add(Dropout(dropOutRate))
+        
+        # Adding a fourth LSTM layer and some Dropout regularisation
+        regressor.add(LSTM(units = l4_units))
+        regressor.add(Dropout(dropOutRate))
+        
+    elif numOfHiddenLayer == 5:
+        # Adding the first LSTM layer and some Dropout regularisation
+        regressor.add(LSTM(units = l1_units, return_sequences = True, input_shape = (X_train.shape[1], 1)))
+        regressor.add(Dropout(dropOutRate))
+
+        # Adding a second LSTM layer and some Dropout regularisation
+        regressor.add(LSTM(units = l2_units, return_sequences = True))
+        regressor.add(Dropout(dropOutRate))
+
+        # Adding a third LSTM layer and some Dropout regularisation
+        regressor.add(LSTM(units = l3_units, return_sequences = True))
+        regressor.add(Dropout(dropOutRate))
+        
+        # Adding a fourth LSTM layer and some Dropout regularisation
+        regressor.add(LSTM(units = l4_units, return_sequences = True))
+        regressor.add(Dropout(dropOutRate))
+        
+        # Adding a fifth LSTM layer and some Dropout regularisation
+        regressor.add(LSTM(units = l5_units))
+        regressor.add(Dropout(dropOutRate))
 
     # Adding the output layer
     regressor.add(Dense(units = 1))
