@@ -1,11 +1,18 @@
 # Define Function
 def RNN3_Regressor(
-    start_date =   '2013-01-01', end_date   =   '2019-12-6',
-    tickers    =   'AAPL',       cutoff     =   0.8,
-    l1_units   =   50,           l2_units   =   50,           l3_units   =   50,
-    optimizer  =   'adam',       loss       =   'mean_squared_error',
-    epochs     =   50,           batch_size =   64,
-    plotGraph  =   True,         verbose   =   True ):
+    start_date =   '2013-01-01',
+    end_date   =   '2019-12-6',
+    tickers    =   'AAPL',
+    cutoff     =   0.8,
+    l1_units   =   50,
+    l2_units   =   50,
+    l3_units   =   50,
+    optimizer  =   'adam',
+    loss       =   'mean_squared_error',
+    epochs     =   50,
+    batch_size =   64,
+    plotGraph  =   True,
+    verbose    =   True ):
 
     if verbose:
         print("------------------------------------------------------------------------------")
