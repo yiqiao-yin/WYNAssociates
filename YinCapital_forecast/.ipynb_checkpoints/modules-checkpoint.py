@@ -27,6 +27,7 @@ def Yin_Timer(
     start_date       =   '2015-01-01',
     end_date         =   '2021-01-01',
     ticker           =   'FB',
+    rescale          =   True,
     figsize          =   (15,6),
     LB               =   -1,
     UB               =   +1, 
@@ -135,10 +136,16 @@ def Yin_Timer(
         # Get Data
         stock = dta
 
-        smaData1 = stock['Close']- sma_indicator(stock['Close'], sma_threshold_1, True)
-        smaData2 = stock['Close']- sma_indicator(stock['Close'], sma_threshold_2, True)
-        smaData3 = stock['Close']- sma_indicator(stock['Close'], sma_threshold_3, True)
-
+        # Scale Data
+        if rescale = True:
+            smaData1 = stock['Close'] - sma_indicator(stock['Close'], sma_threshold_1, True)
+            smaData2 = stock['Close'] - sma_indicator(stock['Close'], sma_threshold_2, True)
+            smaData3 = stock['Close'] - sma_indicator(stock['Close'], sma_threshold_3, True)
+        else:
+            smaData1 = (stock['Close'] - sma_indicator(stock['Close'], sma_threshold_1, True)) / max(abs((stock['Close'] - sma_indicator(stock['Close'], sma_threshold_1, True))))
+            smaData2 = (stock['Close'] - sma_indicator(stock['Close'], sma_threshold_2, True)) / max(abs((stock['Close'] - sma_indicator(stock['Close'], sma_threshold_2, True))))
+            smaData3 = (stock['Close'] - sma_indicator(stock['Close'], sma_threshold_3, True)) / max(abs((stock['Close'] - sma_indicator(stock['Close'], sma_threshold_3, True))))
+            
         # Conditional Buy/Sell => Signals
         conditionalBuy1 = np.where(smaData1 < buy_threshold, stock['Close'], np.nan)
         conditionalSell1 = np.where(smaData1 > sell_threshold, stock['Close'], np.nan)
@@ -161,7 +168,7 @@ def Yin_Timer(
         strategy = "SMA"
         title = f'Close Price Buy/Sell Signals using {strategy}'
 
-        fig, axs = plt.subplots(2, sharex=True, figsize=(13,9))
+        fig, axs = plt.subplots(2, sharex=True, figsize=figsize)
 
         # fig.suptitle(f'Top: {tickers} Stock Price. Bottom: {strategy}')
 
