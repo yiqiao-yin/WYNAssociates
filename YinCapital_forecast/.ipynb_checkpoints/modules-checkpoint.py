@@ -170,7 +170,7 @@ def Yin_Timer(
         stock['SMA3_Sell'] = conditionalSell3
 
         strategy = "SMA"
-        title = f'Close Price Buy/Sell Signals using {strategy}'
+        title = f'Close Price Buy/Sell Signals using {strategy} {pick_SMA}'
 
         fig, axs = plt.subplots(2, sharex=True, figsize=figsize)
 
