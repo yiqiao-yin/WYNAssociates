@@ -32,3 +32,10 @@ For developers, one can clone package by simple **git clone** command (assuming 
 ```
 git clone https://github.com/yiqiao-yin/YinPortfolioManagement.git
 ```
+
+## Documentation
+
+We provide some basic education of Recurrent Neural Network (aka Long Short-Term Memory). The term Recurrent Neural Network is short for RNN and Long Short-Term Memory is short for LSTM.
+
+- A sample notebook for RNN education can be found [here](https://github.com/yiqiao-yin/YinPortfolioManagement/blob/main/docs/python_MM_LSTM_StockPriceForecast.ipynb).
+- A sample notebook for installation and usage of the package can be found [here](https://github.com/yiqiao-yin/YinPortfolioManagement/blob/main/docs/python_MM_YinPortfolioManagement.ipynb).
