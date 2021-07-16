@@ -280,13 +280,14 @@ def Yin_Timer(
         print('Time Consumption (in hr):', round((end - start)/60/60, 2))
 
     # Return
-    return {'data': dta_stock, 
-            'resulting matrix': stock,
-            'basic statistics': basicStats,
-            'estimatedReturn': np.mean(dta_stock['Normalize Return']), 
-            'estimatedRisk': np.std(dta_stock['Normalize Return']),
-            'ALL_DATA': ALL_DATA
-           } 
+    return {
+        'data': dta_stock, 
+        'resulting matrix': stock,
+        'basic statistics': basicStats,
+        'estimatedReturn': np.mean(dta_stock['Normalize Return']), 
+        'estimatedRisk': np.std(dta_stock['Normalize Return']),
+        'ALL_DATA': ALL_DATA 
+    } 
 # End function
 
 # Define Function: RSI Timer
@@ -662,9 +663,20 @@ def RNN_Regressor(
 
     # Output
     return {
-        'Information': [training_set.shape, testing_set.shape],
-        'Data': [X_train, y_train, X_test, y_test],
-        'Test Response': [predicted_stock_price, real_stock_price],
+        'Information': {
+            'train set shape': training_set.shape, 
+            'test set shape': testing_set.shape
+        },
+        'Data': {
+            'X_train': X_train, 
+            'y_train': y_train,
+            'X_test': X_test,
+            'y_test': y_test
+        },
+        'Test Response': {
+            'predicted_stock_price': predicted_stock_price, 
+            'real_stock_price': real_stock_price
+        },
         'Test Error': rmse
     }
 # End function
