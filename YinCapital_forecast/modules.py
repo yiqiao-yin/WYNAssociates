@@ -399,23 +399,24 @@ def RSI_Timer(
 
 # Define Function: Recurrent Neural Network Regressor
 def RNN_Regressor(
-    start_date =   '2013-01-01',
-    end_date   =   '2019-12-6',
-    tickers    =   'AAPL',
-    cutoff     =   0.8,
+    start_date       =   '2013-01-01',
+    end_date         =   '2019-12-6',
+    tickers          =   'AAPL',
+    numberOfPastDays = 100,
+    cutoff           =   0.8,
     numOfHiddenLayer = 3,
-    l1_units   =   50,
-    l2_units   =   50,
-    l3_units   =   50,
-    l4_units   =   30,
-    l5_units   =   10,
-    dropOutRate =  0.2,
-    optimizer  =   'adam',
-    loss       =   'mean_squared_error',
-    epochs     =   50,
-    batch_size =   64,
-    plotGraph  =   True,
-    verbose    =   True ):
+    l1_units         =   50,
+    l2_units         =   50,
+    l3_units         =   50,
+    l4_units         =   30,
+    l5_units         =   10,
+    dropOutRate       =  0.2,
+    optimizer        =   'adam',
+    loss             =   'mean_squared_error',
+    epochs           =   50,
+    batch_size       =   64,
+    plotGraph        =   True,
+    verbose          =   True ):
 
     if verbose:
         print("------------------------------------------------------------------------------")
@@ -430,23 +431,24 @@ def RNN_Regressor(
 
             # Run
             tmp = RNN_Regressor(
-                    start_date =   '2013-01-01',
-                    end_date   =   '2019-12-6',
-                    tickers    =   'AAPL',
-                    cutoff     =   0.8,
-                    numOfHiddenLayer = 3,
-                    l1_units   =   50,
-                    l2_units   =   50,
-                    l3_units   =   50,
-                    l4_units   =   30,
-                    l5_units   =   10,
-                    dropOutRate =  0.2,
-                    optimizer  =   'adam',
-                    loss       =   'mean_squared_error',
-                    epochs     =   50,
-                    batch_size =   64,
-                    plotGraph  =   True,
-                    verbose    =   True )
+                start_date       =   '2013-01-01',
+                end_date         =   '2019-12-6',
+                tickers          =   'AAPL',
+                numberOfPastDays = 100,
+                cutoff           =   0.8,
+                numOfHiddenLayer = 3,
+                l1_units         =   50,
+                l2_units         =   50,
+                l3_units         =   50,
+                l4_units         =   30,
+                l5_units         =   10,
+                dropOutRate       =  0.2,
+                optimizer        =   'adam',
+                loss             =   'mean_squared_error',
+                epochs           =   50,
+                batch_size       =   64,
+                plotGraph        =   True,
+                verbose          =   True )
                     
             # Cite
             # All Rights Reserved. © Yiqiao Yin
@@ -500,8 +502,8 @@ def RNN_Regressor(
     X_train = []
     y_train = []
 
-    for i in range(100, training_set.shape[0]):
-        X_train.append(np.array(training_set)[i-100:i, 0])
+    for i in range(numberOfPastDays, training_set.shape[0]):
+        X_train.append(np.array(training_set)[i-numberOfPastDays:i, 0])
         y_train.append(np.array(training_set)[i, 0])
 
     X_train, y_train = np.array(X_train), np.array(y_train)
@@ -515,8 +517,8 @@ def RNN_Regressor(
     X_test = []
     y_test = []
 
-    for i in range(100, testing_set.shape[0]):
-        X_test.append(np.array(testing_set)[i-100:i, 0])
+    for i in range(numberOfPastDays, testing_set.shape[0]):
+        X_test.append(np.array(testing_set)[i-numberOfPastDays:i, 0])
         y_test.append(np.array(testing_set)[i, 0])
 
     X_test, y_test = np.array(X_test), np.array(y_test)
