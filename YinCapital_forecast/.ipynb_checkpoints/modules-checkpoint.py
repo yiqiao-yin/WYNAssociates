@@ -692,8 +692,8 @@ def Neural_Sequence_Translation(
         h                =   5,
         cutoff           =   0.8,
         numOfHiddenLayer =   3,
+        numOfDense       =   2,
         l1_units         =   50,
-        l2_units         =   50,
         l2_units         =   50,
         l3_units         =   50,
         l4_units         =   30,
@@ -701,10 +701,10 @@ def Neural_Sequence_Translation(
         dropOutRate       =  0.2,
         optimizer        =   'adam',
         loss             =   'mean_squared_error',
-        useDice          =   True,
         epochs           =   50,
         batch_size       =   64,
         plotGraph        =   True,
+        useMPLFinancePlot=   True,
         verbose          =   True ):
 
     if verbose:
@@ -727,6 +727,7 @@ def Neural_Sequence_Translation(
                 h                =   5,
                 cutoff           =   0.8,
                 numOfHiddenLayer =   3,
+                numOfDense       =   2,
                 l1_units         =   50,
                 l2_units         =   50,
                 l2_units         =   50,
@@ -740,6 +741,7 @@ def Neural_Sequence_Translation(
                 epochs           =   50,
                 batch_size       =   64,
                 plotGraph        =   True,
+                useMPLFinancePlot=   True,
                 verbose          =   True )
                     
             # Cite
@@ -747,6 +749,11 @@ def Neural_Sequence_Translation(
             """ )
         print("------------------------------------------------------------------------------")
         
+        # libraries
+        import pandas as pd
+        import numpy as np
+        import yfinance as yf
+
         # get data
         stockData = yf.download(ticker, start_date, end_date)
 
@@ -754,7 +761,7 @@ def Neural_Sequence_Translation(
 
         stockData = stockData.iloc[:,:5]
         Y = stockData.iloc[1::, ]
-        X = stockData.iloc[0:1744,]
+        X = stockData.iloc[0:int(stockData.shape[0]-1),]
 
         X_train = X.iloc[0:round(X.shape[0]*cutoff), ]
         X_test = X.iloc[round(X.shape[0]*cutoff):X.shape[0], ]
@@ -842,6 +849,21 @@ def Neural_Sequence_Translation(
             # Adding a fifth LSTM layer and some Dropout regularisation
             regressor.add(LSTM(units = l5_units))
             regressor.add(Dropout(dropOutRate))
+            
+        # Design dense layers
+        if numOfDense == 1:
+            regressor.add(Dense(units = l1_units))
+        elif numOfDense == 2:
+            regressor.add(Dense(units = l1_units))
+            regressor.add(Dense(units = l2_units))
+        elif numOfDense == 3:
+            regressor.add(Dense(units = l1_units))
+            regressor.add(Dense(units = l2_units))
+            regressor.add(Dense(units = l3_units))
+        else:
+            if verbose:
+                print("Options are 1, 2, or 3. Reset to one dense layer.")
+            regressor.add(Dense(units = l1_units))
 
         # Adding the output layer
         regressor.add(Dense(units = y_train.shape[1]))
@@ -879,9 +901,27 @@ def Neural_Sequence_Translation(
         import matplotlib.pyplot as plt
         if plotGraph:
             fig, axs = plt.subplots(2, figsize = (10,6))
-            fig.suptitle(f'Real (Up) vs. Estimate (Down) {tickers} Stock Price')
-            axs[0].plot(real_stock_price, color = 'red', label = f'Real {tickers[0]} Stock Price')
-            axs[1].plot(predicted_stock_price, color = 'blue', label = f'Predicted {tickers[0]} Stock Price')
+            fig.suptitle(f'Real (Up) vs. Estimate (Down) {ticker} Stock Price')
+            axs[0].plot(real_stock_price, color = 'red', label = f'Real {ticker} Stock Price')
+            axs[1].plot(predicted_stock_price, color = 'blue', label = f'Predicted {ticker} Stock Price')
+        if useMPLFinancePlot:
+            import pandas as pd
+            import mplfinance as mpf
+
+            predicted_stock_price = pd.DataFrame(predicted_stock_price)
+            predicted_stock_price.columns = real_stock_price.columns
+            predicted_stock_price.index = real_stock_price.index
+
+            s = mpf.make_mpf_style(base_mpf_style='charles', rc={'font.size': 6})
+            fig = mpf.figure(figsize=(10, 7), style=s) # pass in the self defined style to the whole canvas
+            ax = fig.add_subplot(2,1,1) # main candle stick chart subplot, you can also pass in the self defined style here only for this subplot
+            av = fig.add_subplot(2,1,2, sharex=ax)  # volume chart subplot
+
+            df1 = real_stock_price
+            mpf.plot(df1, type='candle', style='yahoo', ax=ax, volume=False)
+
+            df2 = predicted_stock_price
+            mpf.plot(df2, type='candle', style='yahoo', ax=av)
             
     # Output
     return {
