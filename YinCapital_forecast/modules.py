@@ -682,3 +682,225 @@ def RNN_Regressor(
         'Test Error': rmse
     }
 # End function
+
+# Define Function: Recurrent Neural Network: Neural Sequence Translation
+def Neural_Sequence_Translation(
+        start_date       =   '2013-01-01',
+        end_date         =   '2021-01-01',
+        ticker           =   'AAPL',
+        w                =   1,
+        h                =   5,
+        cutoff           =   0.8,
+        numOfHiddenLayer =   3,
+        l1_units         =   50,
+        l2_units         =   50,
+        l2_units         =   50,
+        l3_units         =   50,
+        l4_units         =   30,
+        l5_units         =   10,
+        dropOutRate       =  0.2,
+        optimizer        =   'adam',
+        loss             =   'mean_squared_error',
+        useDice          =   True,
+        epochs           =   50,
+        batch_size       =   64,
+        plotGraph        =   True,
+        verbose          =   True ):
+
+    if verbose:
+        print("------------------------------------------------------------------------------")
+        print(
+            """
+            MANUAL: To install this python package, please use the following code.
+
+            # In a python notebook:
+            # !pip install git+https://github.com/yiqiao-yin/YinPortfolioManagement.git
+            # In a command line:
+            # pip install git+https://github.com/yiqiao-yin/YinPortfolioManagement.git
+
+            # Run
+            tmp = RNN_Regressor(
+                start_date       =   '2013-01-01',
+                end_date         =   '2021-01-01',
+                ticker           =   'AAPL',
+                w                =   1,
+                h                =   5,
+                cutoff           =   0.8,
+                numOfHiddenLayer =   3,
+                l1_units         =   50,
+                l2_units         =   50,
+                l2_units         =   50,
+                l3_units         =   50,
+                l4_units         =   30,
+                l5_units         =   10,
+                dropOutRate       =  0.2,
+                optimizer        =   'adam',
+                loss             =   'mean_squared_error',
+                useDice          =   True,
+                epochs           =   50,
+                batch_size       =   64,
+                plotGraph        =   True,
+                verbose          =   True )
+                    
+            # Cite
+            # All Rights Reserved. © Yiqiao Yin
+            """ )
+        print("------------------------------------------------------------------------------")
+        
+        # get data
+        stockData = yf.download(ticker, start_date, end_date)
+
+        stockData.head(2)
+
+        stockData = stockData.iloc[:,:5]
+        Y = stockData.iloc[1::, ]
+        X = stockData.iloc[0:1744,]
+
+        X_train = X.iloc[0:round(X.shape[0]*cutoff), ]
+        X_test = X.iloc[round(X.shape[0]*cutoff):X.shape[0], ]
+
+        y_train = Y.iloc[0:round(Y.shape[0]*cutoff), ]
+        y_test = Y.iloc[round(Y.shape[0]*cutoff):Y.shape[0], ]
+
+        X_train = np.array(X_train).reshape(X_train.shape[0], w, h)
+        X_test = np.array(X_test).reshape(X_test.shape[0], w, h)
+
+        print(X_train.shape)
+        print(X_test.shape)
+        print(y_train.shape)
+        print(y_test.shape)
+
+        ### Build RNN
+        # Importing the Keras libraries and packages
+        from keras.models import Sequential
+        from keras.layers import Dense
+        from keras.layers import LSTM
+        from keras.layers import Dropout
+        import time
+
+        # Initialize RNN
+        begintime = time.time()
+        regressor = Sequential()
+
+        # Design hidden layers
+        if numOfHiddenLayer == 2:
+            # Adding the first LSTM layer and some Dropout regularisation
+            regressor.add(LSTM(units = l1_units, return_sequences = True, input_shape = (w, h)))
+            regressor.add(Dropout(dropOutRate))
+
+            # Adding a second LSTM layer and some Dropout regularisation
+            regressor.add(LSTM(units = l2_units))
+            regressor.add(Dropout(dropOutRate))
+
+        elif numOfHiddenLayer == 3:
+            # Adding the first LSTM layer and some Dropout regularisation
+            regressor.add(LSTM(units = l1_units, return_sequences = True, input_shape = (w, h)))
+            regressor.add(Dropout(dropOutRate))
+
+            # Adding a second LSTM layer and some Dropout regularisation
+            regressor.add(LSTM(units = l2_units, return_sequences = True))
+            regressor.add(Dropout(dropOutRate))
+
+            # Adding a third LSTM layer and some Dropout regularisation
+            regressor.add(LSTM(units = l3_units))
+            regressor.add(Dropout(dropOutRate))
+
+        elif numOfHiddenLayer == 4:
+            # Adding the first LSTM layer and some Dropout regularisation
+            regressor.add(LSTM(units = l1_units, return_sequences = True, input_shape = (w, h)))
+            regressor.add(Dropout(dropOutRate))
+
+            # Adding a second LSTM layer and some Dropout regularisation
+            regressor.add(LSTM(units = l2_units, return_sequences = True))
+            regressor.add(Dropout(dropOutRate))
+
+            # Adding a third LSTM layer and some Dropout regularisation
+            regressor.add(LSTM(units = l3_units, return_sequences = True))
+            regressor.add(Dropout(dropOutRate))
+
+            # Adding a fourth LSTM layer and some Dropout regularisation
+            regressor.add(LSTM(units = l4_units))
+            regressor.add(Dropout(dropOutRate))
+
+        elif numOfHiddenLayer == 5:
+            # Adding the first LSTM layer and some Dropout regularisation
+            regressor.add(LSTM(units = l1_units, return_sequences = True, input_shape = (w, h)))
+            regressor.add(Dropout(dropOutRate))
+
+            # Adding a second LSTM layer and some Dropout regularisation
+            regressor.add(LSTM(units = l2_units, return_sequences = True))
+            regressor.add(Dropout(dropOutRate))
+
+            # Adding a third LSTM layer and some Dropout regularisation
+            regressor.add(LSTM(units = l3_units, return_sequences = True))
+            regressor.add(Dropout(dropOutRate))
+
+            # Adding a fourth LSTM layer and some Dropout regularisation
+            regressor.add(LSTM(units = l4_units, return_sequences = True))
+            regressor.add(Dropout(dropOutRate))
+
+            # Adding a fifth LSTM layer and some Dropout regularisation
+            regressor.add(LSTM(units = l5_units))
+            regressor.add(Dropout(dropOutRate))
+
+        # Adding the output layer
+        regressor.add(Dense(units = y_train.shape[1]))
+        endtime = time.time()
+
+        # Summary
+        if verbose:
+            print("--------------------------------------------")
+            print('Let us investigate the sequential models.')
+            regressor.summary()
+            print("--------------------------------------------")
+            print("Time Consumption (in sec):", endtime - begintime)
+            print("Time Consumption (in min):", round((endtime - begintime)/60, 2))
+            print("Time Consumption (in hr):", round((endtime - begintime)/60)/60, 2)
+            print("--------------------------------------------")
+
+        ### Train RNN
+        # Compiling the RNN
+        start = time.time()
+        regressor.compile(optimizer = optimizer, loss = loss)
+
+        # Fitting the RNN to the Training set
+        regressor.fit(X_train, y_train, epochs = epochs, batch_size = batch_size)
+        end = time.time()
+
+        # Time Check
+        if verbose == True: 
+            print('Time Consumption:', end - start)
+
+        ### Predictions
+        predicted_stock_price = regressor.predict(X_test)
+        real_stock_price = y_test
+
+        # Visualising the results
+        import matplotlib.pyplot as plt
+        if plotGraph:
+            fig, axs = plt.subplots(2, figsize = (10,6))
+            fig.suptitle(f'Real (Up) vs. Estimate (Down) {tickers} Stock Price')
+            axs[0].plot(real_stock_price, color = 'red', label = f'Real {tickers[0]} Stock Price')
+            axs[1].plot(predicted_stock_price, color = 'blue', label = f'Predicted {tickers[0]} Stock Price')
+            
+    # Output
+    return {
+        'Information': {
+            'explanatory matrix X shape': X.shape, 
+            'response matrix Y shape': Y.shape
+        },
+        'Data': {
+            'X_train': X_train, 
+            'y_train': y_train,
+            'X_test': X_test,
+            'y_test': y_test
+        },
+        'Model': {
+            'neural sequence translation model': regressor
+        },
+        'Test Response': {
+            'predicted_stock_price': predicted_stock_price, 
+            'real_stock_price': real_stock_price
+        }
+    }
+# End function
