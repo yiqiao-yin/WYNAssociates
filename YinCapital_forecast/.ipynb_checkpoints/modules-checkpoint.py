@@ -719,7 +719,7 @@ def Neural_Sequence_Translation(
             # pip install git+https://github.com/yiqiao-yin/YinPortfolioManagement.git
 
             # Run
-            tmp = RNN_Regressor(
+            tmp = Neural_Sequence_Translation(
                 start_date       =   '2013-01-01',
                 end_date         =   '2021-01-01',
                 ticker           =   'AAPL',
@@ -865,6 +865,267 @@ def Neural_Sequence_Translation(
         else:
             if verbose:
                 print("Options are 1, 2, or 3. Reset to one dense layer.")
+            regressor.add(Dense(units = l1_units))
+
+        # Adding the output layer
+        regressor.add(Dense(units = y_train.shape[1]))
+        endtime = time.time()
+
+        # Summary
+        if verbose:
+            print("--------------------------------------------")
+            print('Let us investigate the sequential models.')
+            regressor.summary()
+            print("--------------------------------------------")
+            print("Time Consumption (in sec):", endtime - begintime)
+            print("Time Consumption (in min):", round((endtime - begintime)/60, 2))
+            print("Time Consumption (in hr):", round((endtime - begintime)/60)/60, 2)
+            print("--------------------------------------------")
+
+        ### Train RNN
+        # Compiling the RNN
+        start = time.time()
+        regressor.compile(optimizer = optimizer, loss = loss)
+
+        # Fitting the RNN to the Training set
+        regressor.fit(X_train, y_train, epochs = epochs, batch_size = batch_size)
+        end = time.time()
+
+        # Time Check
+        if verbose == True: 
+            print('Time Consumption:', end - start)
+
+        ### Predictions
+        predicted_stock_price = regressor.predict(X_test)
+        real_stock_price = y_test
+
+        # Visualising the results
+        import matplotlib.pyplot as plt
+        if plotGraph:
+            fig, axs = plt.subplots(2, figsize = (10,6))
+            fig.suptitle(f'Real (Up) vs. Estimate (Down) {ticker} Stock Price')
+            axs[0].plot(real_stock_price, color = 'red', label = f'Real {ticker} Stock Price')
+            axs[1].plot(predicted_stock_price, color = 'blue', label = f'Predicted {ticker} Stock Price')
+        if useMPLFinancePlot:
+            import pandas as pd
+            import mplfinance as mpf
+
+            predicted_stock_price = pd.DataFrame(predicted_stock_price)
+            predicted_stock_price.columns = real_stock_price.columns
+            predicted_stock_price.index = real_stock_price.index
+
+            s = mpf.make_mpf_style(base_mpf_style='charles', rc={'font.size': 6})
+            fig = mpf.figure(figsize=(10, 7), style=s) # pass in the self defined style to the whole canvas
+            ax = fig.add_subplot(2,1,1) # main candle stick chart subplot, you can also pass in the self defined style here only for this subplot
+            av = fig.add_subplot(2,1,2, sharex=ax)  # volume chart subplot
+
+            df1 = real_stock_price
+            mpf.plot(df1, type='candle', style='yahoo', ax=ax, volume=False)
+
+            df2 = predicted_stock_price
+            mpf.plot(df2, type='candle', style='yahoo', ax=av)
+            
+    # Output
+    return {
+        'Information': {
+            'explanatory matrix X shape': X.shape, 
+            'response matrix Y shape': Y.shape
+        },
+        'Data': {
+            'X_train': X_train, 
+            'y_train': y_train,
+            'X_test': X_test,
+            'y_test': y_test
+        },
+        'Model': {
+            'neural sequence translation model': regressor
+        },
+        'Test Response': {
+            'predicted_stock_price': predicted_stock_price, 
+            'real_stock_price': real_stock_price
+        }
+    }
+# End function
+
+# Define Function: Recurrent Neural Network: Neural Sequence Translation
+def Autonomous_Neural_Sequence_Translation(
+        X                 =   X,
+        Y                 =   Y,
+        w                 =   1,
+        h                 =   5,
+        cutoff            =   0.8,
+        numOfHiddenLayer  =   3,
+        numOfDense        =   2,
+        l1_units          =   128,
+        l2_units          =   64,
+        l3_units          =   32,
+        l4_units          =   16,
+        l5_units          =   10,
+        dropOutRate       =   0.2,
+        optimizer         =   'adam',
+        loss              =   'mean_squared_error',
+        epochs            =   50,
+        batch_size        =   64,
+        plotGraph         =   False,
+        useMPLFinancePlot =   True,
+        verbose           =   True ):
+
+    if verbose:
+        print("------------------------------------------------------------------------------")
+        print(
+            """
+            MANUAL: To install this python package, please use the following code.
+
+            # In a python notebook:
+            # !pip install git+https://github.com/yiqiao-yin/YinPortfolioManagement.git
+            # In a command line:
+            # pip install git+https://github.com/yiqiao-yin/YinPortfolioManagement.git
+
+            # Run
+            tmp = Autonomous_Neural_Sequence_Translation(
+                X                 =   X,   # explanatory data matrix
+                Y                 =   Y,   # response data matrix
+                w                 =   1,
+                h                 =   5,
+                cutoff            =   0.8, # take a fraction between 0 and 1
+                numOfHiddenLayer  =   3,   # take an integer from 1, 2, 3, 4, or 5
+                numOfDense        =   2,   # take an integer from 1, 2, or 3
+                l1_units          =   128,
+                l2_units          =   64,
+                l3_units          =   32,
+                l4_units          =   16,
+                l5_units          =   10,
+                dropOutRate       =   0.2,
+                optimizer         =   'adam',
+                loss              =   'mean_squared_error',
+                epochs            =   50,
+                batch_size        =   64,
+                plotGraph         =   False,
+                useMPLFinancePlot =   True,
+                verbose           =   True )
+                    
+            # Cite
+            # All Rights Reserved. © Yiqiao Yin
+            """ )
+        print("------------------------------------------------------------------------------")
+        
+        # libraries
+        import pandas as pd
+        import numpy as np
+        import yfinance as yf
+
+        # get data
+        X_train = X[0:round(X.shape[0]*cutoff), ]
+        X_test = X[round(X.shape[0]*cutoff):X.shape[0], ]
+
+        y_train = Y.iloc[0:round(Y.shape[0]*cutoff), ]
+        y_test = Y.iloc[round(Y.shape[0]*cutoff):Y.shape[0], ]
+
+        X_train = np.array(X_train).reshape(X_train.shape[0], w, h)
+        X_test = np.array(X_test).reshape(X_test.shape[0], w, h)
+
+        if verbose:
+            print(X_train.shape)
+            print(X_test.shape)
+            print(y_train.shape)
+            print(y_test.shape)
+
+        ### Build RNN
+        # Importing the Keras libraries and packages
+        from keras.models import Sequential
+        from keras.layers import Dense
+        from keras.layers import LSTM
+        from keras.layers import Dropout
+        import time
+
+        # Initialize RNN
+        begintime = time.time()
+        regressor = Sequential()
+
+        # Design hidden layers
+        if numOfHiddenLayer == 2:
+            # Adding the first LSTM layer and some Dropout regularisation
+            regressor.add(LSTM(units = l1_units, return_sequences = True, input_shape = (w, h)))
+            regressor.add(Dropout(dropOutRate))
+
+            # Adding a second LSTM layer and some Dropout regularisation
+            regressor.add(LSTM(units = l2_units))
+            regressor.add(Dropout(dropOutRate))
+
+        elif numOfHiddenLayer == 3:
+            # Adding the first LSTM layer and some Dropout regularisation
+            regressor.add(LSTM(units = l1_units, return_sequences = True, input_shape = (w, h)))
+            regressor.add(Dropout(dropOutRate))
+
+            # Adding a second LSTM layer and some Dropout regularisation
+            regressor.add(LSTM(units = l2_units, return_sequences = True))
+            regressor.add(Dropout(dropOutRate))
+
+            # Adding a third LSTM layer and some Dropout regularisation
+            regressor.add(LSTM(units = l3_units))
+            regressor.add(Dropout(dropOutRate))
+
+        elif numOfHiddenLayer == 4:
+            # Adding the first LSTM layer and some Dropout regularisation
+            regressor.add(LSTM(units = l1_units, return_sequences = True, input_shape = (w, h)))
+            regressor.add(Dropout(dropOutRate))
+
+            # Adding a second LSTM layer and some Dropout regularisation
+            regressor.add(LSTM(units = l2_units, return_sequences = True))
+            regressor.add(Dropout(dropOutRate))
+
+            # Adding a third LSTM layer and some Dropout regularisation
+            regressor.add(LSTM(units = l3_units, return_sequences = True))
+            regressor.add(Dropout(dropOutRate))
+
+            # Adding a fourth LSTM layer and some Dropout regularisation
+            regressor.add(LSTM(units = l4_units))
+            regressor.add(Dropout(dropOutRate))
+
+        elif numOfHiddenLayer == 5:
+            # Adding the first LSTM layer and some Dropout regularisation
+            regressor.add(LSTM(units = l1_units, return_sequences = True, input_shape = (w, h)))
+            regressor.add(Dropout(dropOutRate))
+
+            # Adding a second LSTM layer and some Dropout regularisation
+            regressor.add(LSTM(units = l2_units, return_sequences = True))
+            regressor.add(Dropout(dropOutRate))
+
+            # Adding a third LSTM layer and some Dropout regularisation
+            regressor.add(LSTM(units = l3_units, return_sequences = True))
+            regressor.add(Dropout(dropOutRate))
+
+            # Adding a fourth LSTM layer and some Dropout regularisation
+            regressor.add(LSTM(units = l4_units, return_sequences = True))
+            regressor.add(Dropout(dropOutRate))
+
+            # Adding a fifth LSTM layer and some Dropout regularisation
+            regressor.add(LSTM(units = l5_units))
+            regressor.add(Dropout(dropOutRate))
+            
+        # Design dense layers
+        if numOfDense == 1:
+            regressor.add(Dense(units = l1_units))
+        elif numOfDense == 2:
+            regressor.add(Dense(units = l1_units))
+            regressor.add(Dense(units = l2_units))
+        elif numOfDense == 3:
+            regressor.add(Dense(units = l1_units))
+            regressor.add(Dense(units = l2_units))
+            regressor.add(Dense(units = l3_units))
+        elif numOfDense == 4:
+            regressor.add(Dense(units = l1_units))
+            regressor.add(Dense(units = l2_units))
+            regressor.add(Dense(units = l3_units))
+        elif numOfDense == 5:
+            regressor.add(Dense(units = l1_units))
+            regressor.add(Dense(units = l2_units))
+            regressor.add(Dense(units = l3_units))
+            regressor.add(Dense(units = l4_units))
+            regressor.add(Dense(units = l5_units))
+        else:
+            if verbose:
+                print("Options are 1, 2, 3, 4, or 5. Reset to one dense layer.")
             regressor.add(Dense(units = l1_units))
 
         # Adding the output layer
