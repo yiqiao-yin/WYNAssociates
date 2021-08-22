@@ -756,15 +756,16 @@ def Neural_Sequence_Translation(
 
         # get data
         stockData = yf.download(ticker, start_date, end_date)
+        stockData = stockData.iloc[:,:5] # omit volume
 
-        stockData.head(2)
+        # create data
+        Y = stockData.iloc[w::, ]
+        X = np.arange(0, Y.shape[0]*w*h, 1).reshape(Y.shape[0], w*h)
+        for i in range(0,int(stockData.shape[0]-w)):
+            X[i,] = np.array(stockData.iloc[i:(i+w),]).reshape(1, w*h)
 
-        stockData = stockData.iloc[:,:5]
-        Y = stockData.iloc[1::, ]
-        X = stockData.iloc[0:int(stockData.shape[0]-1),]
-
-        X_train = X.iloc[0:round(X.shape[0]*cutoff), ]
-        X_test = X.iloc[round(X.shape[0]*cutoff):X.shape[0], ]
+        X_train = X[0:round(X.shape[0]*cutoff), ]
+        X_test = X[round(X.shape[0]*cutoff):X.shape[0], ]
 
         y_train = Y.iloc[0:round(Y.shape[0]*cutoff), ]
         y_test = Y.iloc[round(Y.shape[0]*cutoff):Y.shape[0], ]
@@ -772,10 +773,11 @@ def Neural_Sequence_Translation(
         X_train = np.array(X_train).reshape(X_train.shape[0], w, h)
         X_test = np.array(X_test).reshape(X_test.shape[0], w, h)
 
-        print(X_train.shape)
-        print(X_test.shape)
-        print(y_train.shape)
-        print(y_test.shape)
+        if verbose:
+            print(X_train.shape)
+            print(X_test.shape)
+            print(y_train.shape)
+            print(y_test.shape)
 
         ### Build RNN
         # Importing the Keras libraries and packages
