@@ -949,8 +949,8 @@ def Neural_Sequence_Translation(
 
 # Define Function: Recurrent Neural Network: Neural Sequence Translation
 def Autonomous_Neural_Sequence_Translation(
-        X                 =   X,
-        Y                 =   Y,
+        X                 =   0,
+        Y                 =   0,
         w                 =   1,
         h                 =   5,
         cutoff            =   0.8,
