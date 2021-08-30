@@ -962,7 +962,7 @@ def Autonomous_Neural_Sequence_Translation(
         l4_units          =   16,
         l5_units          =   10,
         dropOutRate       =   0.2,
-        activation        =   'relu',
+        layer_activation  =   'relu',
         final_activation  =   'softmax',
         optimizer         =   'adam',
         loss              =   'mean_squared_error',
@@ -1107,24 +1107,24 @@ def Autonomous_Neural_Sequence_Translation(
             
         # Design dense layers
         if numOfDense == 1:
-            regressor.add(Dense(units = l1_units, activation = activation))
+            regressor.add(Dense(units = l1_units, activation = layer_activation))
         elif numOfDense == 2:
-            regressor.add(Dense(units = l1_units, activation = activation))
-            regressor.add(Dense(units = l2_units, activation = activation))
+            regressor.add(Dense(units = l1_units, activation = layer_activation))
+            regressor.add(Dense(units = l2_units, activation = layer_activation))
         elif numOfDense == 3:
-            regressor.add(Dense(units = l1_units, activation = activation))
-            regressor.add(Dense(units = l2_units, activation = activation))
-            regressor.add(Dense(units = l3_units, activation = activation))
+            regressor.add(Dense(units = l1_units, activation = layer_activation))
+            regressor.add(Dense(units = l2_units, activation = layer_activation))
+            regressor.add(Dense(units = l3_units, activation = layer_activation))
         elif numOfDense == 4:
-            regressor.add(Dense(units = l1_units, activation = activation))
-            regressor.add(Dense(units = l2_units, activation = activation))
-            regressor.add(Dense(units = l3_units, activation = activation))
+            regressor.add(Dense(units = l1_units, activation = layer_activation))
+            regressor.add(Dense(units = l2_units, activation = layer_activation))
+            regressor.add(Dense(units = l3_units, activation = layer_activation))
         elif numOfDense == 5:
-            regressor.add(Dense(units = l1_units, activation = activation))
-            regressor.add(Dense(units = l2_units, activation = activation))
-            regressor.add(Dense(units = l3_units, activation = activation))
-            regressor.add(Dense(units = l4_units, activation = activation))
-            regressor.add(Dense(units = l5_units, activation = activation))
+            regressor.add(Dense(units = l1_units, activation = layer_activation))
+            regressor.add(Dense(units = l2_units, activation = layer_activation))
+            regressor.add(Dense(units = l3_units, activation = layer_activation))
+            regressor.add(Dense(units = l4_units, activation = layer_activation))
+            regressor.add(Dense(units = l5_units, activation = layer_activation))
         else:
             if verbose:
                 print("Options are 1, 2, 3, 4, or 5. Reset to one dense layer.")
