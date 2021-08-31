@@ -57,6 +57,7 @@ def Yin_Timer(
             start_date       =   '2015-01-01',
             end_date         =   '2021-01-01',
             ticker           =   'FB',
+            rescale          =   True,
             figsize          =   (15,6),
             LB               =   -1,
             UB               =   +1, 
@@ -318,9 +319,16 @@ def RSI_Timer(
     start_date = '2010-01-01'
     end_date   = '2020-01-18'
     ticker = 'FB'
-    temp = YinsTimer(
-            start_date, end_date, ticker, figsize=(15,6), LB=-0.01, UB=0.01, 
-            plotGraph=True, verbose=True, printManual=True, gotoSEC=True)
+    temp = RSI_Timer(
+        start_date =   '2013-01-01',
+        end_date   =   '2019-12-6',
+        tickers    =   'AAPL',
+        pick_RSI   = 1,
+        rsi_threshold_1 = 10,
+        rsi_threshold_2 = 30,
+        rsi_threshold_3 = 100,
+        buy_threshold = 20,
+        sell_threshold = 80 )
     """ )
     print("Manual ends here.")
     print("------------------------------------------------------------------------------")
@@ -402,9 +410,9 @@ def RNN_Regressor(
     start_date       =   '2013-01-01',
     end_date         =   '2019-12-6',
     tickers          =   'AAPL',
-    numberOfPastDays = 100,
+    numberOfPastDays =   100,
     cutoff           =   0.8,
-    numOfHiddenLayer = 3,
+    numOfHiddenLayer =   3,
     l1_units         =   50,
     l2_units         =   50,
     l3_units         =   50,
@@ -432,11 +440,11 @@ def RNN_Regressor(
             # Run
             tmp = RNN_Regressor(
                 start_date       =   '2013-01-01',
-                end_date         =   '2019-12-6',
+                end_date         =   '2021-01-01',
                 tickers          =   'AAPL',
-                numberOfPastDays = 100,
+                numberOfPastDays =   100,
                 cutoff           =   0.8,
-                numOfHiddenLayer = 3,
+                numOfHiddenLayer =   3,
                 l1_units         =   50,
                 l2_units         =   50,
                 l3_units         =   50,
