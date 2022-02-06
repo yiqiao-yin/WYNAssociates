@@ -1,4 +1,4 @@
-from setuptools import setup, find_packages
+from setuptools import setup
 
 setup(
   name='WYNAssociates',
@@ -6,5 +6,5 @@ setup(
   author_email="Yiqiao.Yin@wyn-associates.com",
   version='1.0.0',
   description="This package provides AI-driven solutions.",
-  packages=find_packages(include=["AI-solution"]),
+  packages=["AI-solution"],
 )
