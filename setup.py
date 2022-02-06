@@ -6,5 +6,5 @@ setup(
   author_email="Yiqiao.Yin@wyn-associates.com",
   version='1.0.0',
   description="This package provides AI-driven solutions.",
-  packages=find_packages(include=["AI-solutions", "YinCapital_forecast"]),
+  packages=find_packages(include=["AI-solutions"]),
 )
