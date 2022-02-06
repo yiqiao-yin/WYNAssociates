@@ -1,3 +1,10 @@
+# check
+try:
+  import yfinance, ta
+except:
+  !pip install yfinance
+  !pip install ta
+
 # Import Libraries
 import pandas as pd
 import numpy as np
