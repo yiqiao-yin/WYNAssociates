@@ -16,6 +16,7 @@ This is the official quantitative and statistical software package by W.Y.N. Ass
 - Copyright © Official quantitative and statistical software published by WYN Associates.
 - Copyright © 2010 – Present Yiqiao Yin
 - Contact: Yiqiao Yin
+- Official Site: https://www.WYN-Associates.com
 - Email: Yiqiao.Yin@wyn-associates.com
 
 ## Installation and Development
