@@ -49,7 +49,10 @@ git clone https://github.com/yiqiao-yin/WYNAssociates.git
 | [Autonomous_Neural_Sequence_Translation](https://github.com/yiqiao-yin/WYNAssociates/blob/2b5994f77a74038dd10e55182a0cc16e71168a32/AI_solution/modules.py#L960) | A sequence-to-sequence prediction model |
 | [Embedding_Neural_Sequence_Translation](https://github.com/yiqiao-yin/WYNAssociates/blob/2b5994f77a74038dd10e55182a0cc16e71168a32/AI_solution/modules.py#L1223) | A sequence-to-sequence prediction model with embedding layer | 
 | [YinsML](https://github.com/yiqiao-yin/WYNAssociates/blob/2b5994f77a74038dd10e55182a0cc16e71168a32/AI_solution/modules.py#L1509) | A class of functions in machine learning | 
+| [LogisticRegression_Classifier](https://github.com/yiqiao-yin/WYNAssociates/blob/42022078dc8f00fdf250f19d80f34a1cd685cda6/AI_solution/modules.py#L1517) | Logistic regression classifier |
 | [DecisionTree_Classifier](https://github.com/yiqiao-yin/WYNAssociates/blob/2b5994f77a74038dd10e55182a0cc16e71168a32/AI_solution/modules.py#L1517) | Decision tree classifier |
-| [DecisionTree_Regressor](https://github.com/yiqiao-yin/WYNAssociates/blob/2b5994f77a74038dd10e55182a0cc16e71168a32/AI_solution/modules.py#L1574) | Decision tree regressor | 
+| [DecisionTree_Regressor](https://github.com/yiqiao-yin/WYNAssociates/blob/2b5994f77a74038dd10e55182a0cc16e71168a32/AI_solution/modules.py#L1574) | Decision tree regressor |
+| [RandomForest_Classifier](https://github.com/yiqiao-yin/WYNAssociates/blob/d3f5ef496403a0aef6b940c1740734e174043e71/AI_solution/modules.py#L1616) | Random Forest Classifier algorithm | 
+| [GradientBoosting_Classifier](https://github.com/yiqiao-yin/WYNAssociates/blob/d3f5ef496403a0aef6b940c1740734e174043e71/AI_solution/modules.py#L1673) | Gradient Boosting Classifier algorithm |
 | [Adam_Regressor](https://github.com/yiqiao-yin/WYNAssociates/blob/2b5994f77a74038dd10e55182a0cc16e71168a32/AI_solution/modules.py#L1616) | Regressor trained using Adam | 
 | [ResultAUCROC](https://github.com/yiqiao-yin/WYNAssociates/blob/2b5994f77a74038dd10e55182a0cc16e71168a32/AI_solution/modules.py#L1745) | Compute AUCROC of a predictor to its ground truth |
