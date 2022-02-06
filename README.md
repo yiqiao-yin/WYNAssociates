@@ -56,3 +56,11 @@ git clone https://github.com/yiqiao-yin/WYNAssociates.git
 | [GradientBoosting_Classifier](https://github.com/yiqiao-yin/WYNAssociates/blob/d3f5ef496403a0aef6b940c1740734e174043e71/AI_solution/modules.py#L1673) | Gradient Boosting Classifier algorithm |
 | [Adam_Regressor](https://github.com/yiqiao-yin/WYNAssociates/blob/2b5994f77a74038dd10e55182a0cc16e71168a32/AI_solution/modules.py#L1616) | Regressor trained using Adam | 
 | [ResultAUCROC](https://github.com/yiqiao-yin/WYNAssociates/blob/2b5994f77a74038dd10e55182a0cc16e71168a32/AI_solution/modules.py#L1745) | Compute AUCROC of a predictor to its ground truth |
+| [YinsDL](https://github.com/yiqiao-yin/WYNAssociates/blob/2b5994f77a74038dd10e55182a0cc16e71168a32/AI_solution/modules.py#L1769) | A class of functions in deep learning | 
+| [NN3_Classifier](https://github.com/yiqiao-yin/WYNAssociates/blob/2b5994f77a74038dd10e55182a0cc16e71168a32/AI_solution/modules.py#L1781) | A neural network with 3 layers |
+| [NN10 Classifier](https://github.com/yiqiao-yin/WYNAssociates/blob/2b5994f77a74038dd10e55182a0cc16e71168a32/AI_solution/modules.py#L1917) | A neural network with 10 layers | 
+| [plotOneImage](https://github.com/yiqiao-yin/WYNAssociates/blob/2b5994f77a74038dd10e55182a0cc16e71168a32/AI_solution/modules.py#L2066) | A helper function to plot images | 
+| [ConvOperationC1](https://github.com/yiqiao-yin/WYNAssociates/blob/2b5994f77a74038dd10e55182a0cc16e71168a32/AI_solution/modules.py#L2101) | Hand crafted convolutional operation with one pre-defined filter | 
+| [C1NN3_Classifier](https://github.com/yiqiao-yin/WYNAssociates/blob/2b5994f77a74038dd10e55182a0cc16e71168a32/AI_solution/modules.py#L2193) | A CNN with one convolutional layer and 3 neural network layers | 
+| [C2NN3_Classifier](https://github.com/yiqiao-yin/WYNAssociates/blob/2b5994f77a74038dd10e55182a0cc16e71168a32/AI_solution/modules.py#L2366) | A CNN with two convolutional layer and 3 neural network layers | 
+| [RNN4_Regressor](https://github.com/yiqiao-yin/WYNAssociates/blob/2b5994f77a74038dd10e55182a0cc16e71168a32/AI_solution/modules.py#L2606) | A RNN regressor model for stock price prediction |
