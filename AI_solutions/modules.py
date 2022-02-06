@@ -1,12 +1,13 @@
+# Import Modules
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+import random
+from sklearn import tree
+
+
 # Define function
 def DecisionTree_Classifier(X_train, X_test, y_train, y_test, maxdepth = 3):
-
-    # Import Modules
-    import numpy as np
-    import matplotlib.pyplot as plt
-    import pandas as pd
-    import random
-    from sklearn import tree
 
     # Train
     DCT = tree.DecisionTreeClassifier(max_depth=maxdepth)
