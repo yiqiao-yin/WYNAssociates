@@ -2,8 +2,8 @@
 try:
   import yfinance, ta
 except:
-  !pip install yfinance
-  !pip install ta
+  pip install yfinance
+  pip install ta
 
 # Import Libraries
 import pandas as pd
