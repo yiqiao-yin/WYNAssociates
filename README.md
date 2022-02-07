@@ -49,18 +49,18 @@ git clone https://github.com/yiqiao-yin/WYNAssociates.git
 | [Autonomous_Neural_Sequence_Translation](https://github.com/yiqiao-yin/WYNAssociates/blob/2b5994f77a74038dd10e55182a0cc16e71168a32/AI_solution/modules.py#L960) | A sequence-to-sequence prediction model |
 | [Embedding_Neural_Sequence_Translation](https://github.com/yiqiao-yin/WYNAssociates/blob/2b5994f77a74038dd10e55182a0cc16e71168a32/AI_solution/modules.py#L1223) | A sequence-to-sequence prediction model with embedding layer | 
 | [YinsML](https://github.com/yiqiao-yin/WYNAssociates/blob/2b5994f77a74038dd10e55182a0cc16e71168a32/AI_solution/modules.py#L1509) | A class of functions in machine learning | 
-| [LogisticRegression_Classifier](https://github.com/yiqiao-yin/WYNAssociates/blob/42022078dc8f00fdf250f19d80f34a1cd685cda6/AI_solution/modules.py#L1517) | Logistic regression classifier |
-| [DecisionTree_Classifier](https://github.com/yiqiao-yin/WYNAssociates/blob/2b5994f77a74038dd10e55182a0cc16e71168a32/AI_solution/modules.py#L1517) | Decision tree classifier |
-| [DecisionTree_Regressor](https://github.com/yiqiao-yin/WYNAssociates/blob/2b5994f77a74038dd10e55182a0cc16e71168a32/AI_solution/modules.py#L1574) | Decision tree regressor |
-| [RandomForest_Classifier](https://github.com/yiqiao-yin/WYNAssociates/blob/d3f5ef496403a0aef6b940c1740734e174043e71/AI_solution/modules.py#L1616) | Random Forest Classifier algorithm | 
-| [GradientBoosting_Classifier](https://github.com/yiqiao-yin/WYNAssociates/blob/d3f5ef496403a0aef6b940c1740734e174043e71/AI_solution/modules.py#L1673) | Gradient Boosting Classifier algorithm |
-| [Adam_Regressor](https://github.com/yiqiao-yin/WYNAssociates/blob/2b5994f77a74038dd10e55182a0cc16e71168a32/AI_solution/modules.py#L1616) | Regressor trained using Adam | 
-| [ResultAUCROC](https://github.com/yiqiao-yin/WYNAssociates/blob/2b5994f77a74038dd10e55182a0cc16e71168a32/AI_solution/modules.py#L1745) | Compute AUCROC of a predictor to its ground truth |
+| - [LogisticRegression_Classifier](https://github.com/yiqiao-yin/WYNAssociates/blob/42022078dc8f00fdf250f19d80f34a1cd685cda6/AI_solution/modules.py#L1517) | Logistic regression classifier |
+| - [DecisionTree_Classifier](https://github.com/yiqiao-yin/WYNAssociates/blob/2b5994f77a74038dd10e55182a0cc16e71168a32/AI_solution/modules.py#L1517) | Decision tree classifier |
+| - [DecisionTree_Regressor](https://github.com/yiqiao-yin/WYNAssociates/blob/2b5994f77a74038dd10e55182a0cc16e71168a32/AI_solution/modules.py#L1574) | Decision tree regressor |
+| - [RandomForest_Classifier](https://github.com/yiqiao-yin/WYNAssociates/blob/d3f5ef496403a0aef6b940c1740734e174043e71/AI_solution/modules.py#L1616) | Random Forest Classifier algorithm | 
+| - [GradientBoosting_Classifier](https://github.com/yiqiao-yin/WYNAssociates/blob/d3f5ef496403a0aef6b940c1740734e174043e71/AI_solution/modules.py#L1673) | Gradient Boosting Classifier algorithm |
+| - [Adam_Regressor](https://github.com/yiqiao-yin/WYNAssociates/blob/2b5994f77a74038dd10e55182a0cc16e71168a32/AI_solution/modules.py#L1616) | Regressor trained using Adam | 
+| - [ResultAUCROC](https://github.com/yiqiao-yin/WYNAssociates/blob/2b5994f77a74038dd10e55182a0cc16e71168a32/AI_solution/modules.py#L1745) | Compute AUCROC of a predictor to its ground truth |
 | [YinsDL](https://github.com/yiqiao-yin/WYNAssociates/blob/2b5994f77a74038dd10e55182a0cc16e71168a32/AI_solution/modules.py#L1769) | A class of functions in deep learning | 
-| [NN3_Classifier](https://github.com/yiqiao-yin/WYNAssociates/blob/2b5994f77a74038dd10e55182a0cc16e71168a32/AI_solution/modules.py#L1781) | A neural network with 3 layers |
-| [NN10 Classifier](https://github.com/yiqiao-yin/WYNAssociates/blob/2b5994f77a74038dd10e55182a0cc16e71168a32/AI_solution/modules.py#L1917) | A neural network with 10 layers | 
-| [plotOneImage](https://github.com/yiqiao-yin/WYNAssociates/blob/2b5994f77a74038dd10e55182a0cc16e71168a32/AI_solution/modules.py#L2066) | A helper function to plot images | 
-| [ConvOperationC1](https://github.com/yiqiao-yin/WYNAssociates/blob/2b5994f77a74038dd10e55182a0cc16e71168a32/AI_solution/modules.py#L2101) | Hand crafted convolutional operation with one pre-defined filter | 
-| [C1NN3_Classifier](https://github.com/yiqiao-yin/WYNAssociates/blob/2b5994f77a74038dd10e55182a0cc16e71168a32/AI_solution/modules.py#L2193) | A CNN with one convolutional layer and 3 neural network layers | 
-| [C2NN3_Classifier](https://github.com/yiqiao-yin/WYNAssociates/blob/2b5994f77a74038dd10e55182a0cc16e71168a32/AI_solution/modules.py#L2366) | A CNN with two convolutional layer and 3 neural network layers | 
-| [RNN4_Regressor](https://github.com/yiqiao-yin/WYNAssociates/blob/2b5994f77a74038dd10e55182a0cc16e71168a32/AI_solution/modules.py#L2606) | A RNN regressor model for stock price prediction |
+| - [NN3_Classifier](https://github.com/yiqiao-yin/WYNAssociates/blob/2b5994f77a74038dd10e55182a0cc16e71168a32/AI_solution/modules.py#L1781) | A neural network with 3 layers |
+| - [NN10 Classifier](https://github.com/yiqiao-yin/WYNAssociates/blob/2b5994f77a74038dd10e55182a0cc16e71168a32/AI_solution/modules.py#L1917) | A neural network with 10 layers | 
+| - [plotOneImage](https://github.com/yiqiao-yin/WYNAssociates/blob/2b5994f77a74038dd10e55182a0cc16e71168a32/AI_solution/modules.py#L2066) | A helper function to plot images | 
+| - [ConvOperationC1](https://github.com/yiqiao-yin/WYNAssociates/blob/2b5994f77a74038dd10e55182a0cc16e71168a32/AI_solution/modules.py#L2101) | Hand crafted convolutional operation with one pre-defined filter | 
+| - [C1NN3_Classifier](https://github.com/yiqiao-yin/WYNAssociates/blob/2b5994f77a74038dd10e55182a0cc16e71168a32/AI_solution/modules.py#L2193) | A CNN with one convolutional layer and 3 neural network layers | 
+| - [C2NN3_Classifier](https://github.com/yiqiao-yin/WYNAssociates/blob/2b5994f77a74038dd10e55182a0cc16e71168a32/AI_solution/modules.py#L2366) | A CNN with two convolutional layer and 3 neural network layers | 
+| - [RNN4_Regressor](https://github.com/yiqiao-yin/WYNAssociates/blob/2b5994f77a74038dd10e55182a0cc16e71168a32/AI_solution/modules.py#L2606) | A RNN regressor model for stock price prediction |
