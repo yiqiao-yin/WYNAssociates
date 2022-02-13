@@ -64,4 +64,5 @@ git clone https://github.com/yiqiao-yin/WYNAssociates.git
 | - [C1NN3_Classifier](https://github.com/yiqiao-yin/WYNAssociates/blob/2b5994f77a74038dd10e55182a0cc16e71168a32/AI_solution/modules.py#L2193) | A CNN with one convolutional layer and 3 neural network layers | 
 | - [C2NN3_Classifier](https://github.com/yiqiao-yin/WYNAssociates/blob/2b5994f77a74038dd10e55182a0cc16e71168a32/AI_solution/modules.py#L2366) | A CNN with two convolutional layer and 3 neural network layers | 
 | - [RNN4_Regressor](https://github.com/yiqiao-yin/WYNAssociates/blob/2b5994f77a74038dd10e55182a0cc16e71168a32/AI_solution/modules.py#L2606) | A RNN regressor model for stock price prediction |
-| - [NeuralNet_Regressor](https://github.com/yiqiao-yin/WYNAssociates/blob/4064719f740ebf890fd908e734a58e1f2b883246/AI_solution/modules.py#L3018) | A automated Deep Artificial Neural Network function |
+| - [NeuralNet_Regressor](https://github.com/yiqiao-yin/WYNAssociates/blob/4064719f740ebf890fd908e734a58e1f2b883246/AI_solution/modules.py#L3018) | An automated Deep Artificial Neural Network function for regression problems |
+| - [NeuralNet_Classifier](https://github.com/yiqiao-yin/WYNAssociates/blob/ed5be8e8475039d51fb18829fe0e4ba964652808/AI_solution/modules.py#L3149) | An automated Deep Artificial Neural Network function for classification problems |
