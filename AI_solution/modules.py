@@ -3023,7 +3023,7 @@ class YinsDL:
             X_test=None, 
             y_test=None,
             input_shape=[8],
-            RANGE=[128,64,32,10],
+            hidden=[128,64,32,10],
             output_shape=1,
             activation="relu",
             last_activation="softmax",
@@ -3041,8 +3041,8 @@ class YinsDL:
 
 
         # define model
-        def build_model(input_shape=[8], hidden=[128,32,32], output_shape=1, learning_rate=0.001,
-                        loss="mse"):
+        def build_model(input_shape=input_shape, hidden=hidden, output_shape=output_shape, learning_rate=learning_rate,
+                        loss="mse", activation=activation, last_activation=last_activation):
             model = tf.keras.models.Sequential()
 
             # What type of API are we using for input layer?
@@ -3050,10 +3050,10 @@ class YinsDL:
 
             # What type of API are we using for hidden layer?
             for layer in hidden:
-                model.add(tf.keras.layers.Dense(layer, activation="relu"))
+                model.add(tf.keras.layers.Dense(layer, activation=activation))
 
             # Why do we set number of neurons (or units) to be 1 for this following layer?
-            model.add(tf.keras.layers.Dense(output_shape))
+            model.add(tf.keras.layers.Dense(output_shape, activation=last_activation))
 
             # A gentle reminder question: What is the difference between 
             # stochastic gradient descent and gradient descent?
