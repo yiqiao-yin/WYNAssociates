@@ -3086,8 +3086,8 @@ class YinsDL:
 
         # fit the model: determine whether to use GPU
         if useGPU:
-            %tensorflow_version 2.x
-            import tensorflow as tf
+            # %tensorflow_version 2.x
+            # import tensorflow as tf
             device_name = tf.test.gpu_device_name()
             if device_name != '/device:GPU:0':
                 raise SystemError('GPU device not found. If you are in Colab, please go to Edit => Notebook Setting to select GPU as Hardware Accelerator.')
