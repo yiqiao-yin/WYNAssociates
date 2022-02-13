@@ -1510,7 +1510,7 @@ class YinsML:
 
     """
     Yin's Machine Learning Package 
-    Copyright © YINS CAPITAL, 2009 – Present
+    Copyright © W.Y.N. Associates, LLC, 2009 – Present
     """
 
     # Define function
@@ -2005,7 +2005,7 @@ class YinsDL:
     print(
         """
         Yin's Deep Learning Package 
-        Copyright © YINS CAPITAL, 2009 – Present
+        Copyright © W.Y.N. Associates, LLC, 2009 – Present
         For more information, please go to www.YinsCapital.com
         """ )
     print("---------------------------------------------------------------------")
