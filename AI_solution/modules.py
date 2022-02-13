@@ -3145,3 +3145,166 @@ class YinsDL:
             }
         }
     # End of function
+
+    def NeuralNet_Classifier(
+            X_train=None,
+            y_train=None, 
+            X_valid=None, 
+            y_valid=None, 
+            X_test=None, 
+            y_test=None,
+            input_shape=[8],
+            hidden=[128,64,32,10],
+            output_shape=2,
+            activation="relu",
+            final_activation="softmax",
+            learning_rate=0.001,
+            loss="sparse_categorical_crossentropy",
+            epochs=10,
+            plotModelSummary=True,
+            useGPU=False,
+            verbose=True,
+            plotROC=False
+        ):
+
+        # library
+        import tensorflow as tf
+        import time
+
+        # define model
+        def build_model(input_shape=input_shape, hidden=hidden, output_shape=output_shape, learning_rate=learning_rate,
+                        loss="mse", activation=activation):
+            model = tf.keras.models.Sequential()
+
+            # What type of API are we using for input layer?
+            model.add(tf.keras.layers.InputLayer(input_shape=input_shape))
+
+            # What type of API are we using for hidden layer?
+            for layer in hidden:
+                model.add(tf.keras.layers.Dense(layer, activation=activation))
+
+            # Why do we set number of neurons (or units) to be 1 for this following layer?
+            model.add(tf.keras.layers.Dense(output_shape, activation=final_activation))
+
+            # A gentle reminder question: What is the difference between 
+            # stochastic gradient descent and gradient descent?
+            optimizer = tf.keras.optimizers.SGD(lr=learning_rate)
+
+            # Another gentle reminder question: Why do we use mse or mean squared error？
+            model.compile(loss=loss, optimizer=optimizer)
+
+            return model
+
+        # plot model summary
+        if plotModelSummary:
+            model = build_model()
+            print(model.summary())
+
+        # create a KerasRegressor based on the model defined above
+        keras_reg = tf.keras.wrappers.scikit_learn.KerasRegressor(build_model)
+
+        # comment:
+        # The KerasRegressor object is a think wrapper around the Keras model 
+        # built using build_model(). Since we did not specify any hyperparameters 
+        # when creating it, it will use the default hyperparameters we defined in 
+        # build_model(). This makes things convenient because we can now use 
+        # this object just like a regular Scikit-learn regressor. 
+        # In other words, we can use .fit(), .predict(), and all these concepts
+        # consistently as we discussed before.
+
+
+        # checkpoint
+        start = time.time()
+
+        # fit the model: determine whether to use GPU
+        if useGPU:
+            # %tensorflow_version 2.x
+            # import tensorflow as tf
+            device_name = tf.test.gpu_device_name()
+            if device_name != '/device:GPU:0':
+                raise SystemError('GPU device not found. If you are in Colab, please go to Edit => Notebook Setting to select GPU as Hardware Accelerator.')
+            print('Found GPU at: {}'.format(device_name))
+
+            print("Using GPU to compute...")
+            with tf.device('/device:GPU:0'):
+                keras_reg.fit(
+                    X_train, y_train, epochs=epochs,
+                    validation_data=(X_valid, y_valid),
+                    callbacks=[tf.keras.callbacks.EarlyStopping(patience=10)])
+        else:        
+            # X_train, y_train, X_valid, y_valid, X_test, y_test
+            keras_reg.fit(X_train, y_train, epochs=epochs,
+                        validation_data=(X_valid, y_valid),
+                        callbacks=[tf.keras.callbacks.EarlyStopping(patience=10)])
+
+
+        # checkpoint
+        end = time.time()
+        if verbose:
+            print('Training time consumption ' + str(end-start) + ' seconds.')
+
+        # prediction on train set
+        predictions = keras_reg.predict(X_test)
+
+        # Performance
+
+        # prediction on test set
+        from sklearn.metrics import confusion_matrix
+        import numpy as np
+        import pandas as pd
+        import matplotlib.pyplot as plt
+
+        y_test_hat = np.argmax(predictions, axis=1)
+        confusion = confusion_matrix(y_test, y_test_hat)
+        confusion = pd.DataFrame(confusion)
+        test_acc = sum(np.diag(confusion)) / sum(sum(np.array(confusion)))
+
+        # Print
+        if verbose:
+            print("Confusion Matrix:")
+            print(confusion)
+            print("Test Accuracy:", round(test_acc, 4))
+        # ROCAUC
+        if output_shape == 2:
+            from sklearn.metrics import roc_curve, auc, roc_auc_score
+            fpr, tpr, thresholds = roc_curve(y_test, y_test_hat)
+            areaUnderROC = auc(fpr, tpr)
+            resultsROC = {
+                'false positive rate': fpr,
+                'true positive rate': tpr,
+                'thresholds': thresholds,
+                'auc': round(areaUnderROC, 3)
+            }
+            if verbose:
+                print(f'Test AUC: {areaUnderROC}')
+            if plotROC:
+                plt.figure()
+                plt.plot(fpr, tpr, color='r', lw=2, label='ROC curve')
+                plt.plot([0, 1], [0, 1], color='k', lw=2, linestyle='--')
+                plt.xlim([0.0, 1.0])
+                plt.ylim([0.0, 1.05])
+                plt.xlabel('False Positive Rate')
+                plt.ylabel('True Positive Rate')
+                plt.title('Receiver operating characteristic: \
+                            Area under the curve = {0:0.2f}'.format(areaUnderROC))
+                plt.legend(loc="lower right")
+                plt.show()
+        else: 
+            resultsROC = "Response not in two classes."
+
+        # Output
+        return {
+            'Data': {
+                'X_train': X_train, 
+                'y_train': y_train, 
+                'X_test': X_test, 
+                'y_test': y_test
+            },
+            'Model': keras_reg,
+            'Performance': {
+                'response': {'response': y_test, 'estimated response': y_test_hat},
+                'test_acc': test_acc, 
+                'confusion': confusion
+            },
+            'Results of ROC': resultsROC
+        }        
