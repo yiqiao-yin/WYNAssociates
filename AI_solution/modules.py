@@ -2006,7 +2006,7 @@ class YinsDL:
         """
         Yin's Deep Learning Package 
         Copyright © W.Y.N. Associates, LLC, 2009 – Present
-        For more information, please go to www.YinsCapital.com
+        For more information, please go to https://wyn-associates.com/
         """ )
     print("---------------------------------------------------------------------")
 
