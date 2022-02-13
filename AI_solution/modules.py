@@ -3041,7 +3041,7 @@ class YinsDL:
 
         # define model
         def build_model(input_shape=input_shape, hidden=hidden, output_shape=output_shape, learning_rate=learning_rate,
-                        loss="mse", activation=activation, last_activation=last_activation):
+                        loss="mse", activation=activation):
             model = tf.keras.models.Sequential()
 
             # What type of API are we using for input layer?
