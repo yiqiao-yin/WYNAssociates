@@ -3013,3 +3013,136 @@ class YinsDL:
             'Test Error': rmse
         }
     # End function
+    
+    
+    def NeuralNet_Regressor(
+            X_train=None,
+            y_train=None, 
+            X_valid=None, 
+            y_valid=None, 
+            X_test=None, 
+            y_test=None,
+            input_shape=[8],
+            RANGE=[128,64,32,10],
+            output_shape=1,
+            activation="relu",
+            last_activation="softmax",
+            learning_rate=0.001,
+            loss="mse",
+            epochs=10,
+            plotModelSummary=True,
+            useGPU=False,
+            verbose=True
+        ):
+
+        # library
+        import tensorflow as tf
+        import time
+
+
+        # define model
+        def build_model(input_shape=[8], hidden=[128,32,32], output_shape=1, learning_rate=0.001,
+                        loss="mse"):
+            model = tf.keras.models.Sequential()
+
+            # What type of API are we using for input layer?
+            model.add(tf.keras.layers.InputLayer(input_shape=input_shape))
+
+            # What type of API are we using for hidden layer?
+            for layer in hidden:
+                model.add(tf.keras.layers.Dense(layer, activation="relu"))
+
+            # Why do we set number of neurons (or units) to be 1 for this following layer?
+            model.add(tf.keras.layers.Dense(output_shape))
+
+            # A gentle reminder question: What is the difference between 
+            # stochastic gradient descent and gradient descent?
+            optimizer = tf.keras.optimizers.SGD(lr=learning_rate)
+
+            # Another gentle reminder question: Why do we use mse or mean squared error？
+            model.compile(loss=loss, optimizer=optimizer)
+
+            return model
+
+        # plot model summary
+        if plotModelSummary:
+            model = build_model()
+            print(model.summary())
+
+        # create a KerasRegressor based on the model defined above
+        keras_reg = tf.keras.wrappers.scikit_learn.KerasRegressor(build_model)
+
+        # comment:
+        # The KerasRegressor object is a think wrapper around the Keras model 
+        # built using build_model(). Since we did not specify any hyperparameters 
+        # when creating it, it will use the default hyperparameters we defined in 
+        # build_model(). This makes things convenient because we can now use 
+        # this object just like a regular Scikit-learn regressor. 
+        # In other words, we can use .fit(), .predict(), and all these concepts
+        # consistently as we discussed before.
+
+        # checkpoint
+        start = time.time()
+
+        # fit the model: determine whether to use GPU
+        if useGPU:
+            %tensorflow_version 2.x
+            import tensorflow as tf
+            device_name = tf.test.gpu_device_name()
+            if device_name != '/device:GPU:0':
+                raise SystemError('GPU device not found. If you are in Colab, please go to Edit => Notebook Setting to select GPU as Hardware Accelerator.')
+            print('Found GPU at: {}'.format(device_name))
+
+            print("Using GPU to compute...")
+            with tf.device('/device:GPU:0'):
+                keras_reg.fit(
+                    X_train, y_train, epochs=epochs,
+                    validation_data=(X_valid, y_valid),
+                    callbacks=[tf.keras.callbacks.EarlyStopping(patience=10)])
+        else:        
+            # X_train, y_train, X_valid, y_valid, X_test, y_test
+            keras_reg.fit(X_train, y_train, epochs=epochs,
+                        validation_data=(X_valid, y_valid),
+                        callbacks=[tf.keras.callbacks.EarlyStopping(patience=10)])
+
+
+        # checkpoint
+        end = time.time()
+        if verbose:
+            print('Training time consumption ' + str(end-start) + ' seconds.')
+
+        # prediction on train set
+        y_train_hat_ = keras_reg.predict(X_train)
+
+        # prediction on test set
+        y_test_hat_ = keras_reg.predict(X_test)
+
+        # library 
+        import numpy as np
+
+        # mean square error on train set
+        RMSE_train = (np.sum((y_train_hat_ - y_train) ** 2) / len(y_train)) ** 0.5
+
+        # mean square error on test set
+        RMSE_test = (np.sum((y_test_hat_ - y_test) ** 2) / len(y_test)) ** 0.5
+
+
+        # Output
+        return {
+            'Data': {
+                'X_train': X_train, 
+                'y_train': y_train, 
+                'X_test': X_test, 
+                'y_test': y_test
+            },
+            'Model': keras_reg,
+            'Train Result': {
+                'y_train_hat_': y_train_hat_,
+                'RMSE_train': RMSE_train
+            },
+            'Test Result': {
+                'y_test_hat_': y_test_hat_,
+                'RMSE_test': RMSE_test
+            }
+        }
+    # End of function
