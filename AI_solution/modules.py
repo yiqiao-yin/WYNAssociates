@@ -3026,7 +3026,6 @@ class YinsDL:
             hidden=[128,64,32,10],
             output_shape=1,
             activation="relu",
-            last_activation="softmax",
             learning_rate=0.001,
             loss="mse",
             epochs=10,
@@ -3053,7 +3052,7 @@ class YinsDL:
                 model.add(tf.keras.layers.Dense(layer, activation=activation))
 
             # Why do we set number of neurons (or units) to be 1 for this following layer?
-            model.add(tf.keras.layers.Dense(output_shape, activation=last_activation))
+            model.add(tf.keras.layers.Dense(output_shape))
 
             # A gentle reminder question: What is the difference between 
             # stochastic gradient descent and gradient descent?
