@@ -1628,7 +1628,11 @@ class YinsML:
     # End of function
 
     # Define function
-    def DecisionTree_Classifier(X_train, X_test, y_train, y_test, maxdepth = 3):
+    def DecisionTree_Classifier(
+        X_train, X_test, y_train, y_test, maxdepth = 3,
+        verbose=True,
+        figsize=(12,6),
+        fontsize=12):
         
         # Import Modules
         import numpy as np
@@ -1640,6 +1644,11 @@ class YinsML:
         # Train
         DCT = tree.DecisionTreeClassifier(max_depth=maxdepth)
         DCT = DCT.fit(X_train, y_train)
+        
+        # Plot
+        if verbose:
+            plt.figure(figsize=figsize)
+            tree.plot_tree(DCT, feature_names=X_train.columns, fontsize=fontsize)
         
         # Report In-sample Estimators
         y_train_hat_ = DCT.predict(X_train)
@@ -1684,20 +1693,25 @@ class YinsML:
         }
     # End of function
     
-    # Define function
-    def DecisionTree_Regressor(X_train, X_test, y_train, y_test, maxdepth = 3):
-        
+    # define function
+    def DecisionTree_Regressor(
+        X_train, X_test, y_train, y_test,
+        maxdepth=3, 
+        verbose=True,
+        figsize=(12,6),
+        fontsize=12):
+
         # Import Modules
         import numpy as np
         import matplotlib.pyplot as plt
         import pandas as pd
         import random
         from sklearn import tree
-        
+
         # Train
-        DCT = tree.DecisionTreeClassifier(max_depth=maxdepth)
+        DCT = tree.DecisionTreeRegressor(max_depth=maxdepth)
         DCT = DCT.fit(X_train, y_train)
-        
+
         # Report In-sample Estimators
         y_train_hat_ = DCT.predict(X_train)
         RMSE_train = np.sqrt(np.mean((y_train_hat_ - y_train)**2))
@@ -1705,7 +1719,12 @@ class YinsML:
         # Report Out-of-sample Estimators
         y_test_hat_ = DCT.predict(X_test)
         RMSE_test = np.sqrt(np.mean((y_test_hat_ - y_test)**2))
-        
+
+        # Plot
+        if verbose:
+            plt.figure(figsize=figsize)
+            tree.plot_tree(DCT, feature_names=X_train.columns, fontsize=fontsize)
+
         # Output
         return {
             'Data': {
@@ -1725,6 +1744,7 @@ class YinsML:
             }
         }
     # End of function
+
     
     # Define function
     def RandomForest_Classifier(X_train, X_test, y_train, y_test, maxdepth = 3):
