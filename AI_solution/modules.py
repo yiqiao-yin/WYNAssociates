@@ -1811,6 +1811,7 @@ class YinsML:
         maxdepth=3,
         figsize=(4,4),
         dpi=800,
+        font_size=12,
         verbose=True):
 
         # Import Modules
@@ -1849,6 +1850,7 @@ class YinsML:
             forest_importances = pd.Series(importances, index=X_train.columns)
             fig, ax = plt.subplots(figsize=figsize)
             forest_importances.plot.bar(yerr=std, ax=ax)
+            plt.rc('font', size=font_size)
             ax.set_title("Feature importances using MDI")
             ax.set_ylabel("Mean Decrease in Impurity (MDI)")
             # fig.tight_layout()
