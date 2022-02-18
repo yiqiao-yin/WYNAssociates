@@ -3112,7 +3112,7 @@ class YinsDL:
         }
     # End function
     
-    
+    # define function
     def NeuralNet_Regressor(
             X_train=None,
             y_train=None, 
@@ -3243,7 +3243,8 @@ class YinsDL:
             }
         }
     # End of function
-
+    
+    # define function
     def NeuralNet_Classifier(
             X_train=None,
             y_train=None, 
