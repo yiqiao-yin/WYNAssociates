@@ -1803,6 +1803,84 @@ class YinsML:
         }
     # End of function
     
+    # define function
+    def RandomForest_Regressor(
+        X_train, X_test, 
+        y_train, y_test,
+        n_trees=100,
+        maxdepth=3,
+        figsize=(4,4),
+        dpi=800,
+        verbose=True):
+
+        # Import Modules
+        import numpy as np
+        import matplotlib.pyplot as plt
+        import pandas as pd
+        import random
+        from sklearn import tree
+        from sklearn.ensemble import RandomForestRegressor
+        import time
+
+        # Train
+        RF = RandomForestRegressor(
+            n_estimators=n_trees,
+            max_depth=maxdepth)
+        RF = RF.fit(X_train, y_train)
+
+        # Visualization
+        if verbose:
+            cn=None
+            fig, axes = plt.subplots(nrows=1, ncols=1, figsize=figsize, dpi=dpi)
+            tree.plot_tree(RF.estimators_[0],
+                           feature_names = X_train.columns,
+                           class_names=cn,
+                           filled = True);
+            fig.savefig('rf_individualtree.png')
+
+        # Feature Importance
+        if verbose:
+            start_time = time.time()
+            importances = RF.feature_importances_
+            std = np.std([tree.feature_importances_ for tree in RF.estimators_], axis=0)
+            elapsed_time = time.time() - start_time
+            print(f"Elapsed time to compute the importances: {elapsed_time:.3f} seconds")
+
+            forest_importances = pd.Series(importances, index=X_train.columns)
+            fig, ax = plt.subplots(figsize=figsize)
+            forest_importances.plot.bar(yerr=std, ax=ax)
+            ax.set_title("Feature importances using MDI")
+            ax.set_ylabel("Mean Decrease in Impurity (MDI)")
+            # fig.tight_layout()
+
+        # Report In-sample Estimators
+        y_train_hat_ = RF.predict(X_train)
+        RMSE_train = np.sqrt(np.mean((y_train_hat_ - y_train)**2))
+
+        # Report Out-of-sample Estimators
+        y_test_hat_ = RF.predict(X_test)
+        RMSE_test = np.sqrt(np.mean((y_test_hat_ - y_test)**2))
+
+        # Output
+        return {
+            'Data': {
+                'X_train': X_train, 
+                'y_train': y_train, 
+                'X_test': X_test, 
+                'y_test': y_test
+            },
+            'Model': RF,
+            'Train Result': {
+                'y_train_hat_': y_train_hat_,
+                'RMSE_train': RMSE_train
+            },
+            'Test Result': {
+                'y_test_hat_': y_test_hat_,
+                'RMSE_test': RMSE_test
+            }
+        }
+    # End of function
+    
     # Define function
     def GradientBoosting_Classifier(X_train, X_test, y_train, y_test, 
                                 n_estimators = 100, 
