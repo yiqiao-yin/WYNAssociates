@@ -3114,7 +3114,7 @@ class YinsDL:
         }
     # End function
     
-    # define function
+    # define function    
     def NeuralNet_Regressor(
             X_train=None,
             y_train=None, 
@@ -3126,10 +3126,13 @@ class YinsDL:
             hidden=[128,64,32,10],
             output_shape=1,
             activation="relu",
+            last_activation="sigmoid",
             learning_rate=0.001,
             loss="mse",
             epochs=10,
             plotModelSummary=True,
+            which_layer=None,
+            X_for_internal_extraction=None,
             useGPU=False,
             verbose=True
         ):
@@ -3138,21 +3141,22 @@ class YinsDL:
         import tensorflow as tf
         import time
 
-
         # define model
         def build_model(input_shape=input_shape, hidden=hidden, output_shape=output_shape, learning_rate=learning_rate,
-                        loss="mse", activation=activation):
+                        loss="mse", activation=activation, last_activation=last_activation):
             model = tf.keras.models.Sequential()
 
             # What type of API are we using for input layer?
-            model.add(tf.keras.layers.InputLayer(input_shape=input_shape))
+            model.add(tf.keras.layers.InputLayer(input_shape=input_shape, name='input_layer'))
 
             # What type of API are we using for hidden layer?
+            l = 1
             for layer in hidden:
-                model.add(tf.keras.layers.Dense(layer, activation=activation))
+                model.add(tf.keras.layers.Dense(layer, activation=activation, name=str('dense'+str(l))))
+                l = l + 1
 
             # Why do we set number of neurons (or units) to be 1 for this following layer?
-            model.add(tf.keras.layers.Dense(output_shape))
+            model.add(tf.keras.layers.Dense(output_shape, name=str('dense'+str(l))))
 
             # A gentle reminder question: What is the difference between 
             # stochastic gradient descent and gradient descent?
@@ -3165,11 +3169,13 @@ class YinsDL:
 
         # plot model summary
         if plotModelSummary:
-            model = build_model()
-            print(model.summary())
+            # model = build_model()
+            print(build_model().summary())
 
         # create a KerasRegressor based on the model defined above
-        keras_reg = tf.keras.wrappers.scikit_learn.KerasRegressor(build_model)
+        # print("Checkpoint")
+        # keras_reg_init = tf.keras.wrappers.scikit_learn.KerasRegressor(build_model)
+        keras_reg = build_model()
 
         # comment:
         # The KerasRegressor object is a think wrapper around the Keras model 
@@ -3200,9 +3206,11 @@ class YinsDL:
                     callbacks=[tf.keras.callbacks.EarlyStopping(patience=10)])
         else:        
             # X_train, y_train, X_valid, y_valid, X_test, y_test
+            # print("Checkpoint")
             keras_reg.fit(X_train, y_train, epochs=epochs,
                         validation_data=(X_valid, y_valid),
-                        callbacks=[tf.keras.callbacks.EarlyStopping(patience=10)])
+                         callbacks=[tf.keras.callbacks.EarlyStopping(patience=10)] )
+            print("Checkpoint")
 
 
         # checkpoint
@@ -3220,11 +3228,23 @@ class YinsDL:
         import numpy as np
 
         # mean square error on train set
+        y_train_hat_ = y_train_hat_.reshape(-1)
         RMSE_train = (np.sum((y_train_hat_ - y_train) ** 2) / len(y_train)) ** 0.5
 
         # mean square error on test set
+        y_test_hat_ = y_test_hat_.reshape(-1)
         RMSE_test = (np.sum((y_test_hat_ - y_test) ** 2) / len(y_test)) ** 0.5
 
+        # inference
+        # with a Sequential model
+        if verbose:
+            print('Length of internal layers: ' + str(len(keras_reg.layers)))
+            print('You can input an X and extract output but within any internal layer.')
+            print('Please choose a positive interger up to ' + str(len(keras_reg.layers)-1))
+        if which_layer != None:
+            from tensorflow.keras import backend as K
+            get_internal_layer_fct = K.function([keras_reg.layers[0].input], [keras_reg.layers[which_layer].output])
+            internal_layer_output = get_internal_layer_fct([X_for_internal_extraction])[0]
 
         # Output
         return {
@@ -3234,7 +3254,12 @@ class YinsDL:
                 'X_test': X_test, 
                 'y_test': y_test
             },
-            'Model': keras_reg,
+            'Model': {
+                'trained': keras_reg
+            },
+            'Extracted Internal Layer': {
+                'internal_layer': internal_layer_output
+            },
             'Train Result': {
                 'y_train_hat_': y_train_hat_,
                 'RMSE_train': RMSE_train
