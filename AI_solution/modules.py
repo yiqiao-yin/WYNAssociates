@@ -1944,6 +1944,58 @@ class YinsML:
             }
         }
     # End of function
+    
+    # define function
+    def GradientBoosting_Regressor(
+        X_train, X_test, y_train, y_test, 
+        n_estimators = 100, 
+        learning_rate = 0.2, 
+        maxdepth = 3,
+        random_state = 0):
+
+        # Import Modules
+        import numpy as np
+        import matplotlib.pyplot as plt
+        import pandas as pd
+        from sklearn import ensemble
+        import time
+
+        # Train
+        GB_Reg = ensemble.GradientBoostingRegressor(
+            n_estimators=n_estimators, learning_rate=learning_rate, max_depth=maxdepth, random_state=random_state )
+        GB_Reg = GB_Reg.fit(X_train, y_train)
+
+        # Features
+        feature_importance = pd.DataFrame([GB_Reg.feature_importances_], columns=X_train.columns)
+
+        # Report In-sample Estimators
+        y_train_hat_ = GB_Reg.predict(X_train)
+        RMSE_train = np.sqrt(np.mean((y_train_hat_ - y_train)**2))
+
+        # Report Out-of-sample Estimators
+        y_test_hat_ = GB_Reg.predict(X_test)
+        RMSE_test = np.sqrt(np.mean((y_test_hat_ - y_test)**2))
+
+        # Output
+        return {
+            'Data': {
+                'X_train': X_train, 
+                'y_train': y_train, 
+                'X_test': X_test, 
+                'y_test': y_test
+            },
+            'Model': GB_Reg,
+            'Feature Importance': feature_importance,
+            'Train Result': {
+                'y_train_hat_': y_train_hat_,
+                'RMSE_train': RMSE_train
+            },
+            'Test Result': {
+                'y_test_hat_': y_test_hat_,
+                'RMSE_test': RMSE_test
+            }
+        }
+    # End of function
         
     # Define function
     def Adam_Regressor(Xadam, y, batch_size = 10, lr = 0.01, epochs = 200, period = 20, verbose=True):
