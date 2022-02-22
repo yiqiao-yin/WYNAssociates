@@ -3114,7 +3114,7 @@ class YinsDL:
         }
     # End function
     
-    # define function    
+    # define NeuralNet_Regressor function:
     def NeuralNet_Regressor(
             X_train=None,
             y_train=None, 
@@ -3122,7 +3122,8 @@ class YinsDL:
             y_valid=None, 
             X_test=None, 
             y_test=None,
-            input_shape=[8],
+            name_of_architecture="ANN",
+            input_shape=[None],
             hidden=[128,64,32,10],
             output_shape=1,
             activation="relu",
@@ -3144,7 +3145,7 @@ class YinsDL:
         # define model
         def build_model(input_shape=input_shape, hidden=hidden, output_shape=output_shape, learning_rate=learning_rate,
                         loss="mse", activation=activation, last_activation=last_activation):
-            model = tf.keras.models.Sequential()
+            model = tf.keras.models.Sequential(name=name_of_architecture)
 
             # What type of API are we using for input layer?
             model.add(tf.keras.layers.InputLayer(input_shape=input_shape, name='input_layer'))
@@ -3207,10 +3208,15 @@ class YinsDL:
         else:        
             # X_train, y_train, X_valid, y_valid, X_test, y_test
             # print("Checkpoint")
+            if verbose:
+                vb=1
+            else:
+                vb=0
             keras_reg.fit(X_train, y_train, epochs=epochs,
                         validation_data=(X_valid, y_valid),
-                         callbacks=[tf.keras.callbacks.EarlyStopping(patience=10)] )
-            print("Checkpoint")
+                         callbacks=[tf.keras.callbacks.EarlyStopping(patience=10)],
+                         verbose=vb)
+            # print("Checkpoint")
 
 
         # checkpoint
@@ -3235,6 +3241,14 @@ class YinsDL:
         y_test_hat_ = y_test_hat_.reshape(-1)
         RMSE_test = (np.sum((y_test_hat_ - y_test) ** 2) / len(y_test)) ** 0.5
 
+        # status
+        if verbose:
+            print("Display dimensions of the parameters for each of the layers:")
+            for l in range(len(keras_reg.get_weights())):
+                print("Shape of layer " + str(l) + ": " + str(keras_reg.get_weights()[l].shape))
+            print("To access weights: use the syntax 'my_model['Model'].get_weigths()'. ")
+
+
         # inference
         # with a Sequential model
         if verbose:
@@ -3245,6 +3259,8 @@ class YinsDL:
             from tensorflow.keras import backend as K
             get_internal_layer_fct = K.function([keras_reg.layers[0].input], [keras_reg.layers[which_layer].output])
             internal_layer_output = get_internal_layer_fct([X_for_internal_extraction])[0]
+        else:
+            internal_layer_output = "Please enter which_layer and X_for_internal_extraction to obtain this."
 
         # Output
         return {
@@ -3254,9 +3270,7 @@ class YinsDL:
                 'X_test': X_test, 
                 'y_test': y_test
             },
-            'Model': {
-                'trained': keras_reg
-            },
+            'Model': keras_reg,
             'Extracted Internal Layer': {
                 'internal_layer': internal_layer_output
             },
