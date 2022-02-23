@@ -56,6 +56,7 @@ git clone https://github.com/yiqiao-yin/WYNAssociates.git
 | - [RandomForest_Classifier](https://github.com/yiqiao-yin/WYNAssociates/blob/bc23643dca4c1011f71e4f9fa4844db2df7a84a9/AI_solution/modules.py#L1750) | Random Forest Classifier algorithm | 
 | - [RandomForest_Regressor](https://github.com/yiqiao-yin/WYNAssociates/blob/bc23643dca4c1011f71e4f9fa4844db2df7a84a9/AI_solution/modules.py#L1807) | Random Forest Regressor algorithm |
 | - [GradientBoosting_Classifier](https://github.com/yiqiao-yin/WYNAssociates/blob/bc23643dca4c1011f71e4f9fa4844db2df7a84a9/AI_solution/modules.py#L1885) | Gradient Boosting Classifier algorithm |
+| - [GradientBoosting_Regressor](https://github.com/yiqiao-yin/WYNAssociates/blob/cabe8cae2b869540bf7ccaf91a1687facc09ecec/AI_solution/modules.py#L1949) | Gradient Boosting Regressor algorithm |
 | - [Adam_Regressor](https://github.com/yiqiao-yin/WYNAssociates/blob/bc23643dca4c1011f71e4f9fa4844db2df7a84a9/AI_solution/modules.py#L1947) | Regressor trained using Adam | 
 | - [ResultAUCROC](https://github.com/yiqiao-yin/WYNAssociates/blob/bc23643dca4c1011f71e4f9fa4844db2df7a84a9/AI_solution/modules.py#L2076) | Compute AUCROC of a predictor to its ground truth |
 | [YinsDL](https://github.com/yiqiao-yin/WYNAssociates/blob/bc23643dca4c1011f71e4f9fa4844db2df7a84a9/AI_solution/modules.py#L2100) | A class of functions in deep learning | 
