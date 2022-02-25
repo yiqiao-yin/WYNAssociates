@@ -2027,10 +2027,10 @@ class YinsML:
 
         # source: https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVR.html
         if useStandardScaler:
-            regr = make_pipeline(StandardScaler(), SVR(C=1.0, epsilon=0.2))
+            regr = make_pipeline(StandardScaler(), SVR(kernel=kernel, gamma=gamma, C=C, epsilon=epsilon, verbose=verbose))
         else:
             # kernel='rbf', gamma='auto', C=1.0, epsilon=0.2
-            regr = SVR(kernel=kernel, gamma=gamma, C=C, epsilon=0.2, verbose=verbose)
+            regr = SVR(kernel=kernel, gamma=gamma, C=C, epsilon=epsilon, verbose=verbose)
 
         # fit model
         regr.fit(X_train, y_train)
