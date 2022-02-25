@@ -1996,6 +1996,95 @@ class YinsML:
             }
         }
     # End of function
+    
+    # define SVM_Regressor function:
+    def SVM_Regressor(
+            X_train=None,
+            y_train=None, 
+            X_valid=None, 
+            y_valid=None, 
+            X_test=None, 
+            y_test=None,
+            useStandardScaler=True,
+            kernel='rbf', gamma='auto', 
+            C=1.0, epsilon=0.2,
+            axis_font_size=20,
+            verbose=True
+        ):
+
+        # library
+        import pandas as pd
+        import time
+
+        # checkpoint
+        start = time.time()
+
+        # build model
+        from sklearn.svm import SVR
+        from sklearn.pipeline import make_pipeline
+        from sklearn.preprocessing import StandardScaler
+        import numpy as np
+
+        # source: https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVR.html
+        if useStandardScaler:
+            regr = make_pipeline(StandardScaler(), SVR(C=1.0, epsilon=0.2))
+        else:
+            # kernel='rbf', gamma='auto', C=1.0, epsilon=0.2
+            regr = SVR(kernel=kernel, gamma=gamma, C=C, epsilon=0.2, verbose=verbose)
+
+        # fit model
+        regr.fit(X_train, y_train)
+
+        # checkpoint
+        end = time.time()
+        if verbose:
+            print('Training time consumption ' + str(end-start) + ' seconds.')
+
+        # prediction on train set
+        y_train_hat_ = regr.predict(X_train)
+
+        # prediction on test set
+        y_test_hat_ = regr.predict(X_test)
+
+        # library 
+        import numpy as np
+
+        # mean square error on train set
+        y_train_hat_ = y_train_hat_.reshape(-1)
+        RMSE_train = (np.sum((y_train_hat_ - y_train) ** 2) / len(y_train)) ** 0.5
+
+        # mean square error on test set
+        y_test_hat_ = y_test_hat_.reshape(-1)
+        RMSE_test = (np.sum((y_test_hat_ - y_test) ** 2) / len(y_test)) ** 0.5            
+
+        # visualize
+        if verbose:
+            import seaborn as sns
+            residuals = y_test - y_test_hat_
+            residuals = pd.Series(residuals, name='Residuials')
+            fitted = pd.Series(y_test_hat_, name='Fitted Value')
+            ax = sns.regplot(x=residuals, y=fitted, color='g').set(title='Residuals vs. Fitted Values (Test)')
+            print("Reminder: A good fit leads to Gaussian-like residuals.")
+
+        # Output
+        return {
+            'Data': {
+                'X_train': X_train, 
+                'y_train': y_train, 
+                'X_test': X_test, 
+                'y_test': y_test
+            },
+            'Model': regr,
+            'Train Result': {
+                'y_train_hat_': y_train_hat_,
+                'RMSE_train': RMSE_train
+            },
+            'Test Result': {
+                'y_test_hat_': y_test_hat_,
+                'RMSE_test': RMSE_test
+            }
+        }
+    # End of function
         
     # Define function
     def Adam_Regressor(Xadam, y, batch_size = 10, lr = 0.01, epochs = 200, period = 20, verbose=True):
