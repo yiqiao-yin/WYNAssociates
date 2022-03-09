@@ -3590,8 +3590,7 @@ class YinsDL:
             'Results of ROC': resultsROC
         }        
 
-
-
+    # define
     def LSTM_Regressor(
             X_train=None,
             y_train=None, 
@@ -3619,6 +3618,7 @@ class YinsDL:
 
         # import
         import time
+        import numpy as np
 
         # initialize
         if verbose:
@@ -3626,12 +3626,12 @@ class YinsDL:
 
         # model
         regressor = Sequential(name=name_of_architecture)
-        regressor.add(LSTM(hidden_range[0], return_sequences = True, input_shape = (X_train.shape[1], 1)), name='input_layer'))
+        regressor.add(LSTM(hidden_range[0], return_sequences = True, input_shape = (X_train.shape[1], 1), name='input_layer'))
         regressor.add(Dropout(dropOutRate))
 
         l = 1
         for hidden_layer in hidden_range[1::]:
-            regressor.add(LSTM(units = hidden_layer, return_sequences = True), name=str('dense'+str(l)))
+            regressor.add(LSTM(units = hidden_layer, return_sequences = True, name=str('dense'+str(l))))
             regressor.add(Dropout(dropOutRate))
             regressor.add(tf.keras.layers.MaxPooling1D(pool_size=2, strides=1, padding='valid'))
             l = l + 1
