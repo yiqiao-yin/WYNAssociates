@@ -69,3 +69,4 @@ git clone https://github.com/yiqiao-yin/WYNAssociates.git
 | - [RNN4_Regressor](https://github.com/yiqiao-yin/WYNAssociates/blob/bc23643dca4c1011f71e4f9fa4844db2df7a84a9/AI_solution/modules.py#L2937) | A RNN regressor model for stock price prediction |
 | - [NeuralNet_Regressor](https://github.com/yiqiao-yin/WYNAssociates/blob/dafbbb033d080cc62330ad38302f6c066e302a32/AI_solution/modules.py#L3117) | An automated Deep Artificial Neural Network function for regression problems |
 | - [NeuralNet_Classifier](https://github.com/yiqiao-yin/WYNAssociates/blob/bc23643dca4c1011f71e4f9fa4844db2df7a84a9/AI_solution/modules.py#L3247) | An automated Deep Artificial Neural Network function for classification problems |
+| - [LSTM_Regressor](https://github.com/yiqiao-yin/WYNAssociates/blob/412fc2b7c4dc268ab7869fbf098de767b52bb3ae/AI_solution/modules.py#L3595) | An automated Sequential Model algorithm for regression problems |
