@@ -3589,3 +3589,104 @@ class YinsDL:
             },
             'Results of ROC': resultsROC
         }        
+
+
+
+    def LSTM_Regressor(
+            X_train=None,
+            y_train=None, 
+            X_valid=None, 
+            y_valid=None, 
+            X_test=None, 
+            y_test=None,
+            name_of_architecture='MY_MODEL',
+            hidden_range = [32, 10],
+            dropOutRate = 0.1,
+            output_layer = 1,
+            optimizer = 'adam',
+            loss = 'mean_squared_error',
+            epochs = 10,
+            batch_size = 1,
+            verbose = True
+        ):
+
+        # import 
+        import tensorflow as tf
+        from tensorflow.keras.models import Sequential
+        from tensorflow.keras.layers import Dense
+        from tensorflow.keras.layers import LSTM
+        from tensorflow.keras.layers import Dropout
+
+        # import
+        import time
+
+        # initialize
+        if verbose:
+            begin_time = time.time()
+
+        # model
+        regressor = Sequential(name=name_of_architecture)
+        regressor.add(LSTM(hidden_range[0], return_sequences = True, input_shape = (X_train.shape[1], 1)), name='input_layer'))
+        regressor.add(Dropout(dropOutRate))
+
+        l = 1
+        for hidden_layer in hidden_range[1::]:
+            regressor.add(LSTM(units = hidden_layer, return_sequences = True), name=str('dense'+str(l)))
+            regressor.add(Dropout(dropOutRate))
+            regressor.add(tf.keras.layers.MaxPooling1D(pool_size=2, strides=1, padding='valid'))
+            l = l + 1
+
+        regressor.add(tf.keras.layers.Flatten())
+        regressor.add(Dense(units=output_layer, name=str('dense'+str(l+1))))
+
+        # verbose
+        if verbose:
+            end_time = time.time()
+            print("Time Consumption (in sec): " + str((end_time - begin_time)/60))
+
+        # compile
+        regressor.compile(optimizer = optimizer, loss = loss)
+
+        # print
+        if verbose:
+            # summary
+            regressor.summary()
+
+        # fit
+        begin_time = time.time()
+        regressor.fit(
+            X_train, y_train, epochs = epochs, batch_size = batch_size,
+            validation_data = (X_valid, y_valid))
+        end_time = time.time()
+
+        # verbose
+        if verbose:
+            print("Time Consumption (in sec): " + str((end_time - begin_time)/60))
+
+        # prediction
+        y_train_hat_ = regressor.predict(X_train)
+        y_test_hat_ = regressor.predict(X_test)
+
+        # errors
+        RMSE_train = (np.sum((y_train_hat_ - y_train) ** 2) / len(y_train)) ** 0.5
+        RMSE_test = (np.sum((y_test_hat_ - y_test) ** 2) / len(y_test)) ** 0.5
+
+        # Output
+        return {
+            'Data': {
+                'X_train': X_train, 
+                'y_train': y_train, 
+                'X_test': X_test, 
+                'y_test': y_test
+            },
+            'Model': regressor,
+            'Train Result': {
+                'y_train_hat_': y_train_hat_,
+                'RMSE_train': RMSE_train
+            },
+            'Test Result': {
+                'y_test_hat_': y_test_hat_,
+                'RMSE_test': RMSE_test
+            }
+        }
+    # End of function
