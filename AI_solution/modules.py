@@ -3264,28 +3264,33 @@ class YinsDL:
             X_test=None, 
             y_test=None,
             name_of_architecture="ANN",
-            input_shape=[None],
+            input_shape=[8],
             hidden=[128,64,32,10],
             output_shape=1,
             activation="relu",
             last_activation="sigmoid",
             learning_rate=0.001,
             loss="mse",
+            name_of_optimizer="adam",
             epochs=10,
             plotModelSummary=True,
+            axis_font_size=20,
             which_layer=None,
             X_for_internal_extraction=None,
             useGPU=False,
+            use_earlystopping=False,
+            do_plot=False,
             verbose=True
         ):
 
         # library
         import tensorflow as tf
+        import pandas as pd
         import time
 
         # define model
         def build_model(input_shape=input_shape, hidden=hidden, output_shape=output_shape, learning_rate=learning_rate,
-                        loss="mse", activation=activation, last_activation=last_activation):
+                        loss="mse", activation=activation, last_activation=last_activation, name_of_optimizer=name_of_optimizer):
             model = tf.keras.models.Sequential(name=name_of_architecture)
 
             # What type of API are we using for input layer?
@@ -3302,7 +3307,12 @@ class YinsDL:
 
             # A gentle reminder question: What is the difference between 
             # stochastic gradient descent and gradient descent?
-            optimizer = tf.keras.optimizers.SGD(lr=learning_rate)
+            if name_of_optimizer == "SGD" or name_of_optimizer == "sgd":
+                optimizer = tf.keras.optimizers.SGD(lr=learning_rate)
+            elif name_of_optimizer == "ADAM" or name_of_optimizer == "adam":
+                optimizer = tf.keras.optimizers.Adam(lr=learning_rate)
+            elif name_of_optimizer == "RMSprop" or name_of_optimizer == "rmsprop":
+                optimizer = tf.keras.optimizers.RMSprop(lr=learning_rate)
 
             # Another gentle reminder question: Why do we use mse or mean squared error？
             model.compile(loss=loss, optimizer=optimizer)
@@ -3353,10 +3363,17 @@ class YinsDL:
                 vb=1
             else:
                 vb=0
-            keras_reg.fit(X_train, y_train, epochs=epochs,
-                        validation_data=(X_valid, y_valid),
-                         callbacks=[tf.keras.callbacks.EarlyStopping(patience=10)],
-                         verbose=vb)
+            if use_earlystopping:
+                keras_reg.fit(
+                    X_train, y_train, epochs=epochs,
+                    validation_data=(X_valid, y_valid),
+                    callbacks=[tf.keras.callbacks.EarlyStopping(patience=10)],
+                    verbose=vb)
+            else:
+                keras_reg.fit(
+                    X_train, y_train, epochs=epochs,
+                    validation_data=(X_valid, y_valid),
+                    verbose=vb)
             # print("Checkpoint")
 
 
@@ -3373,14 +3390,30 @@ class YinsDL:
 
         # library 
         import numpy as np
+        from sklearn.metrics import mean_absolute_percentage_error
+        from sklearn.metrics import mean_squared_error
 
         # mean square error on train set
-        y_train_hat_ = y_train_hat_.reshape(-1)
-        RMSE_train = (np.sum((y_train_hat_ - y_train) ** 2) / len(y_train)) ** 0.5
+        y_train_hat_ = y_train_hat_.reshape(-1)    
+        y_train_hat_=pd.Series(y_train_hat_).fillna(0).tolist()
+        if output_shape == 1:
+            MAPE_train = mean_absolute_percentage_error(y_true=y_train, y_pred=y_train_hat_)
+            RMSE_train = mean_squared_error(y_true=y_train, y_pred=y_train_hat_) ** (.5)
+        else:
+            MAPE_train = "Output layer has shape more than 1."
+            RMSE_train = "Output layer has shape more than 1."
 
         # mean square error on test set
         y_test_hat_ = y_test_hat_.reshape(-1)
-        RMSE_test = (np.sum((y_test_hat_ - y_test) ** 2) / len(y_test)) ** 0.5
+        y_test_hat_=pd.Series(y_test_hat_).fillna(0).tolist()
+        if output_shape == 1:
+            MAPE_test = mean_absolute_percentage_error(y_true=y_test, y_pred=y_test_hat_)
+            RMSE_test = mean_squared_error(y_true=y_test, y_pred=y_test_hat_) ** (.5)
+        else:
+            MAPE_test = "Output layer has shape more than 1."
+            RMSE_test = "Output layer has shape more than 1."
+
+        # report: MAPE_train, RMSE_train, MAPE_test, RMSE_test
 
         # status
         if verbose:
@@ -3399,9 +3432,18 @@ class YinsDL:
         if which_layer != None:
             from tensorflow.keras import backend as K
             get_internal_layer_fct = K.function([keras_reg.layers[0].input], [keras_reg.layers[which_layer].output])
-            internal_layer_output = get_internal_layer_fct([X_for_internal_extraction])[0]
+            internal_layer_output = get_internal_layer_fct([np.asarray(X_for_internal_extraction)])[0]
         else:
             internal_layer_output = "Please enter which_layer and X_for_internal_extraction to obtain this."
+
+        # visualize
+        if do_plot:
+            import seaborn as sns
+            residuals = y_test - y_test_hat_
+            residuals = pd.Series(residuals, name='Residuials')
+            fitted = pd.Series(y_test_hat_, name='Fitted Value')
+            ax = sns.regplot(x=residuals, y=fitted, color='g').set(title='Residuals vs. Fitted Values (Test)')
+            print("Reminder: A good fit leads to Gaussian-like residuals.")
 
         # Output
         return {
@@ -3417,11 +3459,13 @@ class YinsDL:
             },
             'Train Result': {
                 'y_train_hat_': y_train_hat_,
-                'RMSE_train': RMSE_train
+                'RMSE_train': RMSE_train,
+                'MAPE_train': MAPE_train
             },
             'Test Result': {
                 'y_test_hat_': y_test_hat_,
-                'RMSE_test': RMSE_test
+                'RMSE_test': RMSE_test,
+                'MAPE_test': MAPE_test
             }
         }
     # End of function
