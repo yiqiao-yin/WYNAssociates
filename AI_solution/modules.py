@@ -3264,7 +3264,9 @@ class YinsDL:
             X_test=None, 
             y_test=None,
             name_of_architecture="ANN",
-            input_shape=[8],
+            input_shape=8,
+            use_auxinput=True,
+            num_of_res_style_block=None,
             hidden=[128,64,32,10],
             output_shape=1,
             activation="relu",
@@ -3284,26 +3286,52 @@ class YinsDL:
         ):
 
         # library
-        import tensorflow as tf
+        import numpy as np
         import pandas as pd
+        import tensorflow as tf
+        from tensorflow import keras
+        from tensorflow.keras import layers
         import time
 
         # define model
-        def build_model(input_shape=input_shape, hidden=hidden, output_shape=output_shape, learning_rate=learning_rate,
+        def build_model(input_shape=input_shape, use_auxinput=use_auxinput, num_of_res_style_block=num_of_res_style_block,
+                        hidden=hidden, output_shape=output_shape, learning_rate=learning_rate,
                         loss="mse", activation=activation, last_activation=last_activation, name_of_optimizer=name_of_optimizer):
-            model = tf.keras.models.Sequential(name=name_of_architecture)
+            # model = tf.keras.models.Sequential(name=name_of_architecture)
+            inputs = keras.Input(shape=(input_shape,), name="input_layer")
+            if use_auxinput:
+                aux_input = inputs
 
-            # What type of API are we using for input layer?
-            model.add(tf.keras.layers.InputLayer(input_shape=input_shape, name='input_layer'))
+            # Set up the input layer or the 1st hidden layer
+            dense = layers.Dense(hidden[0], activation=activation, name=str('dense1'))
+            x = dense(inputs)
 
             # What type of API are we using for hidden layer?
-            l = 1
-            for layer in hidden:
-                model.add(tf.keras.layers.Dense(layer, activation=activation, name=str('dense'+str(l))))
+            l = 2
+            for layer in hidden[1::]:
+                dense = layers.Dense(layer, activation=activation, name=str('dense'+str(l)))
+                x = dense(x)
                 l = l + 1
 
+            # Merge all available features into a single large vector via concatenation
+            if use_auxinput:
+                x = layers.concatenate([x, aux_input])
+
+            # Optional: design residual style block if num_of_res_style_block is an integer
+            # else continue
+            if num_of_res_style_block == None:
+                pass
+            else:
+                for res_i in range(num_of_res_style_block):
+                    aux_input = x
+                    for layer in hidden:
+                        dense = layers.Dense(layer, activation=activation, name=str('dense'+str(l)))
+                        x = dense(x)
+                        l = l + 1
+                    x = layers.concatenate([x, aux_input])                
+
             # Why do we set number of neurons (or units) to be 1 for this following layer?
-            model.add(tf.keras.layers.Dense(output_shape, name=str('dense'+str(l))))
+            outputs = layers.Dense(output_shape, name=str('dense'+str(l)))(x)
 
             # A gentle reminder question: What is the difference between 
             # stochastic gradient descent and gradient descent?
@@ -3314,20 +3342,25 @@ class YinsDL:
             elif name_of_optimizer == "RMSprop" or name_of_optimizer == "rmsprop":
                 optimizer = tf.keras.optimizers.RMSprop(lr=learning_rate)
 
+            # Design a model
+            model = keras.Model(inputs=inputs, outputs=outputs, name=name_of_architecture)
+
             # Another gentle reminder question: Why do we use mse or mean squared error？
             model.compile(loss=loss, optimizer=optimizer)
 
             return model
 
-        # plot model summary
-        if plotModelSummary:
-            # model = build_model()
-            print(build_model().summary())
-
         # create a KerasRegressor based on the model defined above
         # print("Checkpoint")
         # keras_reg_init = tf.keras.wrappers.scikit_learn.KerasRegressor(build_model)
         keras_reg = build_model()
+
+        # plot model summary
+        if plotModelSummary:
+            import pydot
+            import graphviz
+            keras.utils.plot_model(keras_reg, name_of_architecture+".png", show_shapes=True)
+            print(keras_reg.summary())
 
         # comment:
         # The KerasRegressor object is a think wrapper around the Keras model 
@@ -3352,7 +3385,7 @@ class YinsDL:
 
             print("Using GPU to compute...")
             with tf.device('/device:GPU:0'):
-                keras_reg.fit(
+                history = keras_reg.fit(
                     X_train, y_train, epochs=epochs,
                     validation_data=(X_valid, y_valid),
                     callbacks=[tf.keras.callbacks.EarlyStopping(patience=10)])
@@ -3364,13 +3397,13 @@ class YinsDL:
             else:
                 vb=0
             if use_earlystopping:
-                keras_reg.fit(
+                history = keras_reg.fit(
                     X_train, y_train, epochs=epochs,
                     validation_data=(X_valid, y_valid),
                     callbacks=[tf.keras.callbacks.EarlyStopping(patience=10)],
                     verbose=vb)
             else:
-                keras_reg.fit(
+                history = keras_reg.fit(
                     X_train, y_train, epochs=epochs,
                     validation_data=(X_valid, y_valid),
                     verbose=vb)
@@ -3454,6 +3487,7 @@ class YinsDL:
                 'y_test': y_test
             },
             'Model': keras_reg,
+            'History': history,
             'Extracted Internal Layer': {
                 'internal_layer': internal_layer_output
             },
@@ -3469,6 +3503,7 @@ class YinsDL:
             }
         }
     # End of function
+
     
     # define function
     def NeuralNet_Classifier(
