@@ -1,33 +1,33 @@
+# Import Libraries
+import pandas as pd
+import numpy as np
+import yfinance as yf
+import time
+
+# Import Libraries
+from scipy import stats
+# import pandas as pd
+# import numpy as np
+# import yfinance as yf
+import matplotlib.pyplot as plt
+# import time
+
+# Import Libraries
+from ta.momentum import RSIIndicator
+from ta.trend import SMAIndicator
+
+# import numpy as np
+# import pandas as pd
+# import matplotlib.pyplot as plt
+# import yfinance as yf
+import math
+    
 class YinsFinancialTools:
 
     """
     Yin's Machine Learning Package for Financial Tools
     Copyright © W.Y.N. Associates, LLC, 2009 – Present
     """
-    
-    # Import Libraries
-    import pandas as pd
-    import numpy as np
-    import yfinance as yf
-    import time
-
-    # Import Libraries
-    from scipy import stats
-    # import pandas as pd
-    # import numpy as np
-    # import yfinance as yf
-    import matplotlib.pyplot as plt
-    # import time
-
-    # Import Libraries
-    from ta.momentum import RSIIndicator
-    from ta.trend import SMAIndicator
-
-    # import numpy as np
-    # import pandas as pd
-    # import matplotlib.pyplot as plt
-    # import yfinance as yf
-    import math
 
     # Define function: Yins Timer Algorithm
     def Yin_Timer(
@@ -87,7 +87,6 @@ class YinsFinancialTools:
     #     import time
 
         # Time
-        import time
         start = time.time()
 
         # Get Data
