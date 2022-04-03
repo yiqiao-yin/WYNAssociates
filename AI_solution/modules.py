@@ -87,6 +87,7 @@ class YinsFinancialTools:
     #     import time
 
         # Time
+        import time
         start = time.time()
 
         # Get Data
