@@ -3429,8 +3429,12 @@ class YinsDL:
 
         # library 
         import numpy as np
-        from sklearn.metrics import mean_absolute_percentage_error
+        # from sklearn.metrics import mean_absolute_percentage_error
         from sklearn.metrics import mean_squared_error
+        
+        def mean_absolute_percentage_error(y_true, y_pred): 
+            y_true, y_pred = np.array(y_true), np.array(y_pred)
+            return np.mean(np.abs((y_true - y_pred) / np.maximum(np.ones(len(y_true)), np.abs(y_true))))*100
 
         # mean square error on train set
         y_train_hat_ = y_train_hat_.reshape(-1)    
