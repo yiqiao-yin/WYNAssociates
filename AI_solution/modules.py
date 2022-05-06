@@ -1,27 +1,15 @@
 # Import Libraries
 import pandas as pd
 import numpy as np
-import yfinance as yf
 import time
 
 # Import Libraries
 from scipy import stats
-# import pandas as pd
-# import numpy as np
-# import yfinance as yf
 import matplotlib.pyplot as plt
 # import time
 
 # Import Libraries
-from ta.momentum import RSIIndicator
-from ta.trend import SMAIndicator
-
-# import numpy as np
-# import pandas as pd
-# import matplotlib.pyplot as plt
-# import yfinance as yf
 import math
-    
         
 class YinsDL:
     
@@ -1166,12 +1154,24 @@ class YinsDL:
                 raise SystemError('GPU device not found. If you are in Colab, please go to Edit => Notebook Setting to select GPU as Hardware Accelerator.')
             print('Found GPU at: {}'.format(device_name))
 
+            # train
+            if verbose:
+                vb=1
+            else:
+                vb=0
             print("Using GPU to compute...")
-            with tf.device('/device:GPU:0'):
+            if use_earlystopping:
+                with tf.device('/device:GPU:0'):
+                    history = keras_reg.fit(
+                        X_train, y_train, epochs=epochs,
+                        validation_data=(X_valid, y_valid),
+                        callbacks=[tf.keras.callbacks.EarlyStopping(patience=10)],
+                        verbose=vb)
+            else:
                 history = keras_reg.fit(
                     X_train, y_train, epochs=epochs,
                     validation_data=(X_valid, y_valid),
-                    callbacks=[tf.keras.callbacks.EarlyStopping(patience=10)])
+                    verbose=vb)
         else:        
             # X_train, y_train, X_valid, y_valid, X_test, y_test
             # print("Checkpoint")
