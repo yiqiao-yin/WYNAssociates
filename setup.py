@@ -7,5 +7,5 @@ setup(
   version='1.0.0',
   license="MIT license",
   description="This package provides AI-driven solutions.",
-  packages=["AI_solution"],
+  packages=["AI_solution", "ML_solution"]
 )
