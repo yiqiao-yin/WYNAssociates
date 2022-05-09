@@ -1574,7 +1574,9 @@ class YinsDL:
         loss="sparse_categorical_crossentropy",
         epochs=400,
         figsize=(12,6),
-        name_of_file = "model.png"
+        name_of_file = "model.png",
+        plotModel = True,
+        useGPU = True
         ):
 
         # define unet
