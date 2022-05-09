@@ -1582,7 +1582,7 @@ class YinsDL:
         ):
 
         # define unet
-        def get_model(img_size, num_classes):
+        def get_model(img_size, num_classes, ENC_PARAM):
             inputs = keras.Input(shape=img_size)
 
             ### [First half of the network: downsampling inputs] ###
