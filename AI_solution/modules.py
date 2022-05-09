@@ -1645,7 +1645,7 @@ def unet_model(
         # Plot Model
         if plotModel:
                 # name_of_file = "model.png"
-                tf.keras.utils.plot_model(model, to_file=name_of_file show_shapes=True, expand_nested=True)
+                tf.keras.utils.plot_model(model, to_file=name_of_file, show_shapes=True, expand_nested=True)
 
         # compile
         # Configure the model for training.
