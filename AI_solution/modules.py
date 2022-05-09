@@ -1,7 +1,9 @@
 # Import Libraries
+import time
 import pandas as pd
 import numpy as np
-import time
+from tensorflow import keras
+from tensorflow.keras import layers
 
 # Import Libraries
 from scipy import stats
@@ -1556,3 +1558,176 @@ class YinsDL:
             }
         }
     # End of function
+
+        
+# defin unet (inception style)
+def unet_model(     
+        x_train=None,
+        y_train=None,
+        x_val=None, 
+        y_val=None,
+        img_size = (128, 128, 1),
+        num_classes = 2,
+        ENC_PARAM = [2**i for i in range(5, 10)],
+        plotModel = True,
+        optimizer="adam", 
+        loss="sparse_categorical_crossentropy",
+        epochs=400,
+        figsize=(12,6),
+        name_of_file = "model.png"
+        ):
+
+        # define unet
+        def get_model(img_size, num_classes):
+            inputs = keras.Input(shape=img_size)
+
+            ### [First half of the network: downsampling inputs] ###
+            ENC_PARAM = ENC_PARAM
+
+            # Entry block
+            x = layers.Conv2D(ENC_PARAM[0], 3, strides=2, padding="same")(inputs)
+            x = layers.BatchNormalization()(x)
+            x = layers.Activation("relu")(x)
+
+            previous_block_activation = x  # Set aside residual
+
+            # Blocks 1, 2, 3 are identical apart from the feature depth.
+            for filters in ENC_PARAM[1::]:
+                x = layers.Activation("relu")(x)
+                x = layers.SeparableConv2D(filters, 3, padding="same")(x)
+                x = layers.BatchNormalization()(x)
+
+                x = layers.Activation("relu")(x)
+                x = layers.SeparableConv2D(filters, 3, padding="same")(x)
+                x = layers.BatchNormalization()(x)
+
+                x = layers.MaxPooling2D(3, strides=2, padding="same")(x)
+
+                # Project residual
+                residual = layers.Conv2D(filters, 1, strides=2, padding="same")(
+                    previous_block_activation
+                )
+                x = layers.add([x, residual])  # Add back residual
+                previous_block_activation = x  # Set aside next residual
+
+            ### [Second half of the network: upsampling inputs] ###
+            DEC_PARAM = ENC_PARAM[::-1]
+
+            for filters in DEC_PARAM:
+                x = layers.Activation("relu")(x)
+                x = layers.Conv2DTranspose(filters, 3, padding="same")(x)
+                x = layers.BatchNormalization()(x)
+
+                x = layers.Activation("relu")(x)
+                x = layers.Conv2DTranspose(filters, 3, padding="same")(x)
+                x = layers.BatchNormalization()(x)
+
+                x = layers.UpSampling2D(2)(x)
+
+                # Project residual
+                residual = layers.UpSampling2D(2)(previous_block_activation)
+                residual = layers.Conv2D(filters, 1, padding="same")(residual)
+                x = layers.add([x, residual])  # Add back residual
+                previous_block_activation = x  # Set aside next residual
+
+            # Add a per-pixel classification layer
+            outputs = layers.Conv2D(num_classes, 3, activation="softmax", padding="same")(x)
+
+            # Define the model
+            model = keras.Model(inputs, outputs)
+
+            # return
+            return model
+
+        # Build model
+        model = get_model(img_size, num_classes=2)
+
+        # Plot Model
+        if plotModel:
+                # name_of_file = "model.png"
+                tf.keras.utils.plot_model(model, to_file=name_of_file show_shapes=True, expand_nested=True)
+
+        # compile
+        # Configure the model for training.
+        # We use the "sparse" version of categorical_crossentropy
+        # because our target data is integers.
+        model.compile(
+            # default:
+            optimizer=optimizer, 
+            loss=loss, 
+            metrics=['accuracy']  )
+
+        # callbacks
+        callbacks = [ keras.callbacks.ModelCheckpoint("model_segmentation.h5", save_best_only=True) ]
+        # note
+        # https://www.tensorflow.org/guide/keras/save_and_serialize
+        # when need to use the saved model, you can call it by using 
+        # from tensorflow import keras
+        # model = keras.models.load_model('path/to/location')
+
+        # fit
+        if useGPU:
+                device_name = tf.test.gpu_device_name()
+                if device_name != '/device:GPU:0':
+                  raise SystemError('GPU device not found')
+                print('Found GPU at: {}'.format(device_name))
+
+                # use GPU
+                with tf.device('/device:GPU:0'):
+                    # Train the model, doing validation at the end of each epoch.
+                    history = model.fit(
+                        x_train, y_train, 
+                        epochs=epochs, 
+                        validation_data=(x_val, y_val), 
+                        callbacks=callbacks)
+        else:         
+                # Train the model, doing validation at the end of each epoch.
+                history = model.fit(
+                        x_train, y_train, 
+                        epochs=epochs, 
+                        validation_data=(x_val, y_val), 
+                        callbacks=callbacks)
+
+        # plot loss
+        import matplotlib.pyplot as plt
+        plt.figure(figsize=figsize)
+        plt.plot(history.history['loss'], label = 'training loss')
+        plt.plot(history.history['val_loss'], label = 'validating loss')
+        plt.xlabel('Epoch')
+        plt.ylabel('Loss')
+        plt.legend(loc='lower right') # specify location of the legend
+
+        # prediction
+        # make predictions using validating set
+        y_hat_train_ = model.predict(x_train)
+        y_hat_test_ = model.predict(x_val)
+
+        # plt.figure(figsize=(28, 16))
+        # for i in range(10):
+        #     plt.subplot(1,25,i+1)
+        #     plt.imshow(y_val[i][:, :, 0], cmap='gist_gray_r') # plt.cm.binary
+
+        # plt.show()
+
+        # plt.figure(figsize=(28, 16))
+        # for i in range(10):
+        #     plt.subplot(1,25,i+1)
+        #     plt.imshow(x_val[i][:, :, 0], cmap='gist_gray_r') # plt.cm.binary
+
+        # plt.show()
+        
+        # output
+        return {
+            'Data': {
+                'x_train': x_train,
+                'y_train': y_train,
+                'x_val': x_val, 
+                'y_val': y_val
+            },
+            'Model': model,
+            'History': history,
+            'Prediction': {
+                'y_hat_train_': y_hat_train_,
+                'y_hat_train_': y_hat_train_
+            }
+        }
