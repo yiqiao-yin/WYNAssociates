@@ -1560,8 +1560,8 @@ class YinsDL:
     # End of function
 
         
-# defin unet (inception style)
-def unet_model(     
+    # define unet (inception style)
+    def unet_model(     
         x_train=None,
         y_train=None,
         x_val=None, 
@@ -1715,7 +1715,7 @@ def unet_model(
         #     plt.imshow(x_val[i][:, :, 0], cmap='gist_gray_r') # plt.cm.binary
 
         # plt.show()
-        
+
         # output
         return {
             'Data': {
