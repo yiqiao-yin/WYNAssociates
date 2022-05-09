@@ -1569,14 +1569,16 @@ class YinsDL:
         img_size = (128, 128, 1),
         num_classes = 2,
         ENC_PARAM = [2**i for i in range(5, 10)],
-        plotModel = True,
         optimizer="adam", 
         loss="sparse_categorical_crossentropy",
         epochs=400,
         figsize=(12,6),
         name_of_file = "model.png",
         plotModel = True,
-        useGPU = True
+        useGPU = True,
+        verbose = True,
+        which_layer = None,
+        X_for_internal_extraction = None
         ):
 
         # define unet
@@ -1689,6 +1691,19 @@ class YinsDL:
                         epochs=epochs, 
                         validation_data=(x_val, y_val), 
                         callbacks=callbacks)
+        
+        # inference
+        # with a Sequential model
+        if verbose:
+            print('Length of internal layers: ' + str(len(model.layers)))
+            print('You can input an X and extract output but within any internal layer.')
+            print('Please choose a positive interger up to ' + str(len(model.layers)-1))
+        if which_layer != None:
+            from tensorflow.keras import backend as K
+            get_internal_layer_fct = K.function([model.layers[0].input], [model.layers[which_layer].output])
+            internal_layer_output = get_internal_layer_fct([np.asarray(X_for_internal_extraction)])[0]
+        else:
+            internal_layer_output = "Please enter which_layer and X_for_internal_extraction to obtain this."
 
         # plot loss
         import matplotlib.pyplot as plt
