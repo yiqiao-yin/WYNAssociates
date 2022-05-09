@@ -1644,7 +1644,7 @@ class YinsDL:
             return model
 
         # Build model
-        model = get_model(img_size, num_classes=2)
+        model = get_model(img_size=img_size, num_classes=2, ENC_PARAM=ENC_PARAM)
 
         # Plot Model
         if plotModel:
