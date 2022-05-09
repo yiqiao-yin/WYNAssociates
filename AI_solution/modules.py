@@ -1744,6 +1744,9 @@ class YinsDL:
             },
             'Model': model,
             'History': history,
+            'Extracted Internal Layer': {
+                    'internal_layer': internal_layer_output
+            },
             'Prediction': {
                 'y_hat_train_': y_hat_train_,
                 'y_hat_train_': y_hat_train_
