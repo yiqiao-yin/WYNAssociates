@@ -6,11 +6,8 @@ import time
 
 # Import Libraries
 from scipy import stats
-# import pandas as pd
-# import numpy as np
-# import yfinance as yf
 import matplotlib.pyplot as plt
-# import time
+from sklearn.model_selection import train_test_split
 
 # Import Libraries
 from ta.momentum import RSIIndicator
@@ -754,3 +751,41 @@ class YinsML:
                   Area under the curve = {0:0.3f}'.format(areaUnderROC))
         plt.legend(loc="lower right")
         plt.show()
+
+    def AutoMachineLearningClassifier(
+        X = None,
+        y = None,
+        cutoff = 0.1,
+        random_state = 123,
+        selected_algorithm = ['AdaBoostClassifier', 'BaggingClassifier', 'BernoulliNB', 'CalibratedClassifierCV', 'DecisionTreeClassifier', 'DummyClassifier', 'ExtraTreeClassifier', 'ExtraTreesClassifier', 'GaussianNB', 'KNeighborsClassifier', 'LabelPropagation', 'LabelSpreading', 'LinearDiscriminantAnalysis', 'LinearSVC', 'LogisticRegression', 'NearestCentroid', 'NuSVC', 'PassiveAggressiveClassifier', 'Perceptron', 'QuadraticDiscriminantAnalysis', 'RandomForestClassifier', 'RidgeClassifier', 'RidgeClassifierCV', 'SGDClassifier', 'SVC', 'XGBClassifier', 'LGBMClassifier']
+    ):
+        
+        # library
+        import lazypredict
+        from lazypredict.Supervised import LazyClassifier
+
+        # split train test
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=cutoff, random_state=random_state)
+        
+        # fit
+        clf = LazyClassifier(verbose=0, ignore_warnings=True, custom_metric=None)
+        results, predictions = clf.fit(X_train, X_test, y_train, y_test)
+        models_ = clf.provide_models(X_train, X_test, y_train, y_test)
+        
+        # prediction
+        y_train_hat_mat_ = []
+        y_test_hat_mat_ = []
+        for some_algo in selected_algorithm:
+            y_train_hat_mat_.append(models_[some_algo].predict(X_train))
+            y_test_hat_mat_.append(models_[some_algo].predict(X_test))
+        
+        # output
+        return {
+            'Model': models_,
+            'List of Algorithms': models_.keys(),
+            'Results': results,
+            'Predictions': {
+                'y_train_hat_mat_': y_train_hat_mat_,
+                'y_test_hat_mat_': y_test_hat_mat_
+            }
+        }
