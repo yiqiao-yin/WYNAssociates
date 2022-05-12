@@ -38,35 +38,42 @@ git clone https://github.com/yiqiao-yin/WYNAssociates.git
 
 - A sample notebook for RNN education can be found [here](https://github.com/yiqiao-yin/WYNAssociates/blob/main/docs/python_MM_LSTM_StockPriceForecast.ipynb). We provide some basic education of Recurrent Neural Network (aka Long Short-Term Memory). The term Recurrent Neural Network is short for RNN and Long Short-Term Memory is short for LSTM.
 
-## List of Functions
+## Data-Centric Solutions
 
-| Name  | Definition |
-| ------------- | ------------- |
-| [Yin_Timer](https://github.com/yiqiao-yin/WYNAssociates/blob/bc23643dca4c1011f71e4f9fa4844db2df7a84a9/AI_solution/modules.py#L27)  | A stock market timing strategy  |
-| [RSI_Timer](https://github.com/yiqiao-yin/WYNAssociates/blob/2b5994f77a74038dd10e55182a0cc16e71168a32/AI_solution/modules.py#L296)  | A stock market timing strategy  |
-| [RNN_Regressor](https://github.com/yiqiao-yin/WYNAssociates/blob/2b5994f77a74038dd10e55182a0cc16e71168a32/AI_solution/modules.py#L410) | A stock price forecast algorithm |
-| [Neural_Sequence_Translation](https://github.com/yiqiao-yin/WYNAssociates/blob/2b5994f77a74038dd10e55182a0cc16e71168a32/AI_solution/modules.py#L696) | A candlestick sequence forecast algorithm |
-| [Autonomous_Neural_Sequence_Translation](https://github.com/yiqiao-yin/WYNAssociates/blob/2b5994f77a74038dd10e55182a0cc16e71168a32/AI_solution/modules.py#L960) | A sequence-to-sequence prediction model |
-| [Embedding_Neural_Sequence_Translation](https://github.com/yiqiao-yin/WYNAssociates/blob/2b5994f77a74038dd10e55182a0cc16e71168a32/AI_solution/modules.py#L1223) | A sequence-to-sequence prediction model with embedding layer | 
-| [YinsML](https://github.com/yiqiao-yin/WYNAssociates/blob/bc23643dca4c1011f71e4f9fa4844db2df7a84a9/AI_solution/modules.py#L1509) | A class of functions in machine learning | 
-| - [LogisticRegression_Classifier](https://github.com/yiqiao-yin/WYNAssociates/blob/bc23643dca4c1011f71e4f9fa4844db2df7a84a9/AI_solution/modules.py#L1517) | Logistic regression classifier |
-| - [KNN_Classifier](https://github.com/yiqiao-yin/WYNAssociates/blob/bc23643dca4c1011f71e4f9fa4844db2df7a84a9/AI_solution/modules.py#L1574) | KNN classifier |
-| - [DecisionTree_Classifier](https://github.com/yiqiao-yin/WYNAssociates/blob/bc23643dca4c1011f71e4f9fa4844db2df7a84a9/AI_solution/modules.py#L1631) | Decision tree classifier |
-| - [DecisionTree_Regressor](https://github.com/yiqiao-yin/WYNAssociates/blob/bc23643dca4c1011f71e4f9fa4844db2df7a84a9/AI_solution/modules.py#L1697) | Decision tree regressor |
-| - [RandomForest_Classifier](https://github.com/yiqiao-yin/WYNAssociates/blob/bc23643dca4c1011f71e4f9fa4844db2df7a84a9/AI_solution/modules.py#L1750) | Random Forest Classifier algorithm | 
-| - [RandomForest_Regressor](https://github.com/yiqiao-yin/WYNAssociates/blob/bc23643dca4c1011f71e4f9fa4844db2df7a84a9/AI_solution/modules.py#L1807) | Random Forest Regressor algorithm |
-| - [GradientBoosting_Classifier](https://github.com/yiqiao-yin/WYNAssociates/blob/bc23643dca4c1011f71e4f9fa4844db2df7a84a9/AI_solution/modules.py#L1885) | Gradient Boosting Classifier algorithm |
-| - [GradientBoosting_Regressor](https://github.com/yiqiao-yin/WYNAssociates/blob/cabe8cae2b869540bf7ccaf91a1687facc09ecec/AI_solution/modules.py#L1949) | Gradient Boosting Regressor algorithm |
-| - [Adam_Regressor](https://github.com/yiqiao-yin/WYNAssociates/blob/bc23643dca4c1011f71e4f9fa4844db2df7a84a9/AI_solution/modules.py#L1947) | Regressor trained using Adam | 
-| - [ResultAUCROC](https://github.com/yiqiao-yin/WYNAssociates/blob/bc23643dca4c1011f71e4f9fa4844db2df7a84a9/AI_solution/modules.py#L2076) | Compute AUCROC of a predictor to its ground truth |
-| [YinsDL](https://github.com/yiqiao-yin/WYNAssociates/blob/bc23643dca4c1011f71e4f9fa4844db2df7a84a9/AI_solution/modules.py#L2100) | A class of functions in deep learning | 
-| - [NN3_Classifier](https://github.com/yiqiao-yin/WYNAssociates/blob/bc23643dca4c1011f71e4f9fa4844db2df7a84a9/AI_solution/modules.py#L2112) | A neural network with 3 layers |
-| - [NN10_Classifier](https://github.com/yiqiao-yin/WYNAssociates/blob/bc23643dca4c1011f71e4f9fa4844db2df7a84a9/AI_solution/modules.py#L2248) | A neural network with 10 layers | 
-| - [plotOneImage](https://github.com/yiqiao-yin/WYNAssociates/blob/2b5994f77a74038dd10e55182a0cc16e71168a32/AI_solution/modules.py#L2066) | A helper function to plot images | 
-| - [ConvOperationC1](https://github.com/yiqiao-yin/WYNAssociates/blob/bc23643dca4c1011f71e4f9fa4844db2df7a84a9/AI_solution/modules.py#L2432) | Hand crafted convolutional operation with one pre-defined filter | 
-| - [C1NN3_Classifier](https://github.com/yiqiao-yin/WYNAssociates/blob/bc23643dca4c1011f71e4f9fa4844db2df7a84a9/AI_solution/modules.py#L2524) | A CNN with one convolutional layer and 3 neural network layers | 
-| - [C2NN3_Classifier](https://github.com/yiqiao-yin/WYNAssociates/blob/bc23643dca4c1011f71e4f9fa4844db2df7a84a9/AI_solution/modules.py#L2697) | A CNN with two convolutional layer and 3 neural network layers | 
-| - [RNN4_Regressor](https://github.com/yiqiao-yin/WYNAssociates/blob/bc23643dca4c1011f71e4f9fa4844db2df7a84a9/AI_solution/modules.py#L2937) | A RNN regressor model for stock price prediction |
-| - [NeuralNet_Regressor](https://github.com/yiqiao-yin/WYNAssociates/blob/dafbbb033d080cc62330ad38302f6c066e302a32/AI_solution/modules.py#L3117) | An automated Deep Artificial Neural Network function for regression problems |
-| - [NeuralNet_Classifier](https://github.com/yiqiao-yin/WYNAssociates/blob/bc23643dca4c1011f71e4f9fa4844db2df7a84a9/AI_solution/modules.py#L3247) | An automated Deep Artificial Neural Network function for classification problems |
-| - [LSTM_Regressor](https://github.com/yiqiao-yin/WYNAssociates/blob/412fc2b7c4dc268ab7869fbf098de767b52bb3ae/AI_solution/modules.py#L3595) | An automated Sequential Model algorithm for regression problems |
+### AI-Driven Pipelines
+
+There are three global sections of AI-driven solutions in our enterprise. They are listed below.
+
+- [AI_solution](https://github.com/yiqiao-yin/WYNAssociates/tree/main/AI_solution) - The module contains deployable functions of a variety of different solutions in representation learning.
+- [FIN_solution](https://github.com/yiqiao-yin/WYNAssociates/tree/main/FIN_solution) - The module contains deployable functions in financial technology.
+- [ML_solution](https://github.com/yiqiao-yin/WYNAssociates/tree/main/ML_solution) - The module contains machine learning or ML-driven tools.
+
+| [AI Solution](https://github.com/yiqiao-yin/WYNAssociates/blob/d8b1244df5b206c32577e5fabb41afbaaa5b4876/AI_solution/modules.py#L17) | Definition |
+| ---         | ---        |
+| [NN3](https://github.com/yiqiao-yin/WYNAssociates/blob/d8b1244df5b206c32577e5fabb41afbaaa5b4876/AI_solution/modules.py#L29) | LeNet3-style neural network |
+| [NeuralNet Regressor](https://github.com/yiqiao-yin/WYNAssociates/blob/d8b1244df5b206c32577e5fabb41afbaaa5b4876/AI_solution/modules.py#L1033) | Generalized code for neural network based regressor | 
+| [NeuralNet Classifier](https://github.com/yiqiao-yin/WYNAssociates/blob/d8b1244df5b206c32577e5fabb41afbaaa5b4876/AI_solution/modules.py#L1299) | Generalized code for neural network based classifier | 
+| [LSTM Regressor](https://github.com/yiqiao-yin/WYNAssociates/blob/d8b1244df5b206c32577e5fabb41afbaaa5b4876/AI_solution/modules.py#L1463) | A generalized code for developing sequential models |
+| [U-Net Model](https://github.com/yiqiao-yin/WYNAssociates/blob/d8b1244df5b206c32577e5fabb41afbaaa5b4876/AI_solution/modules.py#L1565) | Inception-style image segmentation model |
+
+| [Financial Solution](https://github.com/yiqiao-yin/WYNAssociates/blob/d8b1244df5b206c32577e5fabb41afbaaa5b4876/FIN_solution/modules.py#L25) | Definition |
+| ---         | ---          |
+| [Yin Timer](https://github.com/yiqiao-yin/WYNAssociates/blob/d8b1244df5b206c32577e5fabb41afbaaa5b4876/FIN_solution/modules.py#L33) | A timing algorithm proprietary at W.Y.N. Associates |
+| [RSI Timer](https://github.com/yiqiao-yin/WYNAssociates/blob/d8b1244df5b206c32577e5fabb41afbaaa5b4876/FIN_solution/modules.py#L302) | A timing algorithm based on technical indicator RSI | 
+| [RNN Regressor](https://github.com/yiqiao-yin/WYNAssociates/blob/d8b1244df5b206c32577e5fabb41afbaaa5b4876/FIN_solution/modules.py#L416) | A recurrent neural network for stock specifically |
+| [Neural Sequence Translation](https://github.com/yiqiao-yin/WYNAssociates/blob/d8b1244df5b206c32577e5fabb41afbaaa5b4876/FIN_solution/modules.py#L702) | A sequence-to-sequence model for stock data | 
+| [Automated Neural Sequence Translation](https://github.com/yiqiao-yin/WYNAssociates/blob/d8b1244df5b206c32577e5fabb41afbaaa5b4876/FIN_solution/modules.py#L966) | A sequence-to-sequence model for tabular data |
+
+| [Machine Learning Solution](https://github.com/yiqiao-yin/WYNAssociates/blob/d8b1244df5b206c32577e5fabb41afbaaa5b4876/ML_solution/modules.py#L25) | Definition |
+| --- | --- |
+| [Logistic Classifier](https://github.com/yiqiao-yin/WYNAssociates/blob/d8b1244df5b206c32577e5fabb41afbaaa5b4876/ML_solution/modules.py#L33) | Logistic-based classifier |
+| [KNN Classifier](https://github.com/yiqiao-yin/WYNAssociates/blob/d8b1244df5b206c32577e5fabb41afbaaa5b4876/ML_solution/modules.py#L90) | K Nearest Neighborhood based classifier | 
+| [Decision Tree Classifier](https://github.com/yiqiao-yin/WYNAssociates/blob/d8b1244df5b206c32577e5fabb41afbaaa5b4876/ML_solution/modules.py#L147) | Decision Tree classifier |
+| [Decision Tree Regressor](https://github.com/yiqiao-yin/WYNAssociates/blob/d8b1244df5b206c32577e5fabb41afbaaa5b4876/ML_solution/modules.py#L213) | Decision Tree regressor | 
+| [Random Forest Classifier](https://github.com/yiqiao-yin/WYNAssociates/blob/d8b1244df5b206c32577e5fabb41afbaaa5b4876/ML_solution/modules.py#L266) | Random Forest classifier |
+| [Random Forest Regressor](https://github.com/yiqiao-yin/WYNAssociates/blob/d8b1244df5b206c32577e5fabb41afbaaa5b4876/ML_solution/modules.py#L323) | Random Forest regressor | 
+| [Gradient Boosting Classifier](https://github.com/yiqiao-yin/WYNAssociates/blob/d8b1244df5b206c32577e5fabb41afbaaa5b4876/ML_solution/modules.py#L403) | Gradient Boosting classifier |
+| [Gradient Boosting Regressor](https://github.com/yiqiao-yin/WYNAssociates/blob/d8b1244df5b206c32577e5fabb41afbaaa5b4876/ML_solution/modules.py#L465) | Gradient Boosting regressor | 
+| [SVM Regressor](https://github.com/yiqiao-yin/WYNAssociates/blob/d8b1244df5b206c32577e5fabb41afbaaa5b4876/ML_solution/modules.py#L517) | Support Vector Machine regressor | 
+| [Adam Regressor](https://github.com/yiqiao-yin/WYNAssociates/blob/d8b1244df5b206c32577e5fabb41afbaaa5b4876/ML_solution/modules.py#L606) | A general code for fitting tabgular data using Adam optimization |
+| [AUC ROC](https://github.com/yiqiao-yin/WYNAssociates/blob/d8b1244df5b206c32577e5fabb41afbaaa5b4876/ML_solution/modules.py#L735) | An efficient function of calculating AUC and plotting ROC |
