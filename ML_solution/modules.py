@@ -778,9 +778,67 @@ class YinsML:
         for some_algo in selected_algorithm:
             y_train_hat_mat_.append(models_[some_algo].predict(X_train))
             y_test_hat_mat_.append(models_[some_algo].predict(X_test))
+            
+        # convert
+        y_train_hat_mat_ = pd.DataFrame(np.asarray(y_train_hat_mat_)).transpose().values
+        y_test_hat_mat_ = pd.DataFrame(np.asarray(y_test_hat_mat_)).transpose().values
         
         # output
         return {
+            'Data': {
+                'X_train': X_train,
+                'y_train': y_train,
+                'X_test': X_test,
+                'y_test': y_test
+            },
+            'Model': models_,
+            'List of Algorithms': models_.keys(),
+            'Results': results,
+            'Predictions': {
+                'y_train_hat_mat_': y_train_hat_mat_,
+                'y_test_hat_mat_': y_test_hat_mat_
+            }
+        }
+
+    def AutoMachineLearningRegressor(
+        X = None,
+        y = None,
+        cutoff = 0.1,
+        random_state = 123,
+        selected_algorithm = ['AdaBoostRegressor', 'BaggingRegressor', 'BayesianRidge', 'DecisionTreeRegressor', 'DummyRegressor', 'ElasticNet', 'ElasticNetCV', 'ExtraTreeRegressor', 'ExtraTreesRegressor', 'GammaRegressor', 'GaussianProcessRegressor', 'GeneralizedLinearRegressor', 'GradientBoostingRegressor', 'HistGradientBoostingRegressor', 'HuberRegressor', 'KNeighborsRegressor', 'KernelRidge', 'Lars', 'LarsCV', 'Lasso', 'LassoCV', 'LassoLars', 'LassoLarsCV', 'LassoLarsIC', 'LinearRegression', 'LinearSVR', 'MLPRegressor', 'NuSVR', 'OrthogonalMatchingPursuit', 'OrthogonalMatchingPursuitCV', 'PassiveAggressiveRegressor', 'PoissonRegressor', 'RANSACRegressor', 'RandomForestRegressor', 'Ridge', 'RidgeCV', 'SGDRegressor', 'SVR', 'TransformedTargetRegressor', 'TweedieRegressor', 'XGBRegressor', 'LGBMRegressor']
+    ):
+        
+        # library
+        import lazypredict
+        from lazypredict.Supervised import LazyRegressor
+
+        # split train test
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=cutoff, random_state=random_state)
+        
+        # fit
+        reg = LazyRegressor(verbose=0, ignore_warnings=True, custom_metric=None)
+        results, predictions = reg.fit(X_train, X_test, y_train, y_test)
+        models_ = reg.provide_models(X_train, X_test, y_train, y_test)
+        
+        # prediction
+        y_train_hat_mat_ = []
+        y_test_hat_mat_ = []
+        for some_algo in selected_algorithm:
+            y_train_hat_mat_.append(models_[some_algo].predict(X_train))
+            y_test_hat_mat_.append(models_[some_algo].predict(X_test))
+        
+        # convert
+        y_train_hat_mat_ = pd.DataFrame(np.asarray(y_train_hat_mat_)).transpose().values
+        y_test_hat_mat_ = pd.DataFrame(np.asarray(y_test_hat_mat_)).transpose().values
+
+        # output
+        return {
+            'Data': {
+                'X_train': X_train,
+                'y_train': y_train,
+                'X_test': X_test,
+                'y_test': y_test
+            },
             'Model': models_,
             'List of Algorithms': models_.keys(),
             'Results': results,
