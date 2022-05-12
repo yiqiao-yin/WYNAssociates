@@ -65,15 +65,15 @@ There are three global sections of AI-driven solutions in our enterprise. They a
 | [Automated Neural Sequence Translation](https://github.com/yiqiao-yin/WYNAssociates/blob/d8b1244df5b206c32577e5fabb41afbaaa5b4876/FIN_solution/modules.py#L966) | A sequence-to-sequence model for tabular data |
 
 | [Machine Learning Solution](https://github.com/yiqiao-yin/WYNAssociates/blob/d8b1244df5b206c32577e5fabb41afbaaa5b4876/ML_solution/modules.py#L25) | Definition |
-| --- | --- |
+| ---         | ---          |
 | [Logistic Classifier](https://github.com/yiqiao-yin/WYNAssociates/blob/d8b1244df5b206c32577e5fabb41afbaaa5b4876/ML_solution/modules.py#L33) | Logistic-based classifier |
-| [KNN Classifier](https://github.com/yiqiao-yin/WYNAssociates/blob/d8b1244df5b206c32577e5fabb41afbaaa5b4876/ML_solution/modules.py#L90) | K Nearest Neighborhood based classifier | 
+| [K-Nearest Neighbors Classifier](https://github.com/yiqiao-yin/WYNAssociates/blob/d8b1244df5b206c32577e5fabb41afbaaa5b4876/ML_solution/modules.py#L90) | K Nearest Neighborhood based classifier | 
 | [Decision Tree Classifier](https://github.com/yiqiao-yin/WYNAssociates/blob/d8b1244df5b206c32577e5fabb41afbaaa5b4876/ML_solution/modules.py#L147) | Decision Tree classifier |
 | [Decision Tree Regressor](https://github.com/yiqiao-yin/WYNAssociates/blob/d8b1244df5b206c32577e5fabb41afbaaa5b4876/ML_solution/modules.py#L213) | Decision Tree regressor | 
 | [Random Forest Classifier](https://github.com/yiqiao-yin/WYNAssociates/blob/d8b1244df5b206c32577e5fabb41afbaaa5b4876/ML_solution/modules.py#L266) | Random Forest classifier |
 | [Random Forest Regressor](https://github.com/yiqiao-yin/WYNAssociates/blob/d8b1244df5b206c32577e5fabb41afbaaa5b4876/ML_solution/modules.py#L323) | Random Forest regressor | 
 | [Gradient Boosting Classifier](https://github.com/yiqiao-yin/WYNAssociates/blob/d8b1244df5b206c32577e5fabb41afbaaa5b4876/ML_solution/modules.py#L403) | Gradient Boosting classifier |
 | [Gradient Boosting Regressor](https://github.com/yiqiao-yin/WYNAssociates/blob/d8b1244df5b206c32577e5fabb41afbaaa5b4876/ML_solution/modules.py#L465) | Gradient Boosting regressor | 
-| [SVM Regressor](https://github.com/yiqiao-yin/WYNAssociates/blob/d8b1244df5b206c32577e5fabb41afbaaa5b4876/ML_solution/modules.py#L517) | Support Vector Machine regressor | 
+| [Support Vector Machine Regressor](https://github.com/yiqiao-yin/WYNAssociates/blob/d8b1244df5b206c32577e5fabb41afbaaa5b4876/ML_solution/modules.py#L517) | Support Vector Machine regressor | 
 | [Adam Regressor](https://github.com/yiqiao-yin/WYNAssociates/blob/d8b1244df5b206c32577e5fabb41afbaaa5b4876/ML_solution/modules.py#L606) | A general code for fitting tabgular data using Adam optimization |
-| [AUC ROC](https://github.com/yiqiao-yin/WYNAssociates/blob/d8b1244df5b206c32577e5fabb41afbaaa5b4876/ML_solution/modules.py#L735) | An efficient function of calculating AUC and plotting ROC |
+| [Area-Under-Curve and Receiver-Operating-Characteristics](https://github.com/yiqiao-yin/WYNAssociates/blob/d8b1244df5b206c32577e5fabb41afbaaa5b4876/ML_solution/modules.py#L735) | An efficient function of calculating AUC and plotting ROC |
