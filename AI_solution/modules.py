@@ -1757,8 +1757,8 @@ class YinsDL:
 
 
     def superimposedImages(
-        img = array_2D3D,
-        heatmap = array_2D,
+        img = None, # array_2D3D
+        heatmap = None, # array_2D
         alpha=.4):
 
         # Rescale heatmap to a range 0-255
