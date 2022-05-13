@@ -1762,7 +1762,7 @@ class YinsDL:
         alpha=.4):
 
         # Rescale heatmap to a range 0-255
-        heatmap = np.uint8(255 * heatmap)
+        heatmap = np.round(np.multiply(heatmap, 255)).astype(int)
 
         # Use jet colormap to colorize heatmap
         jet = cm.get_cmap("jet")
