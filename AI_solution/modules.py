@@ -2,14 +2,16 @@
 import time
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.cm as cm
+
+# Import Tensorflow
 import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import layers
 
-# Import Libraries
+# Import Other Libraries
 from scipy import stats
-import matplotlib.pyplot as plt
-# import time
 
 # Import Libraries
 import math
@@ -1751,4 +1753,36 @@ class YinsDL:
                 'y_hat_train_': y_hat_train_,
                 'y_hat_train_': y_hat_train_
             }
+        }
+
+
+    def superimposedImages(
+        img = array_2D3D,
+        heatmap = array_2D,
+        alpha=.4):
+
+        # Rescale heatmap to a range 0-255
+        heatmap = np.uint8(255 * heatmap)
+
+        # Use jet colormap to colorize heatmap
+        jet = cm.get_cmap("jet")
+
+        # Use RGB values of the colormap
+        jet_colors = jet(np.arange(256))[:, :3]
+        jet_heatmap = jet_colors[heatmap]
+
+        # Create an image with RGB colorized heatmap
+        jet_heatmap = tf.keras.preprocessing.image.array_to_img(jet_heatmap)
+        jet_heatmap = jet_heatmap.resize((img.shape[1], img.shape[0]))
+        jet_heatmap = tf.keras.preprocessing.image.img_to_array(jet_heatmap)
+
+        # Superimpose the heatmap on original image
+        superimposed_img = jet_heatmap * alpha + img * (1 - alpha)
+        superimposed_img_pil = tf.keras.preprocessing.image.array_to_img(superimposed_img)
+        superimposed_img_ar = np.asarray(superimposed_img)/255
+
+        # output
+        return {
+          'pil_format':  superimposed_img_pil,
+          'array_format': superimposed_img_ar
         }
