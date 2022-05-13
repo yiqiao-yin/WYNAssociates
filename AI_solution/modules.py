@@ -1783,6 +1783,7 @@ class YinsDL:
 
         # output
         return {
-          'pil_format':  superimposed_img_pil,
+          'jet_heatmap': jet_heatmap,
+          'pil_format': superimposed_img_pil,
           'array_format': superimposed_img_ar
         }
