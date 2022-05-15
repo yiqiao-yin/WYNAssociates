@@ -1759,12 +1759,14 @@ class YinsDL:
     def superimposedImages(
         img = None, # array_2D3D
         heatmap = None, # array_2D
+        color_grad = "rainbow",
         alpha=.4):
 
         # Rescale heatmap to a range 0-255
         heatmap = np.round(np.multiply(heatmap, 255)).astype(int)
 
         # Use jet colormap to colorize heatmap
+        # https://matplotlib.org/3.5.0/tutorials/colors/colormaps.html
         jet = cm.get_cmap("jet")
 
         # Use RGB values of the colormap
