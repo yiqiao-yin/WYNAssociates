@@ -9,7 +9,7 @@ import matplotlib.cm as cm
 import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import layers
-from tf.keras.preprocessing.image import ImageDataGenerator
+from keras.preprocessing.image import ImageDataGenerator
 
 # Import Other Libraries
 from scipy import stats
