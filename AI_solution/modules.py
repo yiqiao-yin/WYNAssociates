@@ -1578,6 +1578,7 @@ class YinsDL:
         name_of_file = "model.png",
         plotModel = True,
         useGPU = True,
+        augmentData = True,
         verbose = True,
         which_layer = None,
         X_for_internal_extraction = None
@@ -1670,6 +1671,83 @@ class YinsDL:
         # when need to use the saved model, you can call it by using 
         # from tensorflow import keras
         # model = keras.models.load_model('path/to/location')
+        
+        # if we need data augmentation
+        from tf.keras.preprocessing.image import ImageDataGenerator
+        
+        # create generator for batches that centers mean and std deviation of training data
+        datagen = ImageDataGenerator(
+            featurewise_center=True,
+            featurewise_std_normalization=True,
+            # rescale=1./255,
+            shear_range=0.3,
+            zoom_range=0.2,
+            rotation_range=90,
+            horizontal_flip=True,
+            vertical_flip=True  )
+
+        # fit data to the generator
+        datagen.fit(x_train) # <= this should only be training data otherwise it is cheating!
+
+        # Source:
+        # Here are different ways of augmenting your training data
+        # https://blog.keras.io/building-powerful-image-classification-models-using-very-little-data.html
+        
+        # training log for data augmentation
+        class LossAndErrorPrintingCallback(keras.callbacks.Callback):
+            def on_train_batch_end(self, batch, logs=None):
+                print( "Up to batch {}, the average loss is {:7.2f}.".format(batch, logs["loss"]) )
+
+            def on_test_batch_end(self, batch, logs=None):
+                print( "Up to batch {}, the average loss is {:7.2f}.".format(batch, logs["loss"]) )
+
+            def on_epoch_end(self, epoch, logs=None):
+                print(
+                    "The average loss for epoch {} is {:7.2f} "
+                    "and mean absolute error is {:7.2f}.".format(
+                        epoch, logs["loss"], logs["val_loss"] ) )
+                
+        # training early stop for data augmentation
+        class EarlyStoppingAtMinLoss(keras.callbacks.Callback):
+            """Stop training when the loss is at its min, i.e. the loss stops decreasing.
+
+          Arguments:
+              patience: Number of epochs to wait after min has been hit. After this
+              number of no improvement, training stops.
+          """
+
+            def __init__(self, patience=0):
+                super(EarlyStoppingAtMinLoss, self).__init__()
+                self.patience = patience
+                # best_weights to store the weights at which the minimum loss occurs.
+                self.best_weights = None
+
+            def on_train_begin(self, logs=None):
+                # The number of epoch it has waited when loss is no longer minimum.
+                self.wait = 0
+                # The epoch the training stops at.
+                self.stopped_epoch = 0
+                # Initialize the best as infinity.
+                self.best = np.Inf
+
+            def on_epoch_end(self, epoch, logs=None):
+                current = logs.get("loss")
+                if np.less(current, self.best):
+                    self.best = current
+                    self.wait = 0
+                    # Record the best weights if current results is better (less).
+                    self.best_weights = self.model.get_weights()
+                else:
+                    self.wait += 1
+                    if self.wait >= self.patience:
+                        self.stopped_epoch = epoch
+                        self.model.stop_training = True
+                        print("Restoring model weights from the end of the best epoch.")
+                        self.model.set_weights(self.best_weights)
+
+            def on_train_end(self, logs=None):
+                if self.stopped_epoch > 0:
+                    print("Epoch %05d: early stopping" % (self.stopped_epoch + 1))
 
         # fit
         if useGPU:
@@ -1681,18 +1759,33 @@ class YinsDL:
                 # use GPU
                 with tf.device('/device:GPU:0'):
                     # Train the model, doing validation at the end of each epoch.
-                    history = model.fit(
-                        x_train, y_train, 
-                        epochs=epochs, 
-                        validation_data=(x_val, y_val), 
-                        callbacks=callbacks)
+                    if augmentData:
+                        history = model.fit_generator(
+                            datagen.flow(x_train, y_train),
+                            epochs=epochs, 
+                            validation_data=(x_val, y_val),
+                            callbacks=[LossAndErrorPrintingCallback(), EarlyStoppingAtMinLoss(), tf.keras.callbacks.ModelCheckpoint("yin_segmentation.h5", save_best_only=True)] )
+                    else:
+                        history = model.fit(
+                            x_train, y_train, 
+                            epochs=epochs, 
+                            validation_data=(x_val, y_val), 
+                            callbacks=callbacks)
         else:         
                 # Train the model, doing validation at the end of each epoch.
-                history = model.fit(
-                        x_train, y_train, 
-                        epochs=epochs, 
-                        validation_data=(x_val, y_val), 
-                        callbacks=callbacks)
+                if augmentData:                    
+                    history = model.fit_generator(
+                            datagen.flow(x_train, y_train),
+                            epochs=epochs, 
+                            validation_data=(x_val, y_val),
+                            callbacks=[LossAndErrorPrintingCallback(), EarlyStoppingAtMinLoss(), tf.keras.callbacks.ModelCheckpoint("yin_segmentation.h5", save_best_only=True)] )
+                else:
+                    history = model.fit(
+                            x_train, y_train, 
+                            epochs=epochs, 
+                            validation_data=(x_val, y_val), 
+                            callbacks=callbacks)
+
         
         # inference
         # with a Sequential model
