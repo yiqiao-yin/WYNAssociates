@@ -1581,7 +1581,15 @@ class YinsDL:
         augmentData = True,
         verbose = True,
         which_layer = None,
-        X_for_internal_extraction = None
+        X_for_internal_extraction = None,
+        featurewise_center=True,
+        featurewise_std_normalization=True,
+        rescale=1,
+        shear_range=0.3,
+        zoom_range=0.2,
+        rotation_range=90,
+        horizontal_flip=True,
+        vertical_flip=True
         ):
 
         # define unet
@@ -1676,15 +1684,23 @@ class YinsDL:
         from tf.keras.preprocessing.image import ImageDataGenerator
         
         # create generator for batches that centers mean and std deviation of training data
+        # featurewise_center=True
+        # featurewise_std_normalization=True
+        # rescale=1
+        # shear_range=0.3
+        # zoom_range=0.2
+        # rotation_range=90
+        # horizontal_flip=True
+        # vertical_flip=True
         datagen = ImageDataGenerator(
-            featurewise_center=True,
-            featurewise_std_normalization=True,
-            # rescale=1./255,
-            shear_range=0.3,
-            zoom_range=0.2,
-            rotation_range=90,
-            horizontal_flip=True,
-            vertical_flip=True  )
+            featurewise_center=featurewise_center,
+            featurewise_std_normalization=featurewise_std_normalization,
+            rescale=rescale,
+            shear_range=shear_range,
+            zoom_range=zoom_range,
+            rotation_range=rotation_range,
+            horizontal_flip=horizontal_flip,
+            vertical_flip=vertical_flip  )
 
         # fit data to the generator
         datagen.fit(x_train) # <= this should only be training data otherwise it is cheating!
