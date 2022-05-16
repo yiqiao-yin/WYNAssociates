@@ -9,6 +9,7 @@ import matplotlib.cm as cm
 import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import layers
+from tf.keras.preprocessing.image import ImageDataGenerator
 
 # Import Other Libraries
 from scipy import stats
@@ -1681,7 +1682,7 @@ class YinsDL:
         # model = keras.models.load_model('path/to/location')
         
         # if we need data augmentation
-        from tf.keras.preprocessing.image import ImageDataGenerator
+        # from tf.keras.preprocessing.image import ImageDataGenerator
         
         # create generator for batches that centers mean and std deviation of training data
         # featurewise_center=True
