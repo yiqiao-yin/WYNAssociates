@@ -1562,9 +1562,8 @@ class YinsDL:
         }
     # End of function
 
-        
     # define unet (inception style)
-    def unet_model(     
+    def unet_inceptionstyle_model(
         x_train=None,
         y_train=None,
         x_val=None, 
