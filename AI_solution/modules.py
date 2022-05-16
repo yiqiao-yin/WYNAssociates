@@ -1781,7 +1781,8 @@ class YinsDL:
                             datagen.flow(x_train, y_train),
                             epochs=epochs, 
                             validation_data=(x_val, y_val),
-                            callbacks=[LossAndErrorPrintingCallback(), EarlyStoppingAtMinLoss(), tf.keras.callbacks.ModelCheckpoint("yin_segmentation.h5", save_best_only=True)] )
+                            callbacks=callbacks )
+                            # callbacks=[LossAndErrorPrintingCallback(), EarlyStoppingAtMinLoss(), tf.keras.callbacks.ModelCheckpoint("yin_segmentation.h5", save_best_only=True)] )
                     else:
                         history = model.fit(
                             x_train, y_train, 
@@ -1795,7 +1796,8 @@ class YinsDL:
                             datagen.flow(x_train, y_train),
                             epochs=epochs, 
                             validation_data=(x_val, y_val),
-                            callbacks=[LossAndErrorPrintingCallback(), EarlyStoppingAtMinLoss(), tf.keras.callbacks.ModelCheckpoint("yin_segmentation.h5", save_best_only=True)] )
+                            callbacks=callbacks )
+#                             callbacks=[LossAndErrorPrintingCallback(), EarlyStoppingAtMinLoss(), tf.keras.callbacks.ModelCheckpoint("yin_segmentation.h5", save_best_only=True)] )
                 else:
                     history = model.fit(
                             x_train, y_train, 
