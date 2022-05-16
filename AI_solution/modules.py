@@ -1760,7 +1760,8 @@ class YinsDL:
         img = None, # array_2D3D
         heatmap = None, # array_2D
         color_grad = "rainbow",
-        alpha=.4):
+        alpha=.4,
+        useOverlay=True):
 
         # Rescale heatmap to a range 0-255
         heatmap = np.round(np.multiply(heatmap, 255)).astype(int)
@@ -1779,7 +1780,10 @@ class YinsDL:
         jet_heatmap = tf.keras.preprocessing.image.img_to_array(jet_heatmap)
 
         # Superimpose the heatmap on original image
-        superimposed_img = jet_heatmap * alpha + img * (1 - alpha)
+        if useOverlay:
+            superimposed_img = jet_heatmap * alpha + img
+        else:
+            superimposed_img = jet_heatmap * alpha + img * (1 - alpha)
         superimposed_img_pil = tf.keras.preprocessing.image.array_to_img(superimposed_img)
         superimposed_img_ar = np.asarray(superimposed_img)/255
 
