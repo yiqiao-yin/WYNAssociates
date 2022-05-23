@@ -27,6 +27,51 @@ class YinsML:
     """
 
     # Define function
+    def LinearRegression_Classifier(X_train, X_test, y_train, y_test, random_state = 0):
+        
+        # Import Modules
+        import numpy as np
+        import matplotlib.pyplot as plt
+        import pandas as pd
+        import random
+        from sklearn.linear_model import LinearRegression
+        
+        # Train
+        LINEAR_Reg = LinearRegression( random_state=random_state )
+        LINEAR_Reg = LINEAR_Reg.fit(X_train, y_train)
+        
+        # Report In-sample Estimators
+        y_train_hat_ = LINEAR_Reg.predict(X_train)
+        y_train_hat_score = LINEAR_Reg.predict_proba(X_train)
+
+        # Predict
+        y_test_hat_ = LINEAR_Reg.predict(X_test)
+        
+        # Output
+        return {
+            'Data': {
+                'X_train': X_train, 
+                'y_train': y_train, 
+                'X_test': X_test, 
+                'y_test': y_test
+            },
+            'Model': LINEAR_Reg,
+            'Weights': {
+                'coefficients', LINEAR_Reg.coef_,
+                'intercept', LINEAR_Reg.intercept_
+            },
+            'Train Result': {
+                'y_train_hat_': y_train_hat_,
+                'y_train_hat_score': y_train_hat_score
+            },
+            'Test Result': {
+                'y_test_hat_': y_test_hat_,
+                'y_test_hat_score': y_test_hat_score
+            }
+        }
+    # End of function
+    
+    # Define function
     def LogisticRegression_Classifier(X_train, X_test, y_train, y_test, random_state = 0):
         
         # Import Modules
@@ -257,7 +302,6 @@ class YinsML:
             }
         }
     # End of function
-
     
     # Define function
     def RandomForest_Classifier(X_train, X_test, y_train, y_test, maxdepth = 3):
