@@ -1579,6 +1579,7 @@ class YinsDL:
         name_of_file = "model.png",
         plotModel = True,
         useGPU = True,
+        useCallback = False,
         augmentData = True,
         verbose = True,
         which_layer = None,
@@ -1777,6 +1778,37 @@ class YinsDL:
                 with tf.device('/device:GPU:0'):
                     # Train the model, doing validation at the end of each epoch.
                     if augmentData:
+                        if useCallback:
+                            history = model.fit_generator(
+                                datagen.flow(x_train, y_train),
+                                epochs=epochs, 
+                                validation_data=(x_val, y_val),
+                                callbacks=callbacks )
+                                # callbacks=[LossAndErrorPrintingCallback(), EarlyStoppingAtMinLoss(), tf.keras.callbacks.ModelCheckpoint("yin_segmentation.h5", save_best_only=True)] )
+                        else:
+                            history = model.fit_generator(
+                                datagen.flow(x_train, y_train),
+                                epochs=epochs, 
+                                validation_data=(x_val, y_val),
+                                # callbacks=callbacks 
+                            )
+                                # callbacks=[LossAndErrorPrintingCallback(), EarlyStoppingAtMinLoss(), tf.keras.callbacks.ModelCheckpoint("yin_segmentation.h5", save_best_only=True)] )
+                    else:
+                        if useCallback:
+                            history = model.fit(
+                                x_train, y_train, 
+                                epochs=epochs, 
+                                validation_data=(x_val, y_val), 
+                                callbacks=callbacks)
+                        else:
+                            history = model.fit(
+                                x_train, y_train, 
+                                epochs=epochs, 
+                                validation_data=(x_val, y_val) )
+        else:         
+                # Train the model, doing validation at the end of each epoch.
+                if augmentData:                    
+                    if useCallback:
                         history = model.fit_generator(
                             datagen.flow(x_train, y_train),
                             epochs=epochs, 
@@ -1784,27 +1816,29 @@ class YinsDL:
                             callbacks=callbacks )
                             # callbacks=[LossAndErrorPrintingCallback(), EarlyStoppingAtMinLoss(), tf.keras.callbacks.ModelCheckpoint("yin_segmentation.h5", save_best_only=True)] )
                     else:
-                        history = model.fit(
-                            x_train, y_train, 
+                        history = model.fit_generator(
+                            datagen.flow(x_train, y_train),
                             epochs=epochs, 
-                            validation_data=(x_val, y_val), 
-                            callbacks=callbacks)
-        else:         
-                # Train the model, doing validation at the end of each epoch.
-                if augmentData:                    
-                    history = model.fit_generator(
+                            validation_data=(x_val, y_val),
+                            # callbacks=callbacks 
+                        )
+                                # callbacks=[LossAndErrorPrintingCallback(), EarlyStoppingAtMinLoss(), tf.keras.callbacks.ModelCheckpoint("yin_segmentation.h5", save_best_only=True)] )
+                else:
+                    if useCallback:
+                        history = model.fit_generator(
                             datagen.flow(x_train, y_train),
                             epochs=epochs, 
                             validation_data=(x_val, y_val),
                             callbacks=callbacks )
-#                             callbacks=[LossAndErrorPrintingCallback(), EarlyStoppingAtMinLoss(), tf.keras.callbacks.ModelCheckpoint("yin_segmentation.h5", save_best_only=True)] )
-                else:
-                    history = model.fit(
-                            x_train, y_train, 
+                            # callbacks=[LossAndErrorPrintingCallback(), EarlyStoppingAtMinLoss(), tf.keras.callbacks.ModelCheckpoint("yin_segmentation.h5", save_best_only=True)] )
+                    else:
+                        history = model.fit_generator(
+                            datagen.flow(x_train, y_train),
                             epochs=epochs, 
-                            validation_data=(x_val, y_val), 
-                            callbacks=callbacks)
-
+                            validation_data=(x_val, y_val),
+                            # callbacks=callbacks 
+                        )
+                            # callbacks=[LossAndErrorPrintingCallback(), EarlyStoppingAtMinLoss(), tf.keras.callbacks.ModelCheckpoint("yin_segmentation.h5", save_best_only=True)] )
         
         # inference
         # with a Sequential model
