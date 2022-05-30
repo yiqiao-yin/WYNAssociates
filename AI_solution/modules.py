@@ -1577,6 +1577,7 @@ class YinsDL:
         epochs=400,
         figsize=(12,6),
         name_of_file = "model.png",
+        name_of_model = "this_model",
         plotModel = True,
         useGPU = True,
         useCallback = False,
@@ -1675,7 +1676,7 @@ class YinsDL:
             metrics=['accuracy']  )
 
         # callbacks
-        callbacks = [ keras.callbacks.ModelCheckpoint("model_segmentation.h5", save_best_only=True) ]
+        callbacks = [ keras.callbacks.ModelCheckpoint(name_of_model+".h5", save_best_only=True) ]
         # note
         # https://www.tensorflow.org/guide/keras/save_and_serialize
         # when need to use the saved model, you can call it by using 
