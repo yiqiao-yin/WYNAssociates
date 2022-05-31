@@ -346,8 +346,7 @@ class YinsDL:
 
         plt.show()
     # End of function
-    
-    
+      
     # Define function
     def ConvOperationC1(
         X_train, y_train, X_test, y_test, 
@@ -851,186 +850,7 @@ class YinsDL:
             },
             'Results of ROC': resultsROC
         }
-    # End of function     
-
-    # Define Function
-    def RNN4_Regressor(
-        start_date = '2013-01-01',
-        end_date   = '2019-12-6',
-        tickers    = 'AAPL', cutoff = 0.8,
-        l1_units = 50, l2_units = 50, l3_units = 50, l4_units = 50,
-        optimizer = 'adam', loss = 'mean_squared_error',
-        epochs = 50, batch_size = 64,
-        plotGraph = True,
-        verbatim = True
-    ):
-        """
-        MANUAL
-        
-        # Load Package
-        %run "../scripts/YinsMM.py"
-        
-        # Run
-        tmp = YinsDL.RNN4_Regressor(
-                start_date = '2013-01-01',
-                end_date   = '2019-12-6',
-                tickers    = 'AMD', cutoff = 0.8,
-                l1_units = 50, l2_units = 50, l3_units = 50, l4_units = 50,
-                optimizer = 'adam', loss = 'mean_squared_error',
-                epochs = 50, batch_size = 64,
-                plotGraph = True,
-                verbatim = True )
-        """
-        
-        # Initiate Environment
-        from scipy import stats
-        import pandas as pd
-        import numpy as np
-        import yfinance as yf
-        import matplotlib.pyplot as plt
-
-        # Define function
-        def getDatafromYF(ticker, start_date, end_date):
-            stockData = yf.download(ticker, start_date, end_date)
-            return stockData
-        # End function
-        
-        start_date = pd.to_datetime(start_date)
-        end_date   = pd.to_datetime(end_date)
-        tickers    = [tickers]
-        
-        # Start with Dictionary (this is where data is saved)
-        stockData = {}
-        for i in tickers:
-            stockData[i] = pd.DataFrame(getDatafromYF(str(i), start_date, end_date))
-            close = stockData[i]['Adj Close']
-            stockData[i]['Normalize Return'] = close / close.shift() - 1
-
-        # Take a look
-        # print(stockData[tickers[0]].head(2)) # this is desired stock
-        # print(stockData[tickers[1]].head(2)) # this is benchmark (in this case, it is S&P 500 SPDR Index Fund: SPY)
-
-        # Feature Scaling
-        from sklearn.preprocessing import MinMaxScaler
-
-        stockData[tickers[0]].iloc[:, 4].head(3)
-
-        data = stockData[tickers[0]].iloc[:, 4:5].values
-        sc = MinMaxScaler(feature_range = (0, 1))
-        scaled_dta = sc.fit_transform(data)
-        scaled_dta = pd.DataFrame(scaled_dta)
-
-        training_set = scaled_dta.iloc[0:round(scaled_dta.shape[0] * cutoff), :]
-        testing_set = scaled_dta.iloc[round(cutoff * scaled_dta.shape[0] + 1):scaled_dta.shape[0], :]
-
-        # print(training_set.shape, testing_set.shape)
-
-        X_train = []
-        y_train = []
-
-        for i in range(100, training_set.shape[0]):
-            X_train.append(np.array(training_set)[i-100:i, 0])
-            y_train.append(np.array(training_set)[i, 0])
-
-        X_train, y_train = np.array(X_train), np.array(y_train)
-
-        print(X_train.shape, y_train.shape)
-
-        X_train = np.reshape(X_train, (X_train.shape[0], X_train.shape[1], 1))
-        print(X_train.shape)
-
-        X_test = []
-        y_test = []
-
-        for i in range(100, testing_set.shape[0]):
-            X_test.append(np.array(testing_set)[i-100:i, 0])
-            y_test.append(np.array(testing_set)[i, 0])
-
-        X_test, y_test = np.array(X_test), np.array(y_test)
-
-        print(X_test.shape, y_test.shape)
-
-        X_test = np.reshape(X_test, (X_test.shape[0], X_test.shape[1], 1))
-        print(X_test.shape)
-
-        ### Build RNN
-
-        # Importing the Keras libraries and packages
-        from keras.models import Sequential
-        from keras.layers import Dense
-        from keras.layers import LSTM
-        from keras.layers import Dropout
-
-        # Initialize RNN
-        regressor = Sequential()
-
-        # Adding the first LSTM layer and some Dropout regularisation
-        regressor.add(LSTM(units = l1_units, return_sequences = True, input_shape = (X_train.shape[1], 1)))
-        regressor.add(Dropout(0.2))
-
-        # Adding a second LSTM layer and some Dropout regularisation
-        regressor.add(LSTM(units = l2_units, return_sequences = True))
-        regressor.add(Dropout(0.2))
-
-        # Adding a third LSTM layer and some Dropout regularisation
-        regressor.add(LSTM(units = l3_units, return_sequences = True))
-        regressor.add(Dropout(0.2))
-
-        # Adding a fourth LSTM layer and some Dropout regularisation
-        regressor.add(LSTM(units = l4_units))
-        regressor.add(Dropout(0.2))
-
-        # Adding the output layer
-        regressor.add(Dense(units = 1))
-
-        regressor.summary()
-
-        ### Train RNN
-
-        # Compiling the RNN
-        regressor.compile(optimizer = optimizer, loss = loss)
-
-        # Fitting the RNN to the Training set
-        regressor.fit(X_train, y_train, epochs = epochs, batch_size = batch_size)
-
-        ### Predictions
-
-        predicted_stock_price = regressor.predict(X_test)
-        predicted_stock_price = sc.inverse_transform(predicted_stock_price)
-
-        real_stock_price = np.reshape(y_test, (y_test.shape[0], 1))
-        real_stock_price = sc.inverse_transform(real_stock_price)
-
-        ### Performance Visualization
-
-        # Visualising the results
-        import matplotlib.pyplot as plt
-        if plotGraph:
-            plt.plot(real_stock_price, color = 'red', label = f'Real {tickers[0]} Stock Price')
-            plt.plot(predicted_stock_price, color = 'blue', label = f'Predicted {tickers[0]} Stock Price')
-            plt.title(f'{tickers[0]} Stock Price Prediction')
-            plt.xlabel('Time')
-            plt.ylabel(f'{tickers[0]} Stock Price')
-            plt.legend()
-            plt.show()
-
-        import math
-        from sklearn.metrics import mean_squared_error
-        rmse = np.sqrt(mean_squared_error(real_stock_price, predicted_stock_price))
-        if verbatim:
-            print(f'Root Mean Square Error is {round(rmse,2)} for test set.')
-            print(f'Interpretation: ---------------')
-            print(f'On the test set, the performance of this LSTM architecture guesses ')
-            print(f'{tickers[0]} stock price on average within the error of ${round(rmse,2)} dollars.')
-
-        # Output
-        return {
-            'Information': [training_set.shape, testing_set.shape],
-            'Data': [X_train, y_train, X_test, y_test],
-            'Test Response': [predicted_stock_price, real_stock_price],
-            'Test Error': rmse
-        }
-    # End function
+    # End of function
     
     # define NeuralNet_Regressor function:
     def NeuralNet_Regressor(
@@ -1198,7 +1018,6 @@ class YinsDL:
                     verbose=vb)
             # print("Checkpoint")
 
-
         # checkpoint
         end = time.time()
         if verbose:
@@ -1248,7 +1067,6 @@ class YinsDL:
                 print("Shape of layer " + str(l) + ": " + str(keras_reg.get_weights()[l].shape))
             print("To access weights: use the syntax 'my_model['Model'].get_weights()'. ")
 
-
         # inference
         # with a Sequential model
         if verbose:
@@ -1297,7 +1115,6 @@ class YinsDL:
         }
     # End of function
 
-    
     # define function
     def NeuralNet_Classifier(
             X_train=None,
@@ -1365,7 +1182,6 @@ class YinsDL:
         # In other words, we can use .fit(), .predict(), and all these concepts
         # consistently as we discussed before.
 
-
         # checkpoint
         start = time.time()
 
@@ -1390,7 +1206,6 @@ class YinsDL:
                         validation_data=(X_valid, y_valid),
                         callbacks=[tf.keras.callbacks.EarlyStopping(patience=10)])
 
-
         # checkpoint
         end = time.time()
         if verbose:
@@ -1398,8 +1213,6 @@ class YinsDL:
 
         # prediction on train set
         predictions = keras_reg.predict(X_test)
-
-        # Performance
 
         # prediction on test set
         from sklearn.metrics import confusion_matrix
@@ -1901,7 +1714,50 @@ class YinsDL:
             }
         }
 
+    # define
+    def make_gradcam_heatmap(img_array, model, last_conv_layer_name, pred_index=None):
+        # First, we create a model that maps the input image to the activations
+        # of the last conv layer as well as the output predictions
+        grad_model = tf.keras.models.Model(
+            [model.inputs], [model.get_layer(last_conv_layer_name).output, model.output]
+        )
 
+        # Then, we compute the gradient of the top predicted class for our input image
+        # with respect to the activations of the last conv layer
+        # The *pred_indx* points to the index of the class in the model. 
+        # Note that for one object, we can select None so the algorithm
+        # automatically points to the maximum probability class, e.g. argmax.
+        # However, if there are more than one objects in the picture, we 
+        # need to use pred_index to select the index of the actual class
+        # in the model. In other words, this function is programmed to be able 
+        # to detect any class in the model.
+        with tf.GradientTape() as tape:
+            last_conv_layer_output, preds = grad_model(img_array)
+            if pred_index is None:
+                pred_index = tf.argmax(preds[0])
+            class_channel = preds[:, pred_index]
+
+        # This is the gradient of the output neuron (top predicted or chosen)
+        # with regard to the output feature map of the last conv layer
+        grads = tape.gradient(class_channel, last_conv_layer_output)
+
+        # This is a vector where each entry is the mean intensity of the gradient
+        # over a specific feature map channel. This is the usual empirical mean
+        # that we do according。
+        pooled_grads = tf.reduce_mean(grads, axis=(0, 1, 2))
+
+        # We multiply each channel in the feature map array
+        # by "how important this channel is" with regard to the top predicted class
+        # then sum all the channels to obtain the heatmap class activation
+        last_conv_layer_output = last_conv_layer_output[0]
+        heatmap = last_conv_layer_output @ pooled_grads[..., tf.newaxis]
+        # heatmap = tf.squeeze(heatmap) # Removes dimensions of size 1 from the shape of a tensor
+
+        # # For visualization purpose, we will also normalize the heatmap between 0 & 1
+        # heatmap = tf.maximum(heatmap, 0) / tf.math.reduce_max(heatmap)
+        return heatmap
+
+    # define
     def superimposedImages(
         img = None, # array_2D3D
         heatmap = None, # array_2D
