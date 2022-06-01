@@ -24,8 +24,13 @@ This is the official quantitative and statistical software package by W.Y.N. Ass
 Welcome to install our package. The entire package is written in *python*. One can use the following code to install this Github package.
 
 ```
+# from command line
 pip install git+https://github.com/yiqiao-yin/WYNAssociates.git # in command line
-!pip install git+https://github.com/yiqiao-yin/WYNAssociates.git # in jupyter notebook
+```
+
+```
+# from jupyter
+!pip install git+https://github.com/yiqiao-yin/WYNAssociates.git # in command line
 ```
 
 For developers, one can clone package by simple **git clone** command (assuming in a desired directory).
