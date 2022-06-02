@@ -33,8 +33,7 @@ for example, I did mine in my OneDrive folder inside C-disk (for organization us
 docker run --name openslide -v C:\Users\eagle\OneDrive:/mnt -d -p 8888:8888 openslide
 ```
 
-This will permantly create a container in docker desktop that you can then launch when you open it, and the notebook will be located at localhost:8888
-make sure to shutdown other notebook servers that might want that port before hand or you can change the first port in the –p command to be something different.
+This will permantly create a container in docker desktop that you can then launch when you open it, and the notebook will be located at localhost:8888. Please make sure to shutdown other notebook servers that might want that port before or you can change the first port in the –p command to be something different. In case a bug occurs that says no such directory is found or a 404 error is reported, it is recommended to check the port first.
 
 After the above steps, you have succesfully installed the docker container. To open it, it is recommended to use the following steps.
 1. Open Docker Desktop as Admin <= enter admin username and pw
