@@ -38,7 +38,7 @@ This will permantly create a container in docker desktop that you can then launc
 After the above steps, you have succesfully installed the docker container. To open it, it is recommended to use the following steps.
 1. Open Docker Desktop as Admin <= enter admin username and pw
 2. In containers / apps, there should be a container called openslide => click on the openslide text
-3. A log will show up and usually it will start. However, if it's not started, go to top right corner to click "start". Then there are more logs and in the bottom there should be a link that says "https://127.0.0.1:8888/lab?token=SOME_TOKEN_HERE
+3. A log will show up and usually it will start. However, if it's not started, go to top right corner to click "start". Then there are more logs and in the bottom there should be a link that says "https://127.0.0.1:8888/lab?token=SOME_TOKEN_HERE"
 4. Copy the last http link and paste in a browser 
 5. Open up a jupyter notebook and you are done. 
 
