@@ -801,12 +801,20 @@ class YinsML:
         y = None,
         cutoff = 0.1,
         random_state = 123,
+        useMinMaxScale = False,
         selected_algorithm = ['AdaBoostClassifier', 'BaggingClassifier', 'BernoulliNB', 'CalibratedClassifierCV', 'DecisionTreeClassifier', 'DummyClassifier', 'ExtraTreeClassifier', 'ExtraTreesClassifier', 'GaussianNB', 'KNeighborsClassifier', 'LabelPropagation', 'LabelSpreading', 'LinearDiscriminantAnalysis', 'LinearSVC', 'LogisticRegression', 'NearestCentroid', 'NuSVC', 'PassiveAggressiveClassifier', 'Perceptron', 'QuadraticDiscriminantAnalysis', 'RandomForestClassifier', 'RidgeClassifier', 'RidgeClassifierCV', 'SGDClassifier', 'SVC', 'XGBClassifier', 'LGBMClassifier']
     ):
         
         # library
         import lazypredict
         from lazypredict.Supervised import LazyClassifier
+        
+        # min-max scale
+        if useMinMaxScale:
+            from sklearn.preprocessing import MinMaxScaler
+            scaler = MinMaxScaler()
+            scaler.fit(X)
+            X = scaler.transform(X)
 
         # split train test
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=cutoff, random_state=random_state)
@@ -849,12 +857,20 @@ class YinsML:
         y = None,
         cutoff = 0.1,
         random_state = 123,
+        useMinMaxScale = False,
         selected_algorithm = ['AdaBoostRegressor', 'BaggingRegressor', 'BayesianRidge', 'DecisionTreeRegressor', 'DummyRegressor', 'ElasticNet', 'ElasticNetCV', 'ExtraTreeRegressor', 'ExtraTreesRegressor', 'GammaRegressor', 'GaussianProcessRegressor', 'GeneralizedLinearRegressor', 'GradientBoostingRegressor', 'HistGradientBoostingRegressor', 'HuberRegressor', 'KNeighborsRegressor', 'KernelRidge', 'Lars', 'LarsCV', 'Lasso', 'LassoCV', 'LassoLars', 'LassoLarsCV', 'LassoLarsIC', 'LinearRegression', 'LinearSVR', 'MLPRegressor', 'NuSVR', 'OrthogonalMatchingPursuit', 'OrthogonalMatchingPursuitCV', 'PassiveAggressiveRegressor', 'PoissonRegressor', 'RANSACRegressor', 'RandomForestRegressor', 'Ridge', 'RidgeCV', 'SGDRegressor', 'SVR', 'TransformedTargetRegressor', 'TweedieRegressor', 'XGBRegressor', 'LGBMRegressor']
     ):
         
         # library
         import lazypredict
         from lazypredict.Supervised import LazyRegressor
+        
+        # min-max scale
+        if useMinMaxScale:
+            from sklearn.preprocessing import MinMaxScaler
+            scaler = MinMaxScaler()
+            scaler.fit(X)
+            X = scaler.transform(X)
 
         # split train test
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=cutoff, random_state=random_state)
