@@ -45,7 +45,7 @@ git clone https://github.com/yiqiao-yin/WYNAssociates.git
 
 ## Data-Centric Solutions
 
-### AI-Driven Pipelines
+### AI-based Pipelines
 
 There are three global sections of AI-driven solutions in our enterprise. They are listed below.
 
