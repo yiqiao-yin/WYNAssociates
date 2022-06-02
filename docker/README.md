@@ -2,6 +2,9 @@
 
 This folder contains information about docker container and the instructions required to set up docker container for the optimal environment. A few good articles ([MicroFocus](https://www.microfocus.com/documentation/enterprise-developer/ed40pu5/ETS-help/GUID-F5BDACC7-6F0E-4EBB-9F62-E0046D8CCF1B.html), [SimpliLearn](https://www.simplilearn.com/tutorials/docker-tutorial/what-is-docker-container), [InfoWorld](https://www.infoworld.com/article/3310941/why-you-should-use-docker-and-containers.html), [DZone](https://dzone.com/articles/top-10-benefits-of-using-docker)) point out the benefit of using docker container in regards to portability, scalability, and efficiency in production.
 
+- In this folder, there is a "dockerfile" which lists the command to run in PowerShell and it contains libraries I used to create this package. For general purpose, I recommend users to put down a list of whatever libraries they desire to have when building the docker container.
+- In this folder, there is another file called "openslide" which is the base installation file I used for the "openslide-python" library. From my experience, it is easier to install the base file in Windows, and then use docker container to install the python adaptation. Other ways are possible, yet I have run into many bugs with other methods. For more information, please refer to [here](https://openslide.org/api/python/).
+
 ## Installation Manual
 
 This is to test if a library you desire to have can run on a virtual environment using docker. Most of the libraries should work fine so this step can be skipped. In some scenarios where a library is originally not written in python, it is recommended to use the virtual Linux enrivonment to test it out before install a full docker container.
