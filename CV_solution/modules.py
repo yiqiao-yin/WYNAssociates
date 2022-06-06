@@ -40,7 +40,7 @@ class YinsCV:
         return (intersection + 1.0) / (K.sum(y_true_f) + K.sum(y_pred_f) - intersection + 1.0)
         
     # define unet
-    def multi_unet_model(n_classes=4, IMG_HEIGHT=256, IMG_WIDTH=256, IMG_CHANNELS=1, useSCALE=FALSE):
+    def multi_unet_model(n_classes=4, IMG_HEIGHT=256, IMG_WIDTH=256, IMG_CHANNELS=1, useSCALE=False):
         
         # Build the model
         inputs = Input((IMG_HEIGHT, IMG_WIDTH, IMG_CHANNELS))
