@@ -16,7 +16,8 @@ from scipy import stats
 
 # Import Libraries
 import math
-        
+
+# define class
 class YinsDL:
     
     print("---------------------------------------------------------------------")
@@ -164,7 +165,7 @@ class YinsDL:
         }
     # End of function
 
-       # Define function
+    # Define function
     def NN10_Classifier(
         X_train, y_train, X_test, y_test, 
         l1_act='relu', l2_act='relu', l3_act='relu', l4_act='relu', l5_act='relu',
@@ -669,7 +670,6 @@ class YinsDL:
                 """ )
             print("--------------------------------------------------------------------")
 
-
         # TensorFlow and tf.keras
         import tensorflow as tf
         from tensorflow import keras
@@ -679,7 +679,6 @@ class YinsDL:
         import pandas as pd
         import matplotlib.pyplot as plt
         import time
-
         if verbose:
             print("Tensorflow Version:")
             print(tf.__version__)
