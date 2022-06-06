@@ -21,7 +21,8 @@ from ta.trend import SMAIndicator
 # import matplotlib.pyplot as plt
 # import yfinance as yf
 import math
-    
+
+# class
 class YinsFinancialTools:
 
     """
@@ -80,11 +81,11 @@ class YinsFinancialTools:
             print("Manual ends here.")
             print("------------------------------------------------------------------------------")
 
-    #     # Initiate Environment
-    #     import pandas as pd
-    #     import numpy as np
-    #     import yfinance as yf
-    #     import time
+        # # Initiate Environment
+        # import pandas as pd
+        # import numpy as np
+        # import yfinance as yf
+        # import time
 
         # Time
         start = time.time()
