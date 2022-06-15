@@ -851,7 +851,7 @@ class YinsDL:
         }
     # End of function
     
-    # transfer learning: using VGG16
+    # transfer learning: from_vgg16
     def from_vgg16(input_shape, n_classes, hidden=[2048,1024], optimizer='rmsprop', fine_tune=0):
         """
         Compiles a model integrated with VGG16 pretrained layers
@@ -895,6 +895,44 @@ class YinsDL:
         model = tf.keras.Model(inputs=conv_base.input, outputs=output_layer)
 
         # output
+        return model
+    
+    # transfer learning: from_vgg16_unsampled
+    def from_vgg16_unsampled(upsampling_multiplier, n_classes, hidden=[2048,1024], dropOutRate=0.2):
+        """
+        Compiles a model integrated with VGG16 pretrained layers
+
+        input_shape: tuple  - the shape of input images (width, height, channels)
+        n_classes:   int    - number of classes for the output layer
+        hidden:      list of integers - a list of integers to indicate the number of units for each dense layer added in the middle
+        """
+
+        # Pretrained convolutional layers are loaded using the Imagenet weights.
+        # Include_top is set to False, in order to exclude the model's fully-connected layers.
+        conv_base = tf.keras.applications.vgg16.VGG16(include_top=False,
+                                                weights='imagenet',
+                                                pooling='avg')
+
+        # design model
+        model= tf.keras.Sequential()
+
+        # upsample
+        for i in range(upsampling_multiplier):
+          model.add(tf.keras.layers.UpSampling2D())
+
+        # add base model
+        model.add(conv_base)
+        model.add(tf.keras.layers.Flatten())
+
+        # design hidden layers
+        for curr_unit in hidden:
+          model.add(tf.keras.layers.Dense(curr_unit, activation=('relu'))) 
+          model.add(tf.keras.layers.Dropout(dropOutRate))
+
+        # last layer
+        model.add(tf.keras.layers.Dense(n_classes, activation=('softmax')))
+
+        # output    
         return model
     
     # define NeuralNet_Regressor function:
