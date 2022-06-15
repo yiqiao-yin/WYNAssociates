@@ -852,14 +852,14 @@ class YinsDL:
     # End of function
     
     # transfer learning: using VGG16
-    # add layer
-    def from_vgg16(input_shape, n_classes, optimizer='rmsprop', fine_tune=0):
+    def from_vgg16(input_shape, n_classes, hidden=[2048,1024], optimizer='rmsprop', fine_tune=0):
         """
         Compiles a model integrated with VGG16 pretrained layers
 
         input_shape: tuple  - the shape of input images (width, height, channels)
         n_classes:   int    - number of classes for the output layer
         optimizer:   string - instantiated optimizer to use for training. Defaults to 'RMSProp'
+        hidden:      list of integers - a list of integers to indicate the number of units for each dense layer added in the middle
         fine_tune:   int    - The number of pre-trained layers to unfreeze.
                               If set to 0, all pretrained layers will freeze during training
         """
@@ -884,9 +884,11 @@ class YinsDL:
         # This is 'bootstrapping' a new top_model onto the pretrained layers.
         top_model = conv_base.output
         top_model = tf.keras.layers.Flatten(name="flatten")(top_model)
-        top_model = tf.keras.layers.Dense(4096, activation='relu')(top_model)
-        top_model = tf.keras.layers.Dense(1072, activation='relu')(top_model)
-        top_model = tf.keras.layers.Dropout(0.2)(top_model)
+
+        # add hidden layer
+        for each_unit in hidden:
+          top_model = tf.keras.layers.Dense(each_unit, activation='relu')(top_model)
+          top_model = tf.keras.layers.Dropout(0.2)(top_model)
         output_layer = tf.keras.layers.Dense(n_classes, activation='softmax')(top_model)
 
         # Group the convolutional base and new fully-connected layers into a Model object.
