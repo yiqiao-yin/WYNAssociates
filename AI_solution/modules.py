@@ -898,7 +898,7 @@ class YinsDL:
         return model
     
     # transfer learning: from_vgg16_unsampled
-    def from_vgg16_unsampled(upsampling_multiplier, n_classes, hidden=[2048,1024], dropOutRate=0.2):
+    def from_vgg16_upsampled(upsampling_multiplier, n_classes, hidden=[2048,1024], dropOutRate=0.2):
         """
         Compiles a model integrated with VGG16 pretrained layers
 
