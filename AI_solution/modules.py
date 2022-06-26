@@ -851,8 +851,70 @@ class YinsDL:
         }
     # End of function
     
+    # cnn with block structure:
+    def cnn_blocked_design(
+        input_shape=(64, 64, 3),
+        conv_blocks=[[32, 64], [32, 64, 128], [32, 32, 64, 128]],
+        kernel_size=(2,2),
+        hidden_layers=[1024, 512],
+        output_dim=2,
+        name="MODEL_JohnSmith",
+    ):
+
+        """
+        input_shape: a tuple such as (64, 64, 3) | this is the input dimension for the image data, assume image data
+        conv_blocks: a nested list such as [[32, 64], [32, 64, 128], [32, 32, 64, 128]] | each sublist is a block of convolutional layers
+        kernel_size: a tuple of length 2 such as (2,2) | this is the kernel size
+        hidden_layers: a list of integers such as [1024, 512] | this is the hidden dense layers
+        output_dim: an integer such as 2 | this is the number of unit in the final output layers (must match number of classes in the given dataset)
+        name: a string such as "MODEL_JohnSmith" | this is the name of the model
+        """
+
+        # build a CNN (Convolutional Neural Network) model
+        model = tf.keras.models.Sequential(name=name)
+        ## Your Changes Start Here ##
+        # starter
+        first_conv_layers = conv_blocks[0]
+        model.add(tf.keras.layers.Conv2D(filters=first_conv_layers[0], kernel_size=kernel_size, activation='relu', input_shape=input_shape, name="Conv_1"))
+        i = 2
+        m = 1
+        for l_ in first_conv_layers[1::]:
+            model.add(tf.keras.layers.Conv2D(filters=l_, kernel_size=kernel_size, activation='relu', name="Conv_"+str(i)))
+            i += 1
+        model.add(tf.keras.layers.MaxPooling2D(name='Pool_'+str(m)))
+        m += 1
+
+        # conv blocks
+        for conv_layers in conv_blocks[1::]:    
+            for l_ in conv_layers:
+                model.add(tf.keras.layers.Conv2D(filters=l_, kernel_size=kernel_size, activation='relu', name="Conv_"+str(i)))
+                i += 1
+            model.add(tf.keras.layers.MaxPooling2D(name='Pool_'+str(m))) 
+            m += 1
+        # You can have more CONVOLUTIONAL layers! # <===== TRY TO TUNE THIS!!!
+        # Each convolutional layer can have arbitrary different number of units! # <===== TRY TO TUNE THIS!!!
+        # ... you can have however many you want
+        ## Your Changes Ends Here ##
+        # up to here, we finish coding the convolutional layers, we have not done neural network layers
+
+        # build neural network layers
+        model.add(tf.keras.layers.Flatten(name='Flatten')) # neural network requires the input layer to be a vector instead of 2D array
+        ## Your Changes Start Here ##
+        d = 1
+        for l in hidden_layers:
+            model.add(tf.keras.layers.Dense(l, activation='relu', use_bias=True, name='Dense_'+str(d))) # input units (usually starts with 128) and activation (it's a choice, usually relu)
+            d += 1
+        # You can have more DENSE layers! # <===== TRY TO TUNE THIS!!!
+        # Each dense layer can have arbitrary different number of units! # <===== TRY TO TUNE THIS!!!
+        # ... you can have however many you want
+        ## Your Changes Ends Here ##
+        model.add(tf.keras.layers.Dense(output_dim, activation='softmax')) # output layer or end layer | you have to match the number of classes
+
+        # output
+        return model
+    
     # transfer learning: from_vgg16
-    def from_vgg16(input_shape, n_classes, hidden=[2048,1024], optimizer='rmsprop', fine_tune=0):
+    def cnn_from_vgg16(input_shape, n_classes, hidden=[2048,1024], optimizer='rmsprop', fine_tune=0):
         """
         Compiles a model integrated with VGG16 pretrained layers
 
@@ -898,7 +960,7 @@ class YinsDL:
         return model
     
     # transfer learning: from_vgg16_unsampled
-    def from_vgg16_upsampled(upsampling_multiplier, n_classes, hidden=[2048,1024], dropOutRate=0.2):
+    def cnn_from_vgg16_upsampled(upsampling_multiplier, n_classes, hidden=[2048,1024], dropOutRate=0.2):
         """
         Compiles a model integrated with VGG16 pretrained layers
 
