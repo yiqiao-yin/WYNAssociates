@@ -858,7 +858,7 @@ class YinsDL:
         kernel_size=(2,2),
         hidden_layers=[1024, 512],
         output_dim=2,
-        name="MODEL_JohnSmith",
+        name="MODEL_JohnSmith"
     ):
 
         """
