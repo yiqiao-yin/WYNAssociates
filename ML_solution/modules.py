@@ -8,15 +8,13 @@ import time
 from scipy import stats
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
+from sklearn import metrics
 
 # Import Libraries
 from ta.momentum import RSIIndicator
 from ta.trend import SMAIndicator
 
-# import numpy as np
-# import pandas as pd
-# import matplotlib.pyplot as plt
-# import yfinance as yf
+# math
 import math
     
 class YinsML:
@@ -773,29 +771,41 @@ class YinsML:
     # End of function
     
     # Define function
-    def ResultAUCROC(y_test, y_test_hat):
-        from sklearn.metrics import roc_curve, auc, roc_auc_score
-        fpr, tpr, thresholds = roc_curve(y_test, y_test_hat)
-        areaUnderROC = auc(fpr, tpr)
-        resultsROC = {
-            'false positive rate': fpr,
-            'true positive rate': tpr,
-            'thresholds': thresholds,
-            'auc': round(areaUnderROC, 3) }
+    def multi_rocauc_plot(
+        model_names = ['M1', 'M2'],
+        y_test = [1, 1, 1, 1, 1, 0, 0, 0, 0, 0],
+        y_pred = [y_pred_1, y_pred_2],
+        figsize=(5, 5),
+        linewidth=3
+    ):
 
-        import matplotlib.pyplot as plt
-        plt.figure()
-        plt.plot(fpr, tpr, color='r', lw=2, label='ROC curve')
-        plt.plot([0, 1], [0, 1], color='k', lw=2, linestyle='--')
-        plt.xlim([0.0, 1.0])
-        plt.ylim([0.0, 1.05])
-        plt.xlabel('False Positive Rate')
-        plt.ylabel('True Positive Rate')
-        plt.title('Receiver operating characteristic: \
-                  Area under the curve = {0:0.3f}'.format(areaUnderROC))
-        plt.legend(loc="lower right")
-        plt.show()
+      """
+      model_names: a list of strings for model names such as ['model1', 'model2']
+      y_test: a list of integers of 1's and 0's such as [1,1,0,0]
+      y_pred: a nested list of predicted probabilities such as [[1,1,0,0],[.9,.8,.7,.6]]
+      figsize: a tuple of two integers indicating figure size such as (10, 10)
+      linewidth: an integer indicating line width such as 3
+      """
 
+      # set up plotting area
+      plt.figure(figsize=figsize)
+
+      # models
+      i = 0
+      for this_y_pred_ in y_pred:
+        fpr, tpr, _ = metrics.roc_curve(y_test, this_y_pred_)
+        auc = np.round(metrics.roc_auc_score(y_test, this_y_pred_), 4)
+        plt.plot(fpr, tpr, label=model_names[i]+", AUC="+str(auc), linewidth=linewidth)
+        i += 1
+
+      # decorate
+      plt.plot([0, 1], [0, 1], color='k', lw=2, linestyle='--')
+      plt.xlabel('False Positive Rate')
+      plt.ylabel('True Positive Rate')
+      plt.title('Receiver operating characteristic')
+      plt.legend(loc="lower right")
+
+    # define function
     def AutoMachineLearningClassifier(
         X = None,
         y = None,
@@ -852,6 +862,7 @@ class YinsML:
             }
         }
 
+    # define function
     def AutoMachineLearningRegressor(
         X = None,
         y = None,
