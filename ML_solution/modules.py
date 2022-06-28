@@ -772,9 +772,9 @@ class YinsML:
     
     # Define function
     def multi_rocauc_plot(
-        model_names = ['M1', 'M2'],
-        y_test = [1, 1, 1, 1, 1, 0, 0, 0, 0, 0],
-        y_pred = [y_pred_1, y_pred_2],
+        model_names,
+        y_test,
+        y_pred,
         figsize=(5, 5),
         linewidth=3
     ):
