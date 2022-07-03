@@ -12,6 +12,8 @@ from tensorflow.keras import layers
 from keras.preprocessing.image import ImageDataGenerator
 from keras.models import Model
 from keras.layers import Input, Conv2D, MaxPooling2D, UpSampling2D, concatenate, Conv2DTranspose, BatchNormalization, Dropout, Lambda
+
+# Import backend
 from keras import backend as K
 
 # Import Other Libraries
@@ -38,6 +40,21 @@ class YinsCV:
         y_pred_f = K.flatten(y_pred)
         intersection = K.sum(y_true_f * y_pred_f)
         return (intersection + 1.0) / (K.sum(y_true_f) + K.sum(y_pred_f) - intersection + 1.0)
+
+    # define dice
+    def dice_loss(y_true, y_pred):
+      y_true = tf.cast(y_true, tf.float32)
+      y_pred = tf.math.sigmoid(y_pred)
+      numerator = 2 * tf.reduce_sum(y_true * y_pred)
+      denominator = tf.reduce_sum(y_true + y_pred)
+      return 1 - numerator / denominator
+
+    # define iou loss
+    def iou_coef(y_true, y_pred, smooth=1):
+        intersection = K.sum(K.abs(y_true * y_pred), axis=[1,2,3])
+        union = K.sum(y_true,[1,2,3])+K.sum(y_pred,[1,2,3])-intersection
+        iou = K.mean((intersection + smooth) / (union + smooth), axis=0)
+        return iou
         
     # define unet
     def shallow_unet_model(input_shape = (W, H, 3)):
