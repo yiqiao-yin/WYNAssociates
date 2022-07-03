@@ -40,6 +40,56 @@ class YinsCV:
         return (intersection + 1.0) / (K.sum(y_true_f) + K.sum(y_pred_f) - intersection + 1.0)
         
     # define unet
+    def shallow_unet_model(input_shape = (W, H, 3)):
+        
+        # define conv_block
+        def conv_block(input, num_filters):
+            x = tf.keras.layers.Conv2D(num_filters, 3, padding="same")(input)
+            x = tf.keras.layers.BatchNormalization()(x)
+            x = tf.keras.layers.Activation("relu")(x)
+
+            x = tf.keras.layers.Conv2D(num_filters, 3, padding="same")(x)
+            x = tf.keras.layers.BatchNormalization()(x)
+            x = tf.keras.layers.Activation("relu")(x)
+            return x
+
+        # define encoder_block: based on conv_block
+        def encoder_block(input, num_filters):
+            x = conv_block(input, num_filters)
+            p = tf.keras.layers.MaxPool2D((2, 2))(x)
+            return x, p
+
+        # define decoder_block
+        def decoder_block(input, skip_features, num_filters):
+            x = tf.keras.layers.Conv2DTranspose(num_filters, (2, 2), strides=2, padding="same")(input)
+            x = tf.keras.layers.Concatenate()([x, skip_features])
+            x = conv_block(x, num_filters)
+            return x
+
+        # build the entire model
+        def build_unet(input_shape):
+            inputs = tf.keras.Input(input_shape)
+
+            s1, p1 = encoder_block(inputs, 32)
+            s2, p2 = encoder_block(p1, 64)
+            s3, p3 = encoder_block(p2, 128)
+            s4, p4 = encoder_block(p3, 256)
+
+            b1 = conv_block(p4, 512)
+
+            d1 = decoder_block(b1, s4, 256)
+            d2 = decoder_block(d1, s3, 128)
+            d3 = decoder_block(d2, s2, 64)
+            d4 = decoder_block(d3, s1, 32)
+
+            outputs = tf.keras.layers.Conv2D(1, 1, padding="same", activation="sigmoid")(d4)
+
+            model = tf.keras.Model(inputs, outputs, name="U-Net")
+            return model
+
+        return build_unet(input_shape)
+
+    # define unet
     def multi_unet_model(n_classes=4, IMG_HEIGHT=256, IMG_WIDTH=256, IMG_CHANNELS=1, useSCALE=False):
         
         # Build the model
