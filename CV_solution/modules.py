@@ -57,7 +57,7 @@ class YinsCV:
         return iou
         
     # define unet
-    def shallow_unet_model(input_shape = (W, H, 3)):
+    def shallow_unet_model(input_shape = (W=None, H=None, 3)):
         
         # define conv_block
         def conv_block(input, num_filters):
