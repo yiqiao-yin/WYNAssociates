@@ -855,7 +855,7 @@ class YinsDL:
     def cnn_blocked_design(
         input_shape=(64, 64, 3),
         conv_blocks=[[32, 64], [32, 64, 128], [32, 32, 64, 128]],
-        kernel_size=(2,2),
+        kernel_size=[(3,3), (3,3), (3,3)],
         hidden_layers=[1024, 512],
         output_dim=2,
         name="MODEL_JohnSmith"
@@ -875,11 +875,11 @@ class YinsDL:
         ## Your Changes Start Here ##
         # starter
         first_conv_layers = conv_blocks[0]
-        model.add(tf.keras.layers.Conv2D(filters=first_conv_layers[0], kernel_size=kernel_size, activation='relu', input_shape=input_shape, name="Conv_1"))
+        model.add(tf.keras.layers.Conv2D(filters=first_conv_layers[0], kernel_size=kernel_size[0], activation='relu', input_shape=input_shape, name="Conv_1"))
         i = 2
         m = 1
         for l_ in first_conv_layers[1::]:
-            model.add(tf.keras.layers.Conv2D(filters=l_, kernel_size=kernel_size, activation='relu', name="Conv_"+str(i)))
+            model.add(tf.keras.layers.Conv2D(filters=l_, kernel_size=kernel_size[l_], activation='relu', name="Conv_"+str(i)))
             i += 1
         model.add(tf.keras.layers.MaxPooling2D(name='Pool_'+str(m)))
         m += 1
