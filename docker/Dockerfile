@@ -13,6 +13,7 @@ RUN pip install openpyxl
 
 RUN pip install openslide-python
 RUN pip install opencv-python
+
 RUN conda install -y -c pytorch torchvision
 
 RUN pip install lightgbm
@@ -28,9 +29,12 @@ RUN pip install tensorflow-datasets
 
 RUN pip install pydot
 RUN pip install graphviz
-RUN pip install lazypredict
 
-RUN pip install SimpleITK geojson shapely progressbar
+# RUN pip install javabridge bioformats
 
-RUN pip install pyinstaller
-RUN pip install dash plot_common shapes_to_segmentations trainable_segmentation
+# RUN pip install SimpleITK geojson shapely progressbar
+
+# RUN pip install pyinstaller
+# RUN pip install dash plot_common shapes_to_segmentations trainable_segmentation
+
+# RUN conda install lazypredict
