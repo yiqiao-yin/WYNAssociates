@@ -889,6 +889,7 @@ class YinsDL:
         k = 1
         for l_ in first_conv_layers[1::]:
             model.add(tf.keras.layers.Conv2D(filters=l_, kernel_size=kernel_size[0][k], activation='relu', name="Conv_"+str(i)))
+            model.add(tf.keras.layers.BatchNormalization())
             i += 1
             k += 1
         model.add(tf.keras.layers.MaxPooling2D(name='Pool_'+str(m)))
@@ -900,6 +901,7 @@ class YinsDL:
             k = 0
             for l_ in conv_layers:
                 model.add(tf.keras.layers.Conv2D(filters=l_, kernel_size=kernel_size[which_kernel][k], activation='relu', name="Conv_"+str(i)))
+                model.add(tf.keras.layers.BatchNormalization())
                 i += 1
                 k += 1
             which_kernel += 1
