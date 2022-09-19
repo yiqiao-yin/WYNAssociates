@@ -14,7 +14,7 @@ This is list is provided by [Aman Chadha](https://www.linkedin.com/in/amanc?mini
 
 🔹 CS230 - Deep Learning by [Andrew Ng](https://www.linkedin.com/in/ACoAAAqBL5gBXJ8MGhQh-qHYyxAOW-DYlHM3VLg?lipi=urn%3Ali%3Apage%3Ad_flagship3_detail_base%3Bbr1%2F0SF5SYqu4NOxKP053Q%3D%3D): [Course](https://lnkd.in/gTk-gKPm)
 
-🔹 CS231n - Convolutional Neural Networks for Visual Recognition by [Fei-Fei Li](https://profiles.stanford.edu/fei-fei-li) and [Andrej Karpathy](https://www.linkedin.com/in/ACoAAANHUM4Ba-7gLW9R4il3U9t3O_2BkbkSDvU?lipi=urn%3Ali%3Apage%3Ad_flagship3_detail_base%3Bbr1%2F0SF5SYqu4NOxKP053Q%3D%3D): [Course](https://lnkd.in/gGUMZH_G)
+🔹 CS231n - Convolutional Neural Networks for Visual Recognition by [Fei-Fei Li](https://profiles.stanford.edu/fei-fei-li) and [Andrej Karpathy](https://www.linkedin.com/in/ACoAAANHUM4Ba-7gLW9R4il3U9t3O_2BkbkSDvU?lipi=urn%3Ali%3Apage%3Ad_flagship3_detail_base%3Bbr1%2F0SF5SYqu4NOxKP053Q%3D%3D): [Course](https://lnkd.in/gGUMZH_G), [2017Spring](https://www.youtube.com/playlist?list=PL3FW7Lu3i5JvHM8ljYj-zLfQRF3EO8sYv), [2016Winter](https://www.youtube.com/playlist?list=PLkt2uSq6rBVctENoVBg1TpCC7OQi31AlC)
 
 🔹 CS224n - Natural Language Processing with Deep Learning by [Christopher Manning](https://www.linkedin.com/in/ACoAAAAVVM0BpHy38YF2LzU5kdIpID9pur6TE0g?lipi=urn%3Ali%3Apage%3Ad_flagship3_detail_base%3Bbr1%2F0SF5SYqu4NOxKP053Q%3D%3D): [Course](https://lnkd.in/giWDZGVX)
 
