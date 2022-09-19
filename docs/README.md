@@ -151,9 +151,9 @@ Go back up to the top, please click [here](https://github.com/yiqiao-yin/YinPort
 Let us clearly define our loss function to make sure we have a proper grip of our mistakes. 
 $$\mathcal{L} = \sum_t L(\hat{y}_{\langle t \rangle} - y_t)^2$$
 and we can compute the gradient 
-$$\triangledown = \frac{\partial \mathcal{L}}{\partial a}$$
+$$\nabla = \frac{\partial \mathcal{L}}{\partial a}$$
 and then with respect with parameters $w$ and $b$
-$$\frac{\partial \triangledown}{\partial w}, \frac{\partial \triangledown}{\partial a}$$
+$$\frac{\partial \nabla}{\partial w}, \frac{\partial \nabla}{\partial a}$$
 and now with perspective of where we make our mistakes according to our parameters we can go backward
 
 $$
