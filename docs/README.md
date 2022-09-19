@@ -37,6 +37,7 @@ This is list is provided by [Aman Chadha](https://www.linkedin.com/in/amanc?mini
 🔹 CS/LTI 11-777 Multimodal Machine Learning by [Louis-Philippe Morency](https://www.linkedin.com/in/ACoAAAA0J4YBkXFZK8lXvW5vH9kwYltQpNvsgBE?lipi=urn%3Ali%3Apage%3Ad_flagship3_detail_base%3B17Oz6mmZQCe6DHDpjttkog%3D%3D): [Course](https://lnkd.in/gKFJDbU4)
 
 📚 University College London
+
 🔹 COMP M050 Reinforcement Learning by David Silver: [Course](https://lnkd.in/gEpkWmqh)
 
 - Have courses that you found useful? Drop me a message so I can learn too!
