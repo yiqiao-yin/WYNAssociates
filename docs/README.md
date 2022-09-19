@@ -7,7 +7,9 @@ This folder stores all the document and notebooks.
 This is list is provided by [Aman Chadha](https://www.linkedin.com/in/amanc?miniProfileUrn=urn%3Ali%3Afs_miniProfile%3AACoAAAOfvYEBZZvCf4uBUNXyTvIRtEJAo4QBlwU&lipi=urn%3Ali%3Apage%3Ad_flagship3_detail_base%3B17Oz6mmZQCe6DHDpjttkog%3D%3D&licu=urn%3Ali%3Acontrol%3Ad_flagship3_detail_base-actor_container&lici=XFNUXOlRSeeOorUPkvTqAA%3D%3D) from his LinkedIn [post](https://www.linkedin.com/posts/amanc_artificialintelligence-machinelearning-ml-activity-6977146862604623872-p7BI?utm_source=share&utm_medium=member_desktop). Kudos to him.
 
 📚 Stanford University
+
 🔹 CS221 - Artificial Intelligence: Principles and Techniques by [Percy Liang](https://www.linkedin.com/in/ACoAAAAsk4MBx6p5oT50XyRzLU7Pk3bo9g_0xD8?lipi=urn%3Ali%3Apage%3Ad_flagship3_detail_base%3Bbr1%2F0SF5SYqu4NOxKP053Q%3D%3D) and [Dorsa Sadigh](https://www.linkedin.com/in/ACoAAAQKjtQBRBLSg-t-nLfVKaj8SQiP3KriVU8?lipi=urn%3Ali%3Apage%3Ad_flagship3_detail_base%3Bbr1%2F0SF5SYqu4NOxKP053Q%3D%3D): [Course](https://www.youtube.com/playlist?list=PLoROMvodv4rOca_Ovz1DvdtWuz8BfSWL2)
+
 🔹 CS229 - Machine Learning by [Andrew Ng](https://www.linkedin.com/in/ACoAAAqBL5gBXJ8MGhQh-qHYyxAOW-DYlHM3VLg?lipi=urn%3Ali%3Apage%3Ad_flagship3_detail_base%3Bbr1%2F0SF5SYqu4NOxKP053Q%3D%3D): [Course](https://lnkd.in/gY8a2yZN)
 🔹 CS230 - Deep Learning by [Andrew Ng](https://www.linkedin.com/in/ACoAAAqBL5gBXJ8MGhQh-qHYyxAOW-DYlHM3VLg?lipi=urn%3Ali%3Apage%3Ad_flagship3_detail_base%3Bbr1%2F0SF5SYqu4NOxKP053Q%3D%3D): [Course](https://lnkd.in/gTk-gKPm)
 🔹 CS231n - Convolutional Neural Networks for Visual Recognition by [Fei-Fei Li](https://profiles.stanford.edu/fei-fei-li) and [Andrej Karpathy](https://www.linkedin.com/in/ACoAAANHUM4Ba-7gLW9R4il3U9t3O_2BkbkSDvU?lipi=urn%3Ali%3Apage%3Ad_flagship3_detail_base%3Bbr1%2F0SF5SYqu4NOxKP053Q%3D%3D): [Course](https://lnkd.in/gGUMZH_G)
