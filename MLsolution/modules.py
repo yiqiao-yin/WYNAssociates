@@ -14,8 +14,34 @@ from sklearn import metrics
 from ta.momentum import RSIIndicator
 from ta.trend import SMAIndicator
 
+# library
+import boto3 
+import botocore 
+import pandas as pd 
+from sagemaker import get_execution_role 
+
 # math
 import math
+
+class YinSystem:
+
+    # helper: save file to s3:
+    def save_to_s3(data_location = None, df = None):
+        
+        if data_location == None or df == None:
+            print('No information added')
+        else:
+            # authorization
+            role = get_execution_role() 
+
+            # load data
+            # data_location = None # some s3 path
+
+            # save
+            df.to_csv(data_location)
+
+            # checkpoint
+            print('Done. Just saved data here:', data_location)
     
 class YinsML:
 
