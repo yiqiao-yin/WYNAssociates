@@ -17,6 +17,16 @@ from scipy import stats
 # Import Libraries
 import math
 
+# Import Libraries: Scalecast
+try: 
+    from scalecast.Forecaster import Forecaster
+    from sklearn.metrics import mean_absolute_percentage_error
+except:
+    !pip install scalecast --upgrade
+    !pip install scikit-learn==0.24
+    from scalecast.Forecaster import Forecaster
+
+
 # define class
 class YinsDL:
     
@@ -1389,15 +1399,6 @@ class YinsDL:
     # End of function
 
     # time-series forecast using scalecast
-    # lib
-    try: 
-        from scalecast.Forecaster import Forecaster
-        from sklearn.metrics import mean_absolute_percentage_error
-    except:
-        !pip install scalecast --upgrade
-        !pip install scikit-learn==0.24
-        from scalecast.Forecaster import Forecaster
-
     # main function
     def run_rnn_scalecast(
         target_data_=None,
