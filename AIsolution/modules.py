@@ -1429,7 +1429,8 @@ class YinsDL:
             'depth_range': [1, 2, 3, 4, 5],
             'valsplit_range': [0, 0.05, 0.1, 0.2, 0.3],
             'learningrate_range': [0.00001, 0.0001, 0.001]
-        }
+        },
+        nom_of_this_siteid_this_ta_data_=None
     ):
 
         """
@@ -1503,7 +1504,7 @@ class YinsDL:
             some_result_ = []
             for ii in ii_range:
                 # name
-                this_nom_ = '_'.join((str(ii), str(jj), str(kk), str(ll), str(r_), str(ss_)))
+                this_nom_ = '_'.join((str(ii), str(jj), str(kk), str(ll), str(r_), str(ss_), str(lr_)))
                 curr_range_.append(ii)
 
                 # model
