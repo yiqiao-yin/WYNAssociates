@@ -18,13 +18,31 @@ from scipy import stats
 import math
 
 # Import Libraries: Scalecast
-try: 
-    from scalecast.Forecaster import Forecaster
-    from sklearn.metrics import mean_absolute_percentage_error
-except:
-    !pip install scalecast --upgrade
-    !pip install scikit-learn==0.24
-    from scalecast.Forecaster import Forecaster
+# library
+import boto3
+import botocore 
+import pandas as pd 
+import sagemaker
+from sagemaker import get_execution_role 
+from sagemaker.session import Session
+
+# import
+import os
+import numpy as np
+import pandas as pd
+import seaborn as sns
+import pickle
+import matplotlib.pyplot as plt
+from tqdm import tqdm
+
+# import tensorflow
+import tensorflow as tf
+import tensorflow.keras.backend as K
+from tensorflow.keras.callbacks import EarlyStopping
+
+# import scalecast
+from scalecast.Forecaster import Forecaster
+from sklearn.metrics import mean_absolute_percentage_error
 
 
 # define class
@@ -1433,405 +1451,62 @@ class YinsDL:
         # args
         # target_data_ # a pd.DataFrame with two columns (Date and Kitsin)
 
-        try:
+        # duplicate from source
+        data = target_data_
+        data = data.iloc[0:-1, :]
 
-            # duplicate from source
-            data = target_data_
-            data = data.iloc[0:-1, :]
+        # display dim
+        L = data.shape[0]
 
-            # display dim
-            L = data.shape[0]
+        # define model
+        f = Forecaster(y=data['kitsin'], current_dates=data['Date'])
 
-            # define model
-            f = Forecaster(y=data['kitsin'], current_dates=data['Date'])
+        # need these info
+        f.set_test_length(10)       # 1. 12 observations to test the results
+        f.generate_future_dates(10) # 2. 12 future points to forecast
+        f.set_estimator('lstm')     # 3. LSTM neural network
 
-            # need these info
-            f.set_test_length(10)       # 1. 12 observations to test the results
-            f.generate_future_dates(10) # 2. 12 future points to forecast
-            f.set_estimator('lstm')     # 3. LSTM neural network
+        # tuning
+        # this is where tuning steps start
 
-            # tuning
-            # this is where tuning steps start
+        # initialize
+        ii, jj, kk, ll, r_, ss_, lr_ = 2, 5, 12, 0.1, 1, 0.1, 0.00001
 
-            # initialize
-            ii, jj, kk, ll, r_, ss_, lr_ = 2, 5, 12, 0.1, 1, 0.1, 0.00001
+        # args
+        # args_dict_ = {
+        #     'lags_range': [1, 2, 3, 4, 5, 6],
+        #     'epochs_range': [800, 1000, 1200, 2000, 3000, 4000, 5000, 6000],
+        #     'width_range': [2, 8, 12, 18, 22, 64, 128, 256, 512],
+        #     'dropout_range': [0, 0.05, 0.1, 0.2],
+        #     'depth_range': [1, 2, 3, 4, 5],
+        #     'valsplit_range': [0, 0.05, 0.1, 0.2, 0.3],
+        #     'learningrate_range': [0.00001, 0.0001, 0.001]
+        # }
 
-            # args
-            # args_dict_ = {
-            #     'lags_range': [1, 2, 3, 4, 5, 6],
-            #     'epochs_range': [800, 1000, 1200, 2000, 3000, 4000, 5000, 6000],
-            #     'width_range': [2, 8, 12, 18, 22, 64, 128, 256, 512],
-            #     'dropout_range': [0, 0.05, 0.1, 0.2],
-            #     'depth_range': [1, 2, 3, 4, 5],
-            #     'valsplit_range': [0, 0.05, 0.1, 0.2, 0.3],
-            #     'learningrate_range': [0.00001, 0.0001, 0.001]
-            # }
+        # set args
+        max_iter = args_dict_['max_iteration']
+        ii_range = args_dict_['lags_range']
+        jj_range = args_dict_['epochs_range']
+        kk_range = args_dict_['width_range']
+        ll_range = args_dict_['dropout_range']
+        r_range = args_dict_['depth_range']
+        ss_range = args_dict_['valsplit_range']
+        lr_range = args_dict_['learningrate_range']
 
-            # set args
-            max_iter = args_dict_['max_iteration']
-            ii_range = args_dict_['lags_range']
-            jj_range = args_dict_['epochs_range']
-            kk_range = args_dict_['width_range']
-            ll_range = args_dict_['dropout_range']
-            r_range = args_dict_['depth_range']
-            ss_range = args_dict_['valsplit_range']
-            lr_range = args_dict_['learningrate_range']
+        # global iterattions
+        z = 0
+        while z < max_iter:
 
-            # global iterattions
-            z = 0
-            while z < max_iter:
+            # tuning lags: ii
+            args_ = []
+            curr_range_ = []
+            some_result_ = []
+            for ii in ii_range:
+                # name
+                this_nom_ = '_'.join((str(ii), str(jj), str(kk), str(ll), str(r_), str(ss_)))
+                curr_range_.append(ii)
 
-                # tuning lags: ii
-                args_ = []
-                curr_range_ = []
-                some_result_ = []
-                for ii in ii_range:
-                    # name
-                    this_nom_ = '_'.join((str(ii), str(jj), str(kk), str(ll), str(r_), str(ss_)))
-                    curr_range_.append(ii)
-
-                    # model
-                    f.manual_forecast(call_me=str(this_nom_),
-                                    lags=ii,
-                                    batch_size=int(np.round(L/10)),
-                                    epochs=jj,
-                                    validation_split=ss_,
-                                    shuffle=True,
-                                    activation='tanh',
-                                    optimizer='Adam',
-                                    learning_rate=lr_,
-                                    lstm_layer_sizes=(kk,)*r_,
-                                    dropout=(ll,)*r_,
-                                    callbacks=EarlyStopping(monitor='loss', patience=200),
-                                    verbose=0,
-                                    plot_loss=True)
-                    f.plot_test_set(order_by='LevelTestSetMAPE', models='top_1', ci=True)
-                    plt.show()
-
-                    # this result
-                    tmp = f.export(
-                        'model_summaries', determine_best_by='LevelTestSetMAPE')[
-                        ['ModelNickname',
-                        'LevelTestSetMAPE',
-                        'LevelTestSetRMSE',
-                        'LevelTestSetR2',
-                        'best_model']
-                    ]
-
-                    print(tmp)
-
-                    # collect
-                    args_.append(this_nom_)
-                    some_result_.append(np.float(tmp.loc[tmp['ModelNickname'] == this_nom_, :]['LevelTestSetMAPE']))
-
-                    # checkpoint
-                    print('>>> currently, we are at this tuning args combo: ', this_nom_, '<<<')
-
-                # pick the best
-                ii = curr_range_[np.argmin(some_result_)]
-                print('best lags: ', ii)
-
-                # tuning epochs: jj
-                args_ = []
-                curr_range_ = []
-                some_result_ = []
-                for jj in jj_range:
-                    # name
-                    this_nom_ = '_'.join((str(ii), str(jj), str(kk), str(ll), str(r_), str(ss_)))
-                    curr_range_.append(jj)
-
-                    # model
-                    f.manual_forecast(call_me=str(this_nom_),
-                                    lags=ii,
-                                    batch_size=int(np.round(L/10)),
-                                    epochs=jj,
-                                    validation_split=ss_,
-                                    shuffle=True,
-                                    activation='tanh',
-                                    optimizer='Adam',
-                                    learning_rate=lr_,
-                                    lstm_layer_sizes=(kk,)*r_,
-                                    dropout=(ll,)*r_,
-                                    callbacks=EarlyStopping(monitor='loss', patience=200),
-                                    verbose=0,
-                                    plot_loss=True)
-                    f.plot_test_set(order_by='LevelTestSetMAPE', models='top_1', ci=True)
-                    plt.show()
-
-                    # this result
-                    tmp = f.export(
-                        'model_summaries', determine_best_by='LevelTestSetMAPE')[
-                        ['ModelNickname',
-                        'LevelTestSetMAPE',
-                        'LevelTestSetRMSE',
-                        'LevelTestSetR2',
-                        'best_model']
-                    ]
-
-                    print(tmp)
-
-                    # collect
-                    args_.append(this_nom_)
-                    some_result_.append(np.float(tmp.loc[tmp['ModelNickname'] == this_nom_, :]['LevelTestSetMAPE']))
-
-                    # checkpoint
-                    print('>>> currently, we are at this tuning args combo: ', this_nom_, '<<<')
-
-                # pick the best
-                jj = curr_range_[np.argmin(some_result_)]
-                print('best epochs: ', jj)
-
-                # tuning width: kk
-                args_ = []
-                curr_range_ = []
-                some_result_ = []
-                for kk in kk_range:
-                    # name
-                    this_nom_ = '_'.join((str(ii), str(jj), str(kk), str(ll), str(r_), str(ss_)))
-                    curr_range_.append(kk)
-
-                    # model
-                    f.manual_forecast(call_me=str(this_nom_),
-                                    lags=ii,
-                                    batch_size=int(np.round(L/10)),
-                                    epochs=jj,
-                                    validation_split=ss_,
-                                    shuffle=True,
-                                    activation='tanh',
-                                    optimizer='Adam',
-                                    learning_rate=lr_,
-                                    lstm_layer_sizes=(kk,)*r_,
-                                    dropout=(ll,)*r_,
-                                    callbacks=EarlyStopping(monitor='loss', patience=200),
-                                    verbose=0,
-                                    plot_loss=True)
-                    f.plot_test_set(order_by='LevelTestSetMAPE', models='top_1', ci=True)
-                    plt.show()
-
-                    # this result
-                    tmp = f.export(
-                        'model_summaries', determine_best_by='LevelTestSetMAPE')[
-                        ['ModelNickname',
-                        'LevelTestSetMAPE',
-                        'LevelTestSetRMSE',
-                        'LevelTestSetR2',
-                        'best_model']
-                    ]
-
-                    print(tmp)
-
-                    # collect
-                    args_.append(this_nom_)
-                    some_result_.append(np.float(tmp.loc[tmp['ModelNickname'] == this_nom_, :]['LevelTestSetMAPE']))
-
-                    # checkpoint
-                    print('>>> currently, we are at this tuning args combo: ', this_nom_, '<<<')
-
-                # pick the best
-                kk = curr_range_[np.argmin(some_result_)]
-                print('best width: ', kk)
-
-                # tuning dropout rate: ll
-                args_ = []
-                curr_range_ = []
-                some_result_ = []
-                for ll in ll_range:
-                    # name
-                    this_nom_ = '_'.join((str(ii), str(jj), str(kk), str(ll), str(r_), str(ss_)))
-                    curr_range_.append(ll)
-
-                    # model
-                    f.manual_forecast(call_me=str(this_nom_),
-                                    lags=ii,
-                                    batch_size=int(np.round(L/10)),
-                                    epochs=jj,
-                                    validation_split=ss_,
-                                    shuffle=True,
-                                    activation='tanh',
-                                    optimizer='Adam',
-                                    learning_rate=lr_,
-                                    lstm_layer_sizes=(kk,)*r_,
-                                    dropout=(ll,)*r_,
-                                    callbacks=EarlyStopping(monitor='loss', patience=200),
-                                    verbose=0,
-                                    plot_loss=True)
-                    f.plot_test_set(order_by='LevelTestSetMAPE', models='top_1', ci=True)
-                    plt.show()
-
-                    # this result
-                    tmp = f.export(
-                        'model_summaries', determine_best_by='LevelTestSetMAPE')[
-                        ['ModelNickname',
-                        'LevelTestSetMAPE',
-                        'LevelTestSetRMSE',
-                        'LevelTestSetR2',
-                        'best_model']
-                    ]
-
-                    print(tmp)
-
-                    # collect
-                    args_.append(this_nom_)
-                    some_result_.append(np.float(tmp.loc[tmp['ModelNickname'] == this_nom_, :]['LevelTestSetMAPE']))
-
-                    # checkpoint
-                    print('>>> currently, we are at this tuning args combo: ', this_nom_, '<<<')
-
-                # pick the best
-                ll = curr_range_[np.argmin(some_result_)]
-                print('best dropout rate: ', ll)
-
-                # tuning depth: r_
-                args_ = []
-                curr_range_ = []
-                some_result_ = []
-                for r_ in r_range:
-                    # name
-                    this_nom_ = '_'.join((str(ii), str(jj), str(kk), str(ll), str(r_), str(ss_)))
-                    curr_range_.append(r_)
-
-                    # model
-                    f.manual_forecast(call_me=str(this_nom_),
-                                    lags=ii,
-                                    batch_size=int(np.round(L/10)),
-                                    epochs=jj,
-                                    validation_split=ss_,
-                                    shuffle=True,
-                                    activation='tanh',
-                                    optimizer='Adam',
-                                    learning_rate=lr_,
-                                    lstm_layer_sizes=(kk,)*r_,
-                                    dropout=(ll,)*r_,
-                                    callbacks=EarlyStopping(monitor='loss', patience=200),
-                                    verbose=0,
-                                    plot_loss=True)
-                    f.plot_test_set(order_by='LevelTestSetMAPE', models='top_1', ci=True)
-                    plt.show()
-
-                    # this result
-                    tmp = f.export(
-                        'model_summaries', determine_best_by='LevelTestSetMAPE')[
-                        ['ModelNickname',
-                        'LevelTestSetMAPE',
-                        'LevelTestSetRMSE',
-                        'LevelTestSetR2',
-                        'best_model']
-                    ]
-
-                    print(tmp)
-
-                    # collect
-                    args_.append(this_nom_)
-                    some_result_.append(np.float(tmp.loc[tmp['ModelNickname'] == this_nom_, :]['LevelTestSetMAPE']))
-
-                    # checkpoint
-                    print('>>> currently, we are at this tuning args combo: ', this_nom_, '<<<')
-
-                # pick the best
-                r_ = curr_range_[np.argmin(some_result_)]
-                print('best depth: ', r_)
-
-                # tuning validation split: ss_
-                args_ = []
-                curr_range_ = []
-                some_result_ = []
-                for ss_ in ss_range:
-                    # name
-                    this_nom_ = '_'.join((str(ii), str(jj), str(kk), str(ll), str(r_), str(ss_)))
-                    curr_range_.append(ss_)
-
-                    # model
-                    f.manual_forecast(call_me=str(this_nom_),
-                                    lags=ii,
-                                    batch_size=int(np.round(L/10)),
-                                    epochs=jj,
-                                    validation_split=ss_,
-                                    shuffle=True,
-                                    activation='tanh',
-                                    optimizer='Adam',
-                                    learning_rate=lr_,
-                                    lstm_layer_sizes=(kk,)*r_,
-                                    dropout=(ll,)*r_,
-                                    callbacks=EarlyStopping(monitor='loss', patience=200),
-                                    verbose=0,
-                                    plot_loss=True)
-                    f.plot_test_set(order_by='LevelTestSetMAPE', models='top_1', ci=True)
-                    plt.show()
-
-                    # this result
-                    tmp = f.export(
-                        'model_summaries', determine_best_by='LevelTestSetMAPE')[
-                        ['ModelNickname',
-                        'LevelTestSetMAPE',
-                        'LevelTestSetRMSE',
-                        'LevelTestSetR2',
-                        'best_model']
-                    ]
-
-                    print(tmp)
-
-                    # collect
-                    args_.append(this_nom_)
-                    some_result_.append(np.float(tmp.loc[tmp['ModelNickname'] == this_nom_, :]['LevelTestSetMAPE']))
-
-                    # checkpoint
-                    print('>>> currently, we are at this tuning args combo: ', this_nom_, '<<<')
-
-                # pick the best
-                ss_ = curr_range_[np.argmin(some_result_)]
-                print('best validation split: ', ss_)
-
-                # tuning learning rate: lr_
-                args_ = []
-                curr_range_ = []
-                some_result_ = []
-                for lr_ in lr_range:
-                    # name
-                    this_nom_ = '_'.join((str(ii), str(jj), str(kk), str(ll), str(r_), str(ss_)))
-                    curr_range_.append(lr_)
-
-                    # model
-                    f.manual_forecast(call_me=str(this_nom_),
-                                    lags=ii,
-                                    batch_size=int(np.round(L/10)),
-                                    epochs=jj,
-                                    validation_split=ss_,
-                                    shuffle=True,
-                                    activation='tanh',
-                                    optimizer='Adam',
-                                    learning_rate=lr_,
-                                    lstm_layer_sizes=(kk,)*r_,
-                                    dropout=(ll,)*r_,
-                                    callbacks=EarlyStopping(monitor='loss', patience=200),
-                                    verbose=0,
-                                    plot_loss=True)
-                    f.plot_test_set(order_by='LevelTestSetMAPE', models='top_1', ci=True)
-                    plt.show()
-
-                    # this result
-                    tmp = f.export(
-                        'model_summaries', determine_best_by='LevelTestSetMAPE')[
-                        ['ModelNickname',
-                        'LevelTestSetMAPE',
-                        'LevelTestSetRMSE',
-                        'LevelTestSetR2',
-                        'best_model']
-                    ]
-
-                    print(tmp)
-
-                    # collect
-                    args_.append(this_nom_)
-                    some_result_.append(np.float(tmp.loc[tmp['ModelNickname'] == this_nom_, :]['LevelTestSetMAPE']))
-
-                    # checkpoint
-                    print('>>> currently, we are at this tuning args combo: ', this_nom_, '<<<')
-
-                # pick the best
-                lr_ = curr_range_[np.argmin(some_result_)]
-                print('best learning rate: ', lr_)
-
-                # finalize: build the best model
+                # model
                 f.manual_forecast(call_me=str(this_nom_),
                                 lags=ii,
                                 batch_size=int(np.round(L/10)),
@@ -1859,135 +1534,473 @@ class YinsDL:
                     'best_model']
                 ]
 
-                print('>>>>>>>>>> final model is here: <<<<<<<<')
                 print(tmp)
 
-                # view result
-                this_tuning_result_ = f.export(
-                    'model_summaries',
-                    determine_best_by='LevelTestSetMAPE')[
+                # collect
+                args_.append(this_nom_)
+                some_result_.append(np.float(tmp.loc[tmp['ModelNickname'] == this_nom_, :]['LevelTestSetMAPE']))
+
+                # checkpoint
+                print('>>> currently, we are at this tuning args combo: ', this_nom_, '<<<')
+
+            # pick the best
+            ii = curr_range_[np.argmin(some_result_)]
+            print('best lags: ', ii)
+
+            # tuning epochs: jj
+            args_ = []
+            curr_range_ = []
+            some_result_ = []
+            for jj in jj_range:
+                # name
+                this_nom_ = '_'.join((str(ii), str(jj), str(kk), str(ll), str(r_), str(ss_)))
+                curr_range_.append(jj)
+
+                # model
+                f.manual_forecast(call_me=str(this_nom_),
+                                lags=ii,
+                                batch_size=int(np.round(L/10)),
+                                epochs=jj,
+                                validation_split=ss_,
+                                shuffle=True,
+                                activation='tanh',
+                                optimizer='Adam',
+                                learning_rate=lr_,
+                                lstm_layer_sizes=(kk,)*r_,
+                                dropout=(ll,)*r_,
+                                callbacks=EarlyStopping(monitor='loss', patience=200),
+                                verbose=0,
+                                plot_loss=True)
+                f.plot_test_set(order_by='LevelTestSetMAPE', models='top_1', ci=True)
+                plt.show()
+
+                # this result
+                tmp = f.export(
+                    'model_summaries', determine_best_by='LevelTestSetMAPE')[
                     ['ModelNickname',
                     'LevelTestSetMAPE',
                     'LevelTestSetRMSE',
                     'LevelTestSetR2',
-                    'best_model'] ]
+                    'best_model']
+                ]
 
-                # directory
-                os.chdir('/root/yiqiao/kit/data/results/')
-                os.listdir(), nom_of_this_siteid_this_ta_data_.split('.')[0]+'_tuning_results_.csv'
+                print(tmp)
 
-                # display name
-                print(nom_of_this_siteid_this_ta_data_.split('.')[0]+'_tuning_results_.csv')
+                # collect
+                args_.append(this_nom_)
+                some_result_.append(np.float(tmp.loc[tmp['ModelNickname'] == this_nom_, :]['LevelTestSetMAPE']))
 
-                # save
-                this_tuning_result_.to_csv(nom_of_this_siteid_this_ta_data_.split('.')[0]+'_tuning_results_.csv')
+                # checkpoint
+                print('>>> currently, we are at this tuning args combo: ', this_nom_, '<<<')
 
-                # which model
-                which_model = this_tuning_result_.iloc[0,0]
-                which_model
+            # pick the best
+            jj = curr_range_[np.argmin(some_result_)]
+            print('best epochs: ', jj)
 
-                # data for plot
-                df = pd.DataFrame()
-                df['Date'] = data['Date']
-                df['kitsin'] = data['kitsin']
+            # tuning width: kk
+            args_ = []
+            curr_range_ = []
+            some_result_ = []
+            for kk in kk_range:
+                # name
+                this_nom_ = '_'.join((str(ii), str(jj), str(kk), str(ll), str(r_), str(ss_)))
+                curr_range_.append(kk)
 
-                # to_be_added
-                to_be_added = pd.DataFrame([
-                    ['2022-09', np.nan], ['2022-10', np.nan], ['2022-11', np.nan], ['2022-12', np.nan], ['2023-01', np.nan],
-                    ['2023-02', np.nan], ['2023-03', np.nan], ['2023-04', np.nan], ['2023-05', np.nan], ['2023-06', np.nan]])
-                to_be_added.columns = df.columns
-                to_be_added
+                # model
+                f.manual_forecast(call_me=str(this_nom_),
+                                lags=ii,
+                                batch_size=int(np.round(L/10)),
+                                epochs=jj,
+                                validation_split=ss_,
+                                shuffle=True,
+                                activation='tanh',
+                                optimizer='Adam',
+                                learning_rate=lr_,
+                                lstm_layer_sizes=(kk,)*r_,
+                                dropout=(ll,)*r_,
+                                callbacks=EarlyStopping(monitor='loss', patience=200),
+                                verbose=0,
+                                plot_loss=True)
+                f.plot_test_set(order_by='LevelTestSetMAPE', models='top_1', ci=True)
+                plt.show()
 
-                # update df
-                df = pd.concat([df, to_be_added], axis=0)
+                # this result
+                tmp = f.export(
+                    'model_summaries', determine_best_by='LevelTestSetMAPE')[
+                    ['ModelNickname',
+                    'LevelTestSetMAPE',
+                    'LevelTestSetRMSE',
+                    'LevelTestSetR2',
+                    'best_model']
+                ]
 
-                # data for plot
-                some_length_ = df.shape[0] - len(f.history[which_model]['Forecast'])
-                df['forecast'] = [np.nan for i in range(some_length_)] + f.history[which_model]['Forecast']
-                df['ub'] = [np.nan for i in range(some_length_)] + f.history[which_model]['UpperCI']
-                df['lb'] = [np.nan for i in range(some_length_)] + f.history[which_model]['LowerCI']
-                df['fitted'] = [f.history[which_model]['LevelFittedVals'][0] for i in range(int(df.shape[0] - len(f.history[which_model]['LevelFittedVals'] + [np.nan for i in range(10)])))] + f.history[which_model]['LevelFittedVals'] + [np.nan for i in range(10)]
-                df
+                print(tmp)
 
-                # save
-                df.to_csv(nom_of_this_siteid_this_ta_data_.split('.')[0]+'_forecasting_results_.csv')
+                # collect
+                args_.append(this_nom_)
+                some_result_.append(np.float(tmp.loc[tmp['ModelNickname'] == this_nom_, :]['LevelTestSetMAPE']))
 
-                # authorization
-                role = get_execution_role() 
+                # checkpoint
+                print('>>> currently, we are at this tuning args combo: ', this_nom_, '<<<')
 
-                # load data
-                # sample path: s3://aws-lca-sandbox07-hipaa-users/yiqiao/sagemaker-output-kitsin/
-                bucket = 'aws-lca-sandbox07-hipaa-users/yiqiao'
-                data_key = 'sagemaker-output-kitsin'
-                data_location = 's3://{}/{}'.format(bucket, data_key)
+            # pick the best
+            kk = curr_range_[np.argmin(some_result_)]
+            print('best width: ', kk)
 
-                # reindex
-                df.index = df['Date']
+            # tuning dropout rate: ll
+            args_ = []
+            curr_range_ = []
+            some_result_ = []
+            for ll in ll_range:
+                # name
+                this_nom_ = '_'.join((str(ii), str(jj), str(kk), str(ll), str(r_), str(ss_)))
+                curr_range_.append(ll)
 
-                # save to s3
-                new_s3_path = data_location+'/'+nom_of_this_siteid_this_ta_data_.split('.')[0]+'_forecasting_results_.csv'
-                print(new_s3_path)
-                df.to_csv(new_s3_path)
+                # model
+                f.manual_forecast(call_me=str(this_nom_),
+                                lags=ii,
+                                batch_size=int(np.round(L/10)),
+                                epochs=jj,
+                                validation_split=ss_,
+                                shuffle=True,
+                                activation='tanh',
+                                optimizer='Adam',
+                                learning_rate=lr_,
+                                lstm_layer_sizes=(kk,)*r_,
+                                dropout=(ll,)*r_,
+                                callbacks=EarlyStopping(monitor='loss', patience=200),
+                                verbose=0,
+                                plot_loss=True)
+                f.plot_test_set(order_by='LevelTestSetMAPE', models='top_1', ci=True)
+                plt.show()
 
-                # mape
-                final_mape_ = this_tuning_result_
-                final_mape_ = final_mape_.loc[final_mape_['ModelNickname'] == which_model, :]
-                final_mape_ = final_mape_['LevelTestSetMAPE']
-                final_mape_ = final_mape_.to_numpy()[0]
+                # this result
+                tmp = f.export(
+                    'model_summaries', determine_best_by='LevelTestSetMAPE')[
+                    ['ModelNickname',
+                    'LevelTestSetMAPE',
+                    'LevelTestSetRMSE',
+                    'LevelTestSetR2',
+                    'best_model']
+                ]
 
-                # plotly
-                fig = go.Figure()
-                fig.add_trace(
-                    go.Scatter(
-                        x=df['Date'],
-                        y=df['forecast'],
-                        name='forecast',
-                        marker_color=px.colors.qualitative.Dark24[3]
-                    ))
-                fig.add_trace(
-                    go.Scatter(
-                        x=df['Date'],
-                        y=df['fitted'],
-                        name='fitted',
-                        marker_color=px.colors.qualitative.Dark24[5]
-                    ))
-                fig.add_trace(
-                    go.Scatter(
-                        x=df['Date'][-10::],
-                        y=df['ub'][-10::],
-                        name='ub'
-                    ))
-                fig.add_trace(
-                    go.Scatter(
-                        x=df['Date'][-10::],
-                        y=df['lb'][-10::],
-                        name='lb',
-                    ))
-                fig.add_trace(
-                    go.Bar(
-                        x=df['Date'],
-                        y=df['kitsin'],
-                        name='truth',
-                        marker_color=px.colors.qualitative.Dark24[0]
-                    ))
-                fig.update_layout(
-                    autosize=False,
-                    width=1200, height=600,
-                    title='Kits In (by Month) | Data: ' + nom_of_this_siteid_this_ta_data_ +' | '+'<br>CI: Upper bound='+str(np.round(df['ub'].iloc[-3],2))+', Lower bound='+str(np.round(df['lb'].iloc[-3],2))+
-                    ', MAPE='+str(np.round(final_mape_, 3))+'; <br>*Next month prediction='+str(int(np.round(df['forecast'].iloc[-3]))),
-                    xaxis=dict(title='Date (by month)'),
-                    yaxis=dict(title='Number of Kits (in) <br>Data: ' + nom_of_this_siteid_this_ta_data_),
-                    hoverlabel=dict(
-                        bgcolor="white",
-                        font_size=19,
-                        font_family="Rockwell"
-                    )
+                print(tmp)
+
+                # collect
+                args_.append(this_nom_)
+                some_result_.append(np.float(tmp.loc[tmp['ModelNickname'] == this_nom_, :]['LevelTestSetMAPE']))
+
+                # checkpoint
+                print('>>> currently, we are at this tuning args combo: ', this_nom_, '<<<')
+
+            # pick the best
+            ll = curr_range_[np.argmin(some_result_)]
+            print('best dropout rate: ', ll)
+
+            # tuning depth: r_
+            args_ = []
+            curr_range_ = []
+            some_result_ = []
+            for r_ in r_range:
+                # name
+                this_nom_ = '_'.join((str(ii), str(jj), str(kk), str(ll), str(r_), str(ss_)))
+                curr_range_.append(r_)
+
+                # model
+                f.manual_forecast(call_me=str(this_nom_),
+                                lags=ii,
+                                batch_size=int(np.round(L/10)),
+                                epochs=jj,
+                                validation_split=ss_,
+                                shuffle=True,
+                                activation='tanh',
+                                optimizer='Adam',
+                                learning_rate=lr_,
+                                lstm_layer_sizes=(kk,)*r_,
+                                dropout=(ll,)*r_,
+                                callbacks=EarlyStopping(monitor='loss', patience=200),
+                                verbose=0,
+                                plot_loss=True)
+                f.plot_test_set(order_by='LevelTestSetMAPE', models='top_1', ci=True)
+                plt.show()
+
+                # this result
+                tmp = f.export(
+                    'model_summaries', determine_best_by='LevelTestSetMAPE')[
+                    ['ModelNickname',
+                    'LevelTestSetMAPE',
+                    'LevelTestSetRMSE',
+                    'LevelTestSetR2',
+                    'best_model']
+                ]
+
+                print(tmp)
+
+                # collect
+                args_.append(this_nom_)
+                some_result_.append(np.float(tmp.loc[tmp['ModelNickname'] == this_nom_, :]['LevelTestSetMAPE']))
+
+                # checkpoint
+                print('>>> currently, we are at this tuning args combo: ', this_nom_, '<<<')
+
+            # pick the best
+            r_ = curr_range_[np.argmin(some_result_)]
+            print('best depth: ', r_)
+
+            # tuning validation split: ss_
+            args_ = []
+            curr_range_ = []
+            some_result_ = []
+            for ss_ in ss_range:
+                # name
+                this_nom_ = '_'.join((str(ii), str(jj), str(kk), str(ll), str(r_), str(ss_)))
+                curr_range_.append(ss_)
+
+                # model
+                f.manual_forecast(call_me=str(this_nom_),
+                                lags=ii,
+                                batch_size=int(np.round(L/10)),
+                                epochs=jj,
+                                validation_split=ss_,
+                                shuffle=True,
+                                activation='tanh',
+                                optimizer='Adam',
+                                learning_rate=lr_,
+                                lstm_layer_sizes=(kk,)*r_,
+                                dropout=(ll,)*r_,
+                                callbacks=EarlyStopping(monitor='loss', patience=200),
+                                verbose=0,
+                                plot_loss=True)
+                f.plot_test_set(order_by='LevelTestSetMAPE', models='top_1', ci=True)
+                plt.show()
+
+                # this result
+                tmp = f.export(
+                    'model_summaries', determine_best_by='LevelTestSetMAPE')[
+                    ['ModelNickname',
+                    'LevelTestSetMAPE',
+                    'LevelTestSetRMSE',
+                    'LevelTestSetR2',
+                    'best_model']
+                ]
+
+                print(tmp)
+
+                # collect
+                args_.append(this_nom_)
+                some_result_.append(np.float(tmp.loc[tmp['ModelNickname'] == this_nom_, :]['LevelTestSetMAPE']))
+
+                # checkpoint
+                print('>>> currently, we are at this tuning args combo: ', this_nom_, '<<<')
+
+            # pick the best
+            ss_ = curr_range_[np.argmin(some_result_)]
+            print('best validation split: ', ss_)
+
+            # tuning learning rate: lr_
+            args_ = []
+            curr_range_ = []
+            some_result_ = []
+            for lr_ in lr_range:
+                # name
+                this_nom_ = '_'.join((str(ii), str(jj), str(kk), str(ll), str(r_), str(ss_)))
+                curr_range_.append(lr_)
+
+                # model
+                f.manual_forecast(call_me=str(this_nom_),
+                                lags=ii,
+                                batch_size=int(np.round(L/10)),
+                                epochs=jj,
+                                validation_split=ss_,
+                                shuffle=True,
+                                activation='tanh',
+                                optimizer='Adam',
+                                learning_rate=lr_,
+                                lstm_layer_sizes=(kk,)*r_,
+                                dropout=(ll,)*r_,
+                                callbacks=EarlyStopping(monitor='loss', patience=200),
+                                verbose=0,
+                                plot_loss=True)
+                f.plot_test_set(order_by='LevelTestSetMAPE', models='top_1', ci=True)
+                plt.show()
+
+                # this result
+                tmp = f.export(
+                    'model_summaries', determine_best_by='LevelTestSetMAPE')[
+                    ['ModelNickname',
+                    'LevelTestSetMAPE',
+                    'LevelTestSetRMSE',
+                    'LevelTestSetR2',
+                    'best_model']
+                ]
+
+                print(tmp)
+
+                # collect
+                args_.append(this_nom_)
+                some_result_.append(np.float(tmp.loc[tmp['ModelNickname'] == this_nom_, :]['LevelTestSetMAPE']))
+
+                # checkpoint
+                print('>>> currently, we are at this tuning args combo: ', this_nom_, '<<<')
+
+            # pick the best
+            lr_ = curr_range_[np.argmin(some_result_)]
+            print('best learning rate: ', lr_)
+
+            # finalize: build the best model
+            f.manual_forecast(call_me=str(this_nom_),
+                            lags=ii,
+                            batch_size=int(np.round(L/10)),
+                            epochs=jj,
+                            validation_split=ss_,
+                            shuffle=True,
+                            activation='tanh',
+                            optimizer='Adam',
+                            learning_rate=lr_,
+                            lstm_layer_sizes=(kk,)*r_,
+                            dropout=(ll,)*r_,
+                            callbacks=EarlyStopping(monitor='loss', patience=200),
+                            verbose=0,
+                            plot_loss=True)
+            f.plot_test_set(order_by='LevelTestSetMAPE', models='top_1', ci=True)
+            plt.show()
+
+            # this result
+            tmp = f.export(
+                'model_summaries', determine_best_by='LevelTestSetMAPE')[
+                ['ModelNickname',
+                'LevelTestSetMAPE',
+                'LevelTestSetRMSE',
+                'LevelTestSetR2',
+                'best_model']
+            ]
+
+            print('>>>>>>>>>> final model is here: <<<<<<<<')
+            print(tmp)
+
+            # view result
+            this_tuning_result_ = f.export(
+                'model_summaries',
+                determine_best_by='LevelTestSetMAPE')[
+                ['ModelNickname',
+                'LevelTestSetMAPE',
+                'LevelTestSetRMSE',
+                'LevelTestSetR2',
+                'best_model'] ]
+
+            # directory
+            os.chdir('/root/yiqiao/kit/data/results/')
+            os.listdir(), nom_of_this_siteid_this_ta_data_.split('.')[0]+'_tuning_results_.csv'
+
+            # display name
+            print(nom_of_this_siteid_this_ta_data_.split('.')[0]+'_tuning_results_.csv')
+
+            # save
+            this_tuning_result_.to_csv(nom_of_this_siteid_this_ta_data_.split('.')[0]+'_tuning_results_.csv')
+
+            # which model
+            which_model = this_tuning_result_.iloc[0,0]
+            which_model
+
+            # data for plot
+            df = pd.DataFrame()
+            df['Date'] = data['Date']
+            df['kitsin'] = data['kitsin']
+
+            # to_be_added
+            to_be_added = pd.DataFrame([
+                ['2022-09', np.nan], ['2022-10', np.nan], ['2022-11', np.nan], ['2022-12', np.nan], ['2023-01', np.nan],
+                ['2023-02', np.nan], ['2023-03', np.nan], ['2023-04', np.nan], ['2023-05', np.nan], ['2023-06', np.nan]])
+            to_be_added.columns = df.columns
+            to_be_added
+
+            # update df
+            df = pd.concat([df, to_be_added], axis=0)
+
+            # data for plot
+            some_length_ = df.shape[0] - len(f.history[which_model]['Forecast'])
+            df['forecast'] = [np.nan for i in range(some_length_)] + f.history[which_model]['Forecast']
+            df['ub'] = [np.nan for i in range(some_length_)] + f.history[which_model]['UpperCI']
+            df['lb'] = [np.nan for i in range(some_length_)] + f.history[which_model]['LowerCI']
+            df['fitted'] = [f.history[which_model]['LevelFittedVals'][0] for i in range(int(df.shape[0] - len(f.history[which_model]['LevelFittedVals'] + [np.nan for i in range(10)])))] + f.history[which_model]['LevelFittedVals'] + [np.nan for i in range(10)]
+            df
+
+            # save
+            df.to_csv(nom_of_this_siteid_this_ta_data_.split('.')[0]+'_forecasting_results_.csv')
+
+            # authorization
+            role = get_execution_role() 
+
+            # load data
+            # sample path: s3://aws-lca-sandbox07-hipaa-users/yiqiao/sagemaker-output-kitsin/
+            bucket = 'aws-lca-sandbox07-hipaa-users/yiqiao'
+            data_key = 'sagemaker-output-kitsin'
+            data_location = 's3://{}/{}'.format(bucket, data_key)
+
+            # reindex
+            df.index = df['Date']
+
+            # save to s3
+            new_s3_path = data_location+'/'+nom_of_this_siteid_this_ta_data_.split('.')[0]+'_forecasting_results_.csv'
+            print(new_s3_path)
+            df.to_csv(new_s3_path)
+
+            # mape
+            final_mape_ = this_tuning_result_
+            final_mape_ = final_mape_.loc[final_mape_['ModelNickname'] == which_model, :]
+            final_mape_ = final_mape_['LevelTestSetMAPE']
+            final_mape_ = final_mape_.to_numpy()[0]
+
+            # plotly
+            fig = go.Figure()
+            fig.add_trace(
+                go.Scatter(
+                    x=df['Date'],
+                    y=df['forecast'],
+                    name='forecast',
+                    marker_color=px.colors.qualitative.Dark24[3]
+                ))
+            fig.add_trace(
+                go.Scatter(
+                    x=df['Date'],
+                    y=df['fitted'],
+                    name='fitted',
+                    marker_color=px.colors.qualitative.Dark24[5]
+                ))
+            fig.add_trace(
+                go.Scatter(
+                    x=df['Date'][-10::],
+                    y=df['ub'][-10::],
+                    name='ub'
+                ))
+            fig.add_trace(
+                go.Scatter(
+                    x=df['Date'][-10::],
+                    y=df['lb'][-10::],
+                    name='lb',
+                ))
+            fig.add_trace(
+                go.Bar(
+                    x=df['Date'],
+                    y=df['kitsin'],
+                    name='truth',
+                    marker_color=px.colors.qualitative.Dark24[0]
+                ))
+            fig.update_layout(
+                autosize=False,
+                width=1200, height=600,
+                title='Kits In (by Month) | Data: ' + nom_of_this_siteid_this_ta_data_ +' | '+'<br>CI: Upper bound='+str(np.round(df['ub'].iloc[-3],2))+', Lower bound='+str(np.round(df['lb'].iloc[-3],2))+
+                ', MAPE='+str(np.round(final_mape_, 3))+'; <br>*Next month prediction='+str(int(np.round(df['forecast'].iloc[-3]))),
+                xaxis=dict(title='Date (by month)'),
+                yaxis=dict(title='Number of Kits (in) <br>Data: ' + nom_of_this_siteid_this_ta_data_),
+                hoverlabel=dict(
+                    bgcolor="white",
+                    font_size=19,
+                    font_family="Rockwell"
                 )
-                fig.show()
+            )
+            fig.show()
 
-            # checkpoint
-            z += 1
-
-        except:
-            print('No data entered.')
-    # End of function
+        # checkpoint
+        print(">>>>>>>>>> finished with global iteration: ", z, '/', max_iter, " <<<<<<<<<<")
+        z += 1
