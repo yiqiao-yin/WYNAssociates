@@ -1430,7 +1430,19 @@ class YinsDL:
             'valsplit_range': [0, 0.05, 0.1, 0.2, 0.3],
             'learningrate_range': [0.00001, 0.0001, 0.001]
         },
-        nom_of_this_siteid_this_ta_data_=None
+        nom_of_this_siteid_this_ta_data_=None,
+        partitions = {
+            "model_name": "LSTM",
+            "model_publish_date": "2022-10-06"
+        },
+        file_args_dict_ = {
+            'model_name': 'lstm',
+            'by_field': 'by_field',
+            'by_value': 'by_value',
+            'frequency': 'monthly',
+            'enum': 'global'
+        },
+        plot_test=False
     ):
 
         """
@@ -1522,8 +1534,9 @@ class YinsDL:
                                 callbacks=EarlyStopping(monitor='loss', patience=200),
                                 verbose=0,
                                 plot_loss=True)
-                f.plot_test_set(order_by='LevelTestSetMAPE', models='top_1', ci=True)
-                plt.show()
+                if plot_test==True:
+                    f.plot_test_set(order_by='LevelTestSetMAPE', models='top_1', ci=True)
+                    plt.show()
 
                 # this result
                 tmp = f.export(
@@ -1572,8 +1585,9 @@ class YinsDL:
                                 callbacks=EarlyStopping(monitor='loss', patience=200),
                                 verbose=0,
                                 plot_loss=True)
-                f.plot_test_set(order_by='LevelTestSetMAPE', models='top_1', ci=True)
-                plt.show()
+                if plot_test==True:
+                    f.plot_test_set(order_by='LevelTestSetMAPE', models='top_1', ci=True)
+                    plt.show()
 
                 # this result
                 tmp = f.export(
@@ -1622,8 +1636,9 @@ class YinsDL:
                                 callbacks=EarlyStopping(monitor='loss', patience=200),
                                 verbose=0,
                                 plot_loss=True)
-                f.plot_test_set(order_by='LevelTestSetMAPE', models='top_1', ci=True)
-                plt.show()
+                if plot_test==True:
+                    f.plot_test_set(order_by='LevelTestSetMAPE', models='top_1', ci=True)
+                    plt.show()
 
                 # this result
                 tmp = f.export(
@@ -1672,8 +1687,9 @@ class YinsDL:
                                 callbacks=EarlyStopping(monitor='loss', patience=200),
                                 verbose=0,
                                 plot_loss=True)
-                f.plot_test_set(order_by='LevelTestSetMAPE', models='top_1', ci=True)
-                plt.show()
+                if plot_test==True:
+                    f.plot_test_set(order_by='LevelTestSetMAPE', models='top_1', ci=True)
+                    plt.show()
 
                 # this result
                 tmp = f.export(
@@ -1722,8 +1738,9 @@ class YinsDL:
                                 callbacks=EarlyStopping(monitor='loss', patience=200),
                                 verbose=0,
                                 plot_loss=True)
-                f.plot_test_set(order_by='LevelTestSetMAPE', models='top_1', ci=True)
-                plt.show()
+                if plot_test==True:
+                    f.plot_test_set(order_by='LevelTestSetMAPE', models='top_1', ci=True)
+                    plt.show()
 
                 # this result
                 tmp = f.export(
@@ -1772,8 +1789,9 @@ class YinsDL:
                                 callbacks=EarlyStopping(monitor='loss', patience=200),
                                 verbose=0,
                                 plot_loss=True)
-                f.plot_test_set(order_by='LevelTestSetMAPE', models='top_1', ci=True)
-                plt.show()
+                if plot_test==True:
+                    f.plot_test_set(order_by='LevelTestSetMAPE', models='top_1', ci=True)
+                    plt.show()
 
                 # this result
                 tmp = f.export(
@@ -1822,8 +1840,9 @@ class YinsDL:
                                 callbacks=EarlyStopping(monitor='loss', patience=200),
                                 verbose=0,
                                 plot_loss=True)
-                f.plot_test_set(order_by='LevelTestSetMAPE', models='top_1', ci=True)
-                plt.show()
+                if plot_test==True:
+                    f.plot_test_set(order_by='LevelTestSetMAPE', models='top_1', ci=True)
+                    plt.show()
 
                 # this result
                 tmp = f.export(
@@ -1863,8 +1882,9 @@ class YinsDL:
                             callbacks=EarlyStopping(monitor='loss', patience=200),
                             verbose=0,
                             plot_loss=True)
-            f.plot_test_set(order_by='LevelTestSetMAPE', models='top_1', ci=True)
-            plt.show()
+            if plot_test==True:
+                f.plot_test_set(order_by='LevelTestSetMAPE', models='top_1', ci=True)
+                plt.show()
 
             # this result
             tmp = f.export(
@@ -1928,6 +1948,7 @@ class YinsDL:
 
             # save
             df.to_csv(nom_of_this_siteid_this_ta_data_.split('.')[0]+'_forecasting_results_.csv')
+            print('Saved the forecasting results to sagemaker locally.')
 
             # authorization
             role = get_execution_role() 
@@ -1941,10 +1962,47 @@ class YinsDL:
             # reindex
             df.index = df['Date']
 
+            # redefine using agreed upon data contract
+            print('Getting data ready for s3...')
+            tmp = df
+            tmp['Date'] = str(pd.to_datetime("today")).split(' ')[0]
+            tmp = tmp.iloc[-10::, :][['Date', 'kitsin', 'forecast', 'ub', 'lb']]
+            tmp['date'] = str(pd.to_datetime("today")).split(' ')[0]
+            tmp['model_name'] = file_args_dict_['model_name']
+            tmp['model_publish_date'] = str(pd.to_datetime("today")).split(' ')[0]
+            tmp['by_field'] = file_args_dict_['by_field']
+            tmp['by_value'] = file_args_dict_['by_value']
+            tmp['frequency'] = file_args_dict_['frequency']
+            tmp['enum'] = file_args_dict_['enum']
+            tmp['forecast_date'] = str(pd.to_datetime("today")).split(' ')[0]
+            tmp = tmp[[
+                'frequency',
+                'by_field',
+                'by_value',
+                'forecast_date',
+                'forecast',
+                'lb',
+                'ub']]
+            tmp.columns = [
+                "frequency",
+                "by_field",
+                "by_value",
+                "forecast_date",
+                "forecast",
+                "forecast_low",
+                "forecast_high"
+            ]
+            tmp.index = np.arange(0, len(tmp))
+            df_after_datacontract = tmp
+
             # save to s3
+            print("Saving data to S3...")
             new_s3_path = data_location+'/'+nom_of_this_siteid_this_ta_data_.split('.')[0]+'_forecasting_results_.csv'
-            print(new_s3_path)
-            df.to_csv(new_s3_path)
+            df_after_datacontract.to_csv(new_s3_path)
+            # parquet location: s3://aws-lca-sandbox07-hipaa-data/project/kit-forecasting/test-schema/
+            this_s3_path_for_inference_ = 's3://aws-lca-sandbox07-hipaa-data/project/kit-forecasting/test-schema/'+partitions['model_name']+'/'+partitions['model_publish_date']+'/'+nom_of_this_siteid_this_ta_data_.split('.')[0]+'_forecasting_results_.csv'
+            df_after_datacontract.to_parquet(this_s3_path_for_inference_, compression='gzip', index=False)
+            print('>>>>>>>>>> Just saved to s3! <<<<<<<<<<')
 
             # mape
             final_mape_ = this_tuning_result_
@@ -1953,6 +2011,7 @@ class YinsDL:
             final_mape_ = final_mape_.to_numpy()[0]
 
             # plotly
+            print('Prepare for visualization using plotly ... ')
             fig = go.Figure()
             fig.add_trace(
                 go.Scatter(
