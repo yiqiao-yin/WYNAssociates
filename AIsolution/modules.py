@@ -2097,6 +2097,39 @@ def ts_forecaster(
     bucket = 'aws-lca-sandbox07-hipaa-users/yiqiao',
     data_key = 'sagemaker-output-kitsin',
 ):
+    
+    """
+    Input arguments:
+        data=pd.DataFrame(),                                                  | pandas dataframe
+        names = ['Date', 'Close'],                                            | a list of two strings
+        n_forecast = 12,                                                      | an integer
+        nom_of_this_siteid_this_ta_data_="name_of_data_you_desired_to_use",   | a string
+        args_dict_ = {
+            'max_iteration': 1,                                               | a positive integer
+            'lags_range': [1],                                                | a list of positive integers
+            'epochs_range': [2],                                              | a list of positive integers
+            'width_range': [2],                                               | a list of positive integers
+            'dropout_range': [0],                                             | a list of positive integers
+            'depth_range': [1],                                               | a list of positive integers
+            'valsplit_range': [0],                                            | a list of positive fractions
+            'learningrate_range': [0.00001]                                   | a list of positive fractions
+        },
+        partitions = {
+            "model_name": "LSTM",                                             | a string
+            "model_publish_date": "2022-10-06"                                | a datetime
+        },
+        file_args_dict_ = {
+            'model_name': 'lstm',                                             | a string
+            'by_field': 'by_field',                                           | a string
+            'by_value': 'by_value',                                           | a string
+            'frequency': 'monthly',                                           | a string
+            'enum': 'global'                                                  | a string
+        },
+        local_path = '/root/yiqiao/kit/data/results/',                        | a string
+        save_to_s3 = False,                                                   | logical: True/False
+        bucket = 'aws-lca-sandbox07-hipaa-users/yiqiao',                      | a string: a s3 bucket location
+        data_key = 'sagemaker-output-kitsin',                                 | a string: a s3 key
+    """
 
     # define
     f = Forecaster(y=data[names[1]], current_dates=data[names[0]])
