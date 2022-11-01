@@ -30,6 +30,23 @@ class YinsFinancialTools:
     Copyright © W.Y.N. Associates, LLC, 2009 – Present
     """
 
+    def create_autoregressive_df(
+        ar_terms = int,
+        df = pd.DataFrame()
+    ):
+
+        """create autoregressive data frame"""
+
+        final_df = df
+        for t in range(ar_terms):
+            final_df = pd.concat([final_df, df.shift(t+1)], axis=1)
+        final_df = final_df.dropna()
+
+        X = final_df.iloc[:, 7::]
+        Y = final_df.iloc[:, 0:7]
+
+        return {'X': X, 'Y': Y}
+
     # Define function: Yins Timer Algorithm
     def Yin_Timer(
         start_date       =   '2015-01-01',
