@@ -1033,11 +1033,11 @@ class YinsFinancialTools:
             import yfinance as yf
 
             # get data
-            X_train = X[0:round(X.shape[0]*cutoff), ]
-            X_test = X[round(X.shape[0]*cutoff):X.shape[0], ]
+            X_train = X.iloc[0:round(X.shape[0]*cutoff), :]
+            X_test = X.iloc[round(X.shape[0]*cutoff):X.shape[0], :]
 
-            y_train = Y.iloc[0:round(Y.shape[0]*cutoff), ]
-            y_test = Y.iloc[round(Y.shape[0]*cutoff):Y.shape[0], ]
+            y_train = Y.iloc[0:round(Y.shape[0]*cutoff), :]
+            y_test = Y.iloc[round(Y.shape[0]*cutoff):Y.shape[0], :]
 
             X_train = np.array(X_train).reshape(X_train.shape[0], w, h)
             X_test = np.array(X_test).reshape(X_test.shape[0], w, h)
