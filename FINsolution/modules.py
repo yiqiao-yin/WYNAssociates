@@ -28,7 +28,7 @@ class YinsFinancialTools:
         final_df = df
         for t in range(ar_terms):
             final_df = pd.concat([final_df, df.shift(t+1)], axis=1)
-        final_df = final_df.dropna()
+        final_df = final_df.fillna(0)
 
         X = final_df.iloc[:, 7::]
         Y = final_df.iloc[:, 0:7]
