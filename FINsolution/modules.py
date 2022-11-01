@@ -1,25 +1,13 @@
 # Import Libraries
-import pandas as pd
+import os
 import numpy as np
-import yfinance as yf
-import time
-
-# Import Libraries
+import pandas as pd
 from scipy import stats
-# import pandas as pd
-# import numpy as np
-# import yfinance as yf
+import yfinance as yf
 import matplotlib.pyplot as plt
-# import time
-
-# Import Libraries
+import time
 from ta.momentum import RSIIndicator
 from ta.trend import SMAIndicator
-
-# import numpy as np
-# import pandas as pd
-# import matplotlib.pyplot as plt
-# import yfinance as yf
 import math
 
 # class
