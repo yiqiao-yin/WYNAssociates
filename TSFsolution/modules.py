@@ -711,3 +711,41 @@ class TSForecast:
             )
         )
         fig.show()
+
+    def interactive_ts_plot_(
+        data = pd.DataFrame,
+        args = dict
+    ):
+        """interactive time-series plot"""
+
+        # data
+        df = data
+        width = args['width']
+        height = args['height']
+
+        # figure
+        fig = go.Figure()
+        for j in range(df.shape[1]):
+            fig.add_trace(
+                go.Scatter(
+                    x=df.index,
+                    y=df.iloc[:, j],
+                    name='site '+str(j),
+                    marker_color=px.colors.qualitative.Dark24[j]
+                ))
+        fig.update_layout(
+            autosize=False,
+            width=width,
+            height=height,
+            xaxis=dict(title=args['xlabel']),
+            yaxis=dict(title=args['ylabel']),
+            title=args['title'],
+            hoverlabel=dict(
+                bgcolor="white",
+                font_size=args['font size'],
+                font_family="Rockwell"
+            )
+        )
+
+        # show plot
+        fig.show()
