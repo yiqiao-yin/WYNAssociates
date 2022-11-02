@@ -18,9 +18,8 @@ class NST:
     """
     This class object takes care of (1) training, (2) saving, and (3)
       plotting the results. List of functions:
-    Function: tune_scalecast_
-    Function: get_best_model_
-    Function: plot_trained_model
+    Function: create_autoregressive_df
+    Function: interactive_ts_plot_
     """
 
     # Define function: create a function that generates data frame with autoregressive features
