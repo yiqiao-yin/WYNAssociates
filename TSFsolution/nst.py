@@ -22,7 +22,6 @@ class NST:
     Function: interactive_ts_plot_
     """
 
-    # Define function: create a function that generates data frame with autoregressive features
     def create_autoregressive_df(
         ar_terms = int,
         df = pd.DataFrame()
@@ -40,7 +39,6 @@ class NST:
 
         return {'X': X, 'Y': Y}
 
-    # Define Function: Recurrent Neural Network: Neural Sequence Translation
     def Autonomous_Neural_Sequence_Translation(
         X                 =   0,
         Y                 =   0,
@@ -62,6 +60,8 @@ class NST:
         plotGraph         =   False,
         useMPLFinancePlot =   True,
         verbose           =   True ):
+
+        """Recurrent Neural Network: Neural Sequence Translation"""
 
         if verbose:
             print("------------------------------------------------------------------------------")
