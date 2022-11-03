@@ -139,7 +139,7 @@ class NST:
             d_ += 1
 
         # Adding a third LSTM layer and some Dropout regularisation
-        regressor.add(LSTM(units = hiddens[-1]))
+        regressor.add(LSTM(units = hiddens[-1], name='hidden_lstm_layer'+str(l_+1))
         regressor.add(Dropout(dropOutRate))
 
         # Design dense layers
