@@ -46,8 +46,6 @@ class NST:
         h                 =   5,
         cutoff            =   0.8,
         val_split         =   0.2,
-        numOfHiddenLayer  =   3,
-        numOfDense        =   2,
         hiddens           =   [128, 128, 128],
         hiddens_dense     =   [128, 128],
         dropOutRate       =   0.2,
@@ -80,8 +78,6 @@ class NST:
                     h                 =   5,
                     cutoff            =   0.8, # take a fraction between 0 and 1
                     val_split         =   0.2, # take a fraction between 0 and 1
-                    numOfHiddenLayer  =   3,   # take an integer from 1, 2, 3, 4, or 5
-                    numOfDense        =   2,   # take an integer from 1, 2, or 3
                     hiddens           =   [128, 128, 128],
                     hiddens_dense     =   [128, 128],
                     dropOutRate       =   0.2,
