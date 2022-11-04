@@ -1,4 +1,3 @@
-# Importing the Keras libraries and packages
 import os
 import time
 import pickle
@@ -13,6 +12,7 @@ from keras.layers import Dropout
 import mplfinance as mpf
 import plotly.graph_objects as go
 import plotly.express as px
+from plotly.subplots import make_subplots
 
 class NST:
     """
@@ -230,11 +230,25 @@ class NST:
             }
         }
 
+
     def interactive_ts_plot_(
         data = pd.DataFrame,
         args = dict
     ):
-        """interactive time-series plot"""
+        """interactive time-series plot
+            data: this is a pandas dataframe
+            args: this is a dictionary
+              example: 
+                args = {
+                    'secondary y': ['Close'],
+                    'width': 1200,
+                    'height': 800,
+                    'xlabel': 'Date',
+                    'ylabel': 'Number',
+                    'title': 'Kitsin (daily)',
+                    'font size': 30
+                }
+        """
 
         # data
         df = data
@@ -242,15 +256,26 @@ class NST:
         height = args['height']
 
         # figure
-        fig = go.Figure()
+        # fig = go.Figure()
+        fig = make_subplots(specs=[[{"secondary_y": True}]])
+
         for j in range(df.shape[1]):
-            fig.add_trace(
-                go.Scatter(
-                    x=df.index,
-                    y=df.iloc[:, j],
-                    name='site '+str(j),
-                    marker_color=px.colors.qualitative.Dark24[j]
-                ))
+            if df.columns[j] in args['secondary y']:
+                fig.add_trace(
+                    go.Scatter(
+                        x=df.index,
+                        y=df.iloc[:, j],
+                        name=df.columns[j],
+                        marker_color=px.colors.qualitative.Dark24[j]
+                    ), secondary_y=True)
+            else:
+                fig.add_trace(
+                    go.Scatter(
+                        x=df.index,
+                        y=df.iloc[:, j],
+                        name=df.columns[j],
+                        marker_color=px.colors.qualitative.Dark24[j]
+                    ))
         fig.update_layout(
             autosize=False,
             width=width,
