@@ -240,7 +240,8 @@ class NST:
             args: this is a dictionary
               example: 
                 args = {
-                    'secondary y': ['Close'],
+                    'secondary y': ['x1'],
+                    'bars': ['x2']
                     'width': 1200,
                     'height': 800,
                     'xlabel': 'Date',
@@ -260,17 +261,26 @@ class NST:
         fig = make_subplots(specs=[[{"secondary_y": True}]])
 
         for j in range(df.shape[1]):
-            if df.columns[j] in args['secondary y']:
+            if df.columns[j] not in args['bars']:
+                if df.columns[j] in args['secondary y']:
+                    fig.add_trace(
+                        go.Scatter(
+                            x=df.index,
+                            y=df.iloc[:, j],
+                            name=df.columns[j],
+                            marker_color=px.colors.qualitative.Dark24[j]
+                        ), secondary_y=True)
+                else:
+                    fig.add_trace(
+                        go.Scatter(
+                            x=df.index,
+                            y=df.iloc[:, j],
+                            name=df.columns[j],
+                            marker_color=px.colors.qualitative.Dark24[j]
+                        ))
+            if df.columns[j] in args['bars']:
                 fig.add_trace(
-                    go.Scatter(
-                        x=df.index,
-                        y=df.iloc[:, j],
-                        name=df.columns[j],
-                        marker_color=px.colors.qualitative.Dark24[j]
-                    ), secondary_y=True)
-            else:
-                fig.add_trace(
-                    go.Scatter(
+                    go.Bar(
                         x=df.index,
                         y=df.iloc[:, j],
                         name=df.columns[j],
