@@ -7,7 +7,7 @@ In this tutorial we will use the well-known Northwind sample database (included 
 
 The following SQL statement selects all the records in the "Customers" table:
 
-```
+```sql
 SELECT * FROM Customers;
 ```
 
