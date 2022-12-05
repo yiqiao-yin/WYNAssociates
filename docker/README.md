@@ -57,4 +57,4 @@ In some scenario due to the setup of your computer, it might be more optimal to 
 
 ## Other Language
 
-This [git](https://github.com/yeasy/docker_practice) has a docker documentation that is provided in Chinese.
+This [git](https://github.com/yeasy/docker_practice) has a docker documentation that is provided in Chinese. The online book can be accessed [here](https://vuepress.mirror.docker-practice.com/).
