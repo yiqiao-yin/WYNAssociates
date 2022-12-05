@@ -54,3 +54,7 @@ In some scenario due to the setup of your computer, it might be more optimal to 
 3. Reinstall Docker Container
 4. Start Docker
 5. Go to powershell (as admin) to build
+
+## Other Language
+
+This [git](https://github.com/yeasy/docker_practice) has a docker documentation that is provided in Chinese.
