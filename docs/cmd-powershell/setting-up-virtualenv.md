@@ -56,7 +56,7 @@ If you want to use Python 3.7 instead, all you need is to change the installatio
 Now, it's time to activate the environment, check the Python version and also list the default packages installed for us. To do so, execute the following commands and you should see a similar output as shown in the image that follows. The (venv) on the left shows that our virtual environment is active. 
 
 ```cmd
-// activate the virtual environment 
+// activate the virtual environment, see comments
 .\venv\Scripts\activate
  
 // check the python version
@@ -68,5 +68,24 @@ pip list
 // deactivate the virtual environment
 deactivate
 ```
+
+## Different Syntax
+
+*Comment*: You’ll need to use different syntax for activating the virtual environment depending on which operating system and command shell you’re using.
+
+On Unix or MacOS, using the bash shell: source /path/to/venv/bin/activate
+On Unix or MacOS, using the csh shell: source /path/to/venv/bin/activate.csh
+On Unix or MacOS, using the fish shell: source /path/to/venv/bin/activate.fish
+On Windows using the Command Prompt: path\to\venv\Scripts\activate.bat
+On Windows using PowerShell: path\to\venv\Scripts\Activate.ps1
+
+## Execution Policy Error
+
+```cmd
+\\ run the following to change the execution policy
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted
+```
+
+Then run the command line to activate virtual environment.
 
 Congratulations! You have successfully created your first virtual environment for Python. And, you are now all set to start your journey with Python development over Windows. 
