@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {font-family: Arial;}
+
+/* Style the tab */
+.tab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+  background-color: lightgrey;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  font-size: 17px;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: lightblue;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+  background-color: lightseagreen;
+}
+
+/* Style the tab content */
+.tabcontent {
+  display: none;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-top: none;
+  height: 1000px;
+}
+
+</style>
+</head>
+<body>
+
+<h2>W.Y.N. Associates, LLC</h2>
+<p>Click on the buttons inside the tabbed menu:</p>
+
+<div class="tab">
+  <button class="tablinks" onclick="openCity(event, 'Register')">Register</button>
+  <button class="tablinks" onclick="openCity(event, 'Meet')">Meet</button>
+  <button class="tablinks" onclick="openCity(event, 'Charts')">Charts</button>
+  <button class="tablinks" onclick="openCity(event, 'Watchlist')">Watchlist</button>
+  <button class="tablinks" onclick="openCity(event, 'Research')">Research</button>
+</div>
+
+<div id="Register" class="tabcontent">
+    <script>
+      // define the callAPI function that takes a first name and last name as parameters
+      var callAPI = (firstName,lastName,eMail)=>{
+          // instantiate a headers object
+          var myHeaders = new Headers();
+          // add content type header to object
+          myHeaders.append("Content-Type", "application/json");
+          // using built in JSON utility package turn object to string and store in a variable
+          var raw = JSON.stringify({"firstName":firstName,"lastName":lastName,"eMail":eMail});
+          // create a JSON object with parameters for API call and store in a variable
+          var requestOptions = {
+              method: 'POST',
+              headers: myHeaders,
+              body: raw,
+              redirect: 'follow'
+          };
+          // make API call with parameters and use promises to get response
+          fetch("https://hrcvw1ccr2.execute-api.us-east-1.amazonaws.com/dev", requestOptions)
+          .then(response => response.text())
+          .then(result => alert(JSON.parse(result).body))
+          .catch(error => console.log('error', error));
+      }
+    </script>
+
+  <h2><b>Register</b></h2>
+  <h4>Like what I teach in class and online? Please register for more information.</h4>
+  <p>Enter your first and last name. </p>
+  <form>
+      <label>First Name :</label>
+      <input type="text" id="fName">
+      <br></br>
+      <label>Last Name :</label>
+      <input type="text" id="lName">
+      <br></br>
+      <label>Email :</label>
+      <input type="text" id="eMail">
+      <!-- set button onClick method to call function we defined passing input values as parameters -->
+      <button type="button" onclick="callAPI(
+          document.getElementById('fName').value,
+          document.getElementById('lName').value,
+          document.getElementById('eMail').value
+      )">Call API</button>
+  </form>
+</div>
+
+<div id="Meet" class="tabcontent">
+  <h4>Please use the following link to buy me a cup of coffee if you like meeting with me!</h4>
+  <img src="https://payme-using-paypal.s3.amazonaws.com/public/PayMe.JPG" height="550px" width="260px"></img>
+
+  <h4>Please use the following link to schedule a 1-1 meeting with me!</h4>
+  <div>
+      <p>
+          <iframe src="https://calendly.com/eagle0504/1-1-with-yin" title="Meet Me" width="100%" height="1000px"></iframe>
+      </p>
+  </div>
+</div>
+
+<div id="Charts" class="tabcontent">
+  <h2><b>Charts</b></h2>
+  <!-- TradingView Widget BEGIN -->
+  <div class="tradingview-widget-container">
+      <div id="technical-analysis-chart-demo"></div>
+      <div class="tradingview-widget-copyright">
+          <!-- <a href="https://www.tradingview.com/symbols/AAPL/" rel="noopener" target="_blank">
+              <span class="blue-text">AAPL stock chart</span>
+          </a> by TradingView -->
+      </div>
+      <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+      <script type="text/javascript">
+          new TradingView.widget(
+              {
+                  "container_id": "technical-analysis-chart-demo",
+                  "width": "100%",
+                  "height": "100%",
+                  "autosize": true,
+                  "symbol": "AAPL",
+                  "interval": "D",
+                  "timezone": "exchange",
+                  "theme": "dark",
+                  "style": "1",
+                  "toolbar_bg": "#f1f3f6",
+                  "withdateranges": true,
+                  "hide_side_toolbar": false,
+                  "allow_symbol_change": true,
+                  "save_image": false,
+                  "studies": [
+                      "TripleEMA@tv-basicstudies",
+                      "ROC@tv-basicstudies",
+                      "RSI@tv-basicstudies",
+                      "StochasticRSI@tv-basicstudies",
+                      "MASimple@tv-basicstudies",
+                      "FisherTransform@tv-basicstudies",
+                      "MOM@tv-basicstudies"
+                  ],
+                  "show_popup_button": true,
+                  "popup_width": "1000",
+                  "popup_height": "650",
+                  "locale": "en"
+              }
+          );
+      </script>
+  </div>
+  <!-- TradingView Widget END -->
+</div>
+
+<div id="Watchlist" class="tabcontent">
+  <h2><b>Watchlist</b></h2>
+  <!-- TradingView Widget BEGIN -->
+  <div class="tradingview-widget-container">
+      <div id="watchlist-chart-demo"></div>
+      <!-- <div class="tradingview-widget-copyright">
+          <a href="https://www.tradingview.com/symbols/NASDAQ-AAPL/" rel="noopener" target="_blank">
+              <span class="blue-text">AAPL stock chart</span>
+          </a> by TradingView
+      </div> -->
+      <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+      <script type="text/javascript">
+      new TradingView.widget(
+          {
+              "container_id": "watchlist-chart-demo",
+              "width": "100%",
+              "height": "100%",
+              "autosize": true,
+              "symbol": "NASDAQ:AAPL",
+              "interval": "D",
+              "timezone": "exchange",
+              "theme": "dark",
+              "style": "1",
+              "toolbar_bg": "#f1f3f6",
+              "withdateranges": true,
+              "allow_symbol_change": true,
+              "save_image": false,
+              "watchlist": [
+                  "SPY", "DIA", "NDAQ", "QQQ",
+                  "AAPL", "FB", 
+                  "IBM",
+                  "TSLA",
+                  "AMD", "NVDA", 
+                  "MSFT",
+                  "GOOG",
+                  "LH"
+              ],
+              "locale": "en" 
+          }
+      );
+      </script>
+  </div>
+  <!-- TradingView Widget END -->
+</div>
+
+<div id="Research" class="tabcontent">
+  <h2>Yin's Research and Watchlist on SEC Filings:</h2>
+  <p>
+    <iframe src="https://wyn-associates.com/research/" title="Research" width="100%" height="1000px"></iframe>
+  </p>
+</div>
+
+<script>
+function openCity(evt, cityName) {
+  var i, tabcontent, tablinks;
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+  tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+  document.getElementById(cityName).style.display = "block";
+  evt.currentTarget.className += " active";
+}
+</script>
+   
+</body>
+</html> 
