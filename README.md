@@ -25,12 +25,12 @@ Welcome to install our package. The entire package is written in *python*. One c
 
 ```
 # from command line
-pip install git+https://github.com/yiqiao-yin/WYNAssociates.git # in command line
+pip install git+https://github.com/yiqiao-yin/WYNAssociates.git
 ```
 
 ```
 # from jupyter
-!pip install git+https://github.com/yiqiao-yin/WYNAssociates.git # in command line
+!pip install git+https://github.com/yiqiao-yin/WYNAssociates.git
 ```
 
 For developers, one can clone package by simple **git clone** command (assuming in a desired directory).
