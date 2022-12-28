@@ -106,12 +106,12 @@ You have every right to be proud of your work and your publication. So, what are
 
 Here is a great article on <a href="https://www.springernature.com/gp/researchers/publication-promotion">Spring Nature</a> for researchers regarding publication promotion.
 
-## Flowchart
+## After submission
 
-```mermaid
-graph TD;
-    A-->B;
-    A-->C;
-    B-->D;
-    C-->D;
-```
+1. Submission received
+2. Technical check
+3. Editor review
+4. Peer review
+5. Final decision
+6. Payments and rights
+7. Publication
