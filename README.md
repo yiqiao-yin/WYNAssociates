@@ -24,7 +24,7 @@ This is the official quantitative and statistical software package by W.Y.N. Ass
 Welcome to install our package. The entire package is written in *python*. One can use the following code to install this Github package. In some scenarios, it might be more optimal to install the package in a virtual environment. We recommend to set up a docker container by uisng this [instruction manual](https://github.com/yiqiao-yin/WYNAssociates/tree/main/docker). In other scenarios such as using [Colab](https://colab.research.google.com/) or [AWS Sagemaker Studio](https://aws.amazon.com/sagemaker/studio/), the following code can be used directly.
 
 ```
-# from command line
+# from command line (through powershell)
 pip install git+https://github.com/yiqiao-yin/WYNAssociates.git
 ```
 
