@@ -23,7 +23,7 @@ a:hover { color: rgb(254, 124, 101); }
 
 .container { 
     max-width: 800px;
-    height: 1000px;
+    height: 1500px;
     margin: 0 auto; 
     padding: 5px;
 }
@@ -150,7 +150,7 @@ a:hover { color: rgb(254, 124, 101); }
         <!-- Content -->
         <h2>💼 W.Y.N. Associates, LLC</h2>
         <p>I was a PhD student in <a href="http://stat.columbia.edu/">Statistics</a> at <a href="https://www.columbia.edu/">Columbia University</a> from September of 2020 to December of 2021. I had a B.A. in <a href="https://www.sas.rochester.edu/mth/">Mathematics</a>, and an M.S. in <a href="https://simon.rochester.edu/programs/full-time-ms-in-finance">Finance</a> from <a href="https://www.rochester.edu/">University of Rochester</a>. I have a wide range of research interests in representation learning: <a href="https://en.wikipedia.org/wiki/Feature_learning">Feature Learning</a>, <a href="https://en.wikipedia.org/wiki/Deep_learning">Deep Learning</a>, <a href="https://en.wikipedia.org/wiki/Computer_vision">Computer Vision (CV)</a>, and <a href="https://en.wikipedia.org/wiki/Natural_language_processing">Natural Language Processing (NLP)</a>. In addition, I have also have some prior research experience in <a href="https://en.wikipedia.org/wiki/Financial_economics">Financial Eonomics</a> and <a href="https://en.wikipedia.org/wiki/Asset_pricing">Asset Pricing</a>.</p>
-        <p>I am currently a Senior Data Scientist at an <a href="https://en.wikipedia.org/wiki/S%26P_500">S&P 500</a> company <a href="https://www.labcorp.com/">LabCorp</a>, developing AI-driven solutions for drug diagnostics, drug development, and financial decisions (see Labcorp SEC filings <a href="https://www.sec.gov/edgar/browse/?CIK=920148&owner=exclude">here</a>). Prior, I have held professional positions such as enterprise-level Data Scientist at a <a href="https://en.wikipedia.org/wiki/EURO_STOXX_50">EURO STOXX 50</a> company Bayer, quantitative researcher at <a href="https://www.aqr.com/">AQR</a> working on alternative quantitative strategies to portfolio management and factor-based trading, and equity trader at <a href="https://t3trading.com/">T3 Trading</a> on Wall Street. I supervise a small fund specializing in algorithmic trading (since 2011, performance is <a href="https://yinscapital.com/letters/">here</a>) and real estate investment. I also run my own monetarized <a href="https://youtube.com/YiqiaoYin/">YouTube Channel</a>.</p>
+        <p>I am currently a Senior Data Scientist at an <a href="https://en.wikipedia.org/wiki/S%26P_500">S&P 500</a> company <a href="https://www.labcorp.com/">LabCorp</a>, developing AI-driven solutions for drug diagnostics, drug development, and financial decisions (see Labcorp SEC filings <a href="https://www.sec.gov/edgar/browse/?CIK=920148&owner=exclude">here</a>). Prior, I have held professional positions such as enterprise-level Data Scientist at a <a href="https://en.wikipedia.org/wiki/EURO_STOXX_50">EURO STOXX 50</a> company Bayer, quantitative researcher at <a href="https://www.aqr.com/">AQR</a> working on alternative quantitative strategies to portfolio management and factor-based trading, and equity trader at <a href="https://t3trading.com/">T3 Trading</a> on Wall Street. I supervise a small fund specializing in algorithmic trading (since 2011, performance is <a href="https://yinscapital.com/letters/">here</a>) and real estate investment. I also run my own monetarized <a href="https://youtube.com/YiqiaoYin/">YouTube Channel</a>. Please feel free to add me on <a href="https://www.linkedin.com/in/yiqiaoyin/">LinkedIn</a>.</p>
         <p>Click on the buttons inside the tabbed menu:</p>
 
         <div class="tabs">
@@ -242,11 +242,6 @@ a:hover { color: rgb(254, 124, 101); }
                 <!-- TradingView Widget BEGIN -->
                 <div class="tradingview-widget-container">
                     <div id="technical-analysis-chart-demo"></div>
-                    <!-- <div class="tradingview-widget-copyright">
-                        <!-- <a href="https://www.tradingview.com/symbols/AAPL/" rel="noopener" target="_blank">
-                            <span class="blue-text">AAPL stock chart</span>
-                        </a> by TradingView -->
-                    <!-- </div> -->
                     <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
                     <script type="text/javascript">
                         new TradingView.widget(
@@ -264,9 +259,11 @@ a:hover { color: rgb(254, 124, 101); }
                                 "withdateranges": true,
                                 "hide_side_toolbar": false,
                                 "allow_symbol_change": true,
+                                "details": true,
                                 "save_image": false,
                                 "studies": [
-                                    "MASimple@tv-basicstudies",
+                                    "MASimple@tv-basicstudies",                                   
+                                    "DoubleEMA@tv-basicstudies",
                                     "TripleEMA@tv-basicstudies",
                                     "ROC@tv-basicstudies",
                                     "RSI@tv-basicstudies",
@@ -317,6 +314,11 @@ a:hover { color: rgb(254, 124, 101); }
                             "withdateranges": true,
                             "allow_symbol_change": true,
                             "save_image": false,
+                            "studies": [
+                                    "MASimple@tv-basicstudies",                                   
+                                    "DoubleEMA@tv-basicstudies",
+                                    "TripleEMA@tv-basicstudies",
+                            ],
                             "watchlist": [
                                 "SPY", "DIA", "NDAQ", "QQQ",
                                 "AAPL", "FB", "TSLA", "BRKB", "UNH",
@@ -325,6 +327,9 @@ a:hover { color: rgb(254, 124, 101); }
                                 "LH", "TMO", "IQV", "MRK", "MCK",
                                 "BTCUSD"
                             ],
+                            "show_popup_button": true,
+                            "popup_width": "1000",
+                            "popup_height": "650",
                             "locale": "en" 
                         }
                     );
@@ -435,6 +440,11 @@ a:hover { color: rgb(254, 124, 101); }
             <input type="radio" id="tab-7" name="tabby-tabs">
             <label for="tab-7"><b>Teaching</b></label>
             <div class="tabby-content">
+                <h3>Post-doc Fellowship</h3>
+                <ul>
+                    <li>W.Y.N. hires Post-doc Fellowships. Welcome to directly reach out to me on LinkedIn.</li>
+                    <li>Currently, I lead teams to do research in the field of eXplainable AI with a focus on computer vision. Some required literature for our research can be seen <a href="https://github.com/yiqiao-yin/WYNAssociates/blob/main/docs/papers.md">here</a>.</li>
+                </ul>
                 <h3>Undergraduate/Graduate Teaching Assistant</h3>
                 <ul>
                     <li>GU STAT 4203 Probability Theory (Fall 2021, Summer 2021, Fall 2020, Fall 2018) | Updated <a href="https://yiqiaoyindotcom.files.wordpress.com/2021/10/probability-theory-2021-fall.pdf">Notes</a>.</li>
