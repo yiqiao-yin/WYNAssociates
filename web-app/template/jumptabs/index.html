@@ -36,7 +36,7 @@ a:hover { color: rgb(254, 124, 101); }
 .tabs {
     position: relative;
     display: flex;
-    min-height: 220%;
+    min-height: 250%;
     border-radius: 20px 20px 0 0;
     overflow: hidden;
 }
@@ -50,10 +50,10 @@ a:hover { color: rgb(254, 124, 101); }
     box-sizing: border-box;
     /* tab content must clear this */
     height: 40px;
-    width: 100%;
+    width: 115px;
     padding: 10px;
     text-align: center;
-    font-size: 12;
+    font-size: 11;
     background: #398bff;
     cursor: pointer;
     transition: background 0.5s ease;
@@ -136,7 +136,7 @@ a:hover { color: rgb(254, 124, 101); }
     padding: 6px 12px;
     /* border: 10px solid rgb(18, 251, 255);
     border-top: 10px solid rgb(18, 251, 255); */
-    max-height: 800px;
+    max-height: 850px;
 }
 </style>
 <head>
@@ -156,7 +156,7 @@ a:hover { color: rgb(254, 124, 101); }
         <div class="tabs">
           <div class="tabby-tab">
             <input type="radio" id="tab-1" name="tabby-tabs" checked>
-            <label for="tab-1">Register</label>
+            <label for="tab-1"><b>Register</b></label>
             <div class="tabby-content">
                 <script>
                 // define the callAPI function that takes a first name and last name as parameters
@@ -206,7 +206,7 @@ a:hover { color: rgb(254, 124, 101); }
       
           <div class="tabby-tab">
             <input type="radio" id="tab-2" name="tabby-tabs">
-            <label for="tab-2">Meet</label>
+            <label for="tab-2"><b>Meet</b></label>
             <div class="tabby-content">
                 <h4>Please use the following link to schedule a 1-1 meeting with me!</h4>
                 <p>
@@ -217,7 +217,7 @@ a:hover { color: rgb(254, 124, 101); }
       
           <div class="tabby-tab">
             <input type="radio" id="tab-3" name="tabby-tabs">
-            <label for="tab-3">Payment</label>
+            <label for="tab-3"><b>Payment</b></label>
             <div class="tabby-content">
                 <!-- <h4>Please use the following link to buy me a cup of coffee if you like meeting with me!</h4>
                 <p align="center">
@@ -235,7 +235,7 @@ a:hover { color: rgb(254, 124, 101); }
       
           <div class="tabby-tab">
             <input type="radio" id="tab-4" name="tabby-tabs">
-            <label for="tab-4">Charts</label>
+            <label for="tab-4"><b>Charts</b></label>
             <div class="tabby-content">
                 <h2><b>Charts</b></h2>
                 <p>A quick preview of stock charts using TradingView widget. Technical indicators are selected by experience.</p>
@@ -253,7 +253,7 @@ a:hover { color: rgb(254, 124, 101); }
                             {
                                 "container_id": "technical-analysis-chart-demo",
                                 "width": "100%",
-                                "height": "90%",
+                                "height": "95%",
                                 "autosize": true,
                                 "symbol": "AAPL",
                                 "interval": "D",
@@ -288,7 +288,7 @@ a:hover { color: rgb(254, 124, 101); }
 
           <div class="tabby-tab">
             <input type="radio" id="tab-5" name="tabby-tabs">
-            <label for="tab-5">Watchlist</label>
+            <label for="tab-5"><b>Watchlist</b></label>
             <div class="tabby-content">
                 <h2><b>Watchlist</b></h2>
                 <p>A pool of stocks pitched and held by Mr. Yiqiao Yin. No recommendations provided and is not for profit. This is for presentation only.</p>
@@ -306,7 +306,7 @@ a:hover { color: rgb(254, 124, 101); }
                         {
                             "container_id": "watchlist-chart-demo",
                             "width": "100%",
-                            "height": "90%",
+                            "height": "95%",
                             "autosize": true,
                             "symbol": "NASDAQ:AAPL",
                             "interval": "D",
@@ -337,7 +337,7 @@ a:hover { color: rgb(254, 124, 101); }
 
           <div class="tabby-tab">
             <input type="radio" id="tab-6" name="tabby-tabs">
-            <label for="tab-6">Research</label>
+            <label for="tab-6"><b>Research</b></label>
             <div class="tabby-content">
                 <h2>Yin's Research and Watchlist on SEC Filings:</h2>
                 <!-- big list starts here -->
@@ -433,7 +433,7 @@ a:hover { color: rgb(254, 124, 101); }
 
           <div class="tabby-tab">
             <input type="radio" id="tab-7" name="tabby-tabs">
-            <label for="tab-7">Teaching</label>
+            <label for="tab-7"><b>Teaching</b></label>
             <div class="tabby-content">
                 <h3>Undergraduate/Graduate Teaching Assistant</h3>
                 <ul>
