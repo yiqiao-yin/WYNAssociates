@@ -45,10 +45,34 @@ Then go into the `WYNAssociates` folder.
 cd WYNAssociates
 ```
 
+Make sure to create your virtual environment.
+
+```
+virtualenv .some_name
+```
+
+Or use 
+
+```
+python -m virtualenv .some_name
+```
+
+Please install the requirements.
+
+```
+pip install -r requirements.txt
+```
+
 Last, you can directly install the package.
 
 ```
 pip install .
+```
+
+Do not forget to deactivate virtual environment when you are done. 
+
+```
+deactivate
 ```
 
 ## Documentation

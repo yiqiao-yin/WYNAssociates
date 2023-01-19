@@ -47,6 +47,10 @@ cd .\project-36
   
 // create a virtual environment named 'venv', feel free to name it anything you like
 virtualenv venv -p C:\Python\Python36\python.exe  
+
+// sometimes virtualenv does not work even it is installed correctly, in that case
+// make sure use python 
+python -m virtualenv .some_name_for_your_virtual_env
 ```
 
 Notice the last command. With the attribute "-p" we have specified the Python version that we want our virtual environment to use. In our case, it's Python 3.6, which we had installed at "C:\Python\Python36". If you installed it at a different location, please pass the complete path here.
