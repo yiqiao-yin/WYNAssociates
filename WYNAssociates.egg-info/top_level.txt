@@ -1,6 +1,0 @@
-AIsolution
-CVsolution
-FINsolution
-MLsolution
-NLPsolution
-TSFsolution
