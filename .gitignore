@@ -2,3 +2,4 @@
 /docs/ref-deeplearning/.ipynb_checkpoints/*
 .ipynb_checkpoints/*
 .venv
+/WYNAssociates.egg-info
