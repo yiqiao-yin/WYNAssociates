@@ -4,3 +4,5 @@
 .venv
 /WYNAssociates.egg-info/*
 WYNAssociates.egg-info/*
+/build/*
+build/*
