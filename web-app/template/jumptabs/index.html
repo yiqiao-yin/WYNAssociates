@@ -137,6 +137,12 @@ a:hover { color: rgb(254, 124, 101); }
     max-height: 1100px;
 }
 
+.tradingview-widget-container-single-chart  {
+    /* padding: 6px 12px;
+    height: 1000px; */
+    max-height: 1500px;
+}
+
 /* This is for Table */
 td {
     border-style: dotted;
@@ -293,6 +299,10 @@ td {
                     {
                         "description": "Tesla",
                         "proName": "TSLA"
+                    },
+                    {
+                        "description": "Google, Inc.",
+                        "proName": "GOOGL"
                     }
                     ],
                     "showSymbolLogo": true,
@@ -307,7 +317,7 @@ td {
                 <h2><b>Charts</b></h2>
                 <p>A quick preview of stock charts using TradingView widget. Technical indicators are selected by experience.</p>
                 <!-- TradingView Widget BEGIN -->
-                <div class="tradingview-widget-container">
+                <div class="tradingview-widget-container-single-chart">
                     <div id="technical-analysis-chart-demo"></div>
                     <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
                     <script type="text/javascript">
@@ -315,7 +325,7 @@ td {
                             {
                                 "container_id": "technical-analysis-chart-demo",
                                 "width": "120%",
-                                "height": "95%",
+                                "height": "255%",
                                 "autosize": true,
                                 "symbol": "AAPL",
                                 "interval": "D",
@@ -371,7 +381,7 @@ td {
                         {
                             "container_id": "watchlist-chart-demo",
                             "width": "120%",
-                            "height": "95%",
+                            "height": "25%",
                             "autosize": true,
                             "symbol": "NASDAQ:AAPL",
                             "interval": "D",
@@ -528,7 +538,7 @@ td {
             <div class="tabby-content">
                 <h3>Post-doc Fellowship</h3>
                 <ul>
-                    <li>W.Y.N. hires Post-doc Fellowships. Welcome to directly reach out to me on LinkedIn.</li>
+                    <li>W.Y.N. offers Post-doc Fellowships. Typically, we manage a team of 3-5 people to run our research lab. Welcome to directly reach out to me on LinkedIn.</li>
                     <li>Currently, I lead teams to do research in the field of eXplainable AI with a focus on computer vision. Some required literature for our research can be seen <a href="https://github.com/yiqiao-yin/WYNAssociates/blob/main/docs/papers.md">here</a>.</li>
                 </ul>
                 <h3>Undergraduate/Graduate Teaching Assistant</h3>
