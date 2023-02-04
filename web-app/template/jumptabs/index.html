@@ -50,7 +50,7 @@ a:hover { color: rgb(254, 124, 101); }
     box-sizing: border-box;
     /* tab content must clear this */
     height: 40px;
-    width: 172px;
+    width: 200px;
     padding: 10px;
     text-align: center;
     font-size: 11;
@@ -151,6 +151,19 @@ td {
     padding: 5px;
 }
 
+/* Design for a button */
+.block {
+    display: block;
+    width: 20%;
+    border: none;
+    background-color: #a8caf9;
+    padding: 14px 28px;
+    font-size: 20px;
+    /* cursor: pointer; */
+    text-align: center;
+    border-radius: 20px 20px 20px 20px;
+}
+
 </style>
 <head>
     <!-- Add url for website thumbnail -->
@@ -166,7 +179,8 @@ td {
         <h4>Personal Background:</h4>
         <p>I was a PhD student in <a href="http://stat.columbia.edu/">Statistics</a> at <a href="https://www.columbia.edu/">Columbia University</a> from September of 2020 to December of 2021. I had a B.A. in <a href="https://www.sas.rochester.edu/mth/">Mathematics</a>, and an M.S. in <a href="https://simon.rochester.edu/programs/full-time-ms-in-finance">Finance</a> from <a href="https://www.rochester.edu/">University of Rochester</a>. I have a wide range of research interests in representation learning: <a href="https://en.wikipedia.org/wiki/Feature_learning">Feature Learning</a>, <a href="https://en.wikipedia.org/wiki/Deep_learning">Deep Learning</a>, <a href="https://en.wikipedia.org/wiki/Computer_vision">Computer Vision (CV)</a>, and <a href="https://en.wikipedia.org/wiki/Natural_language_processing">Natural Language Processing (NLP)</a>. In addition, I have also have some prior research experience in <a href="https://en.wikipedia.org/wiki/Financial_economics">Financial Eonomics</a> and <a href="https://en.wikipedia.org/wiki/Asset_pricing">Asset Pricing</a>.</p>
         <p>I am currently a Senior Data Scientist / Machine Learning Engineer at an <a href="https://en.wikipedia.org/wiki/S%26P_500">S&P 500</a> company <a href="https://www.labcorp.com/">LabCorp</a>, developing AI-driven solutions in drug diagnostics, drug development, operations management, and financial decisions for our global leaders in life sciences (see Labcorp SEC filings <a href="https://www.sec.gov/edgar/browse/?CIK=920148&owner=exclude">here</a>). Prior, I have held professional positions such as enterprise-level Data Scientist at <a href="https://www.bayer.com/en/agriculture">Bayer</a> (a <a href="https://en.wikipedia.org/wiki/EURO_STOXX_50">EURO STOXX 50</a> company), Quantitative Researcher at <a href="https://www.aqr.com/">AQR</a> (a global hedge fund pioneering in alternative quantitative strategies to portfolio management and factor-based trading), and Equity Trader at <a href="https://t3trading.com/">T3 Trading</a> on Wall Street. I supervise a small fund specializing in algorithmic trading (since 2011, performance is <a href="https://yinscapital.com/letters/">here</a>) in equity market, cryptocurrencies, and real estate investment. I also run my own monetarized <a href="https://youtube.com/YiqiaoYin/">YouTube Channel</a>. Please feel free to add me on <a href="https://www.linkedin.com/in/yiqiaoyin/">LinkedIn</a>.</p>
-        <p>Click on the buttons inside the tabbed menu:</p>
+        <button type="button" class="block"><a href="https://calendly.com/eagle0504/1-1-with-yin">Contact Me</a></button>
+        <p></p>
 
         <div class="tabs">
           <div class="tabby-tab">
@@ -219,7 +233,7 @@ td {
             </div>
           </div>
       
-          <div class="tabby-tab">
+          <!-- <div class="tabby-tab">
             <input type="radio" id="tab-2" name="tabby-tabs">
             <label for="tab-2"><b>Meet</b></label>
             <div class="tabby-content">
@@ -228,7 +242,7 @@ td {
                     <iframe src="https://calendly.com/eagle0504/1-1-with-yin" title="Meet Me" width="100%" height="1000px"></iframe>
                 </p>
             </div>
-          </div>
+          </div> -->
       
           <div class="tabby-tab">
             <input type="radio" id="tab-3" name="tabby-tabs">
