@@ -2,7 +2,7 @@
 FROM python:3.8-slim
 
 # Set the environment variable for the API key
-ENV API_KEY=1617249c979543caaef58e3c726b7ff3
+ENV API_KEY=XXX
 
 # Install the curl tool
 RUN apt-get update && apt-get install -y curl
