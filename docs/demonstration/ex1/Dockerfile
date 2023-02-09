@@ -11,4 +11,4 @@ RUN pip3 install -r requirements.txt
 COPY app.py ./
 
 # setting the CMD to your handler file_name.function_name
-CMD [ "app.handler" ]
+CMD [ "app.lambda_handler" ]

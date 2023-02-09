@@ -1,5 +1,3 @@
 def lambda_handler(event, context):
-    message = "Hello World!"
-    return {
-        'message': message
-    }
+    print("Hello World")
+    return "Hello World"

@@ -21,11 +21,11 @@ Here's an example of a "Hello World" AWS Lambda function written in Python:
 
 ```py
 def lambda_handler(event, context):
-    message = "Hello World!"
-    return {
-        'message': message
-    }
+    print("Hello World")
+    return "Hello World"
 ```
+
+The function will be saved in `app.py` script in the same directory of the `Dockerfile`.
 
 In this example, the `lambda_handler` function takes two arguments: `event` and `context`. The event argument contains information about the triggering event, such as an API request. The `context` argument contains information about the current execution context, such as the runtime and the AWS request ID.
 
@@ -54,30 +54,27 @@ By using Dockerfiles to build and launch Docker images on AWS, organizations can
 Here's an example of a Dockerfile that executes a Python script:
 
 ```docker
-# Use an official Python runtime as the base image
-FROM python:3.9-slim
+# python3.8 lambda base image
+FROM public.ecr.aws/lambda/python:3.8
 
-# Set the working directory to /app
-WORKDIR /app
+# copy requirements.txt to container
+COPY requirements.txt ./
 
-# Copy the current directory contents into the container at /app
-COPY . /app
+# installing dependencies
+RUN pip3 install -r requirements.txt
 
-# Install the required packages
-RUN pip install --no-cache-dir -r requirements.txt
+# Copy function code to container
+COPY app.py ./
 
-# Set the environment variable for the Python script
-ENV SCRIPT_FILE="script.py"
-
-# Define the command to run the Python script
-CMD ["python", "-u", "$SCRIPT_FILE"]
+# setting the CMD to your handler file_name.function_name
+CMD [ "app.lambda_handler" ]
 ```
 
-About this dockerfile, what does the directory look like?
+About this dockerfile, what does the directory look like the following. Notice that the `CMD` line (or the last line of the `Dockerfile` the "app" has a method that is the same name as the `lambda_handler` function in `app.py` script).
 
 ```cmd
 /
-|-- hello.py
+|-- app.py
 |-- Dockerfile
 ```
 
@@ -99,3 +96,40 @@ In this example, the "aws ecr get-login-password" command is used to retrieve an
 The "-u" option is used to specify the username (AWS), and the "-p" option is used to specify the authentication token. The registry URL is specified at the end of the command.
 
 Once the Docker client is authenticated, you can use the "docker push" and "docker pull" commands to push and pull images to and from the registry.
+
+## Build Image in ECR Using Docker
+
+Here we use Docker to build image and push the image to ECR. This section assumes you have `Docker Desktop` installed and opened locally. 
+
+Go to AWS ECR and you can `View Commands` to see the following. Make sure that you have the latest version of the AWS Tools for PowerShell and Docker installed. For more information, see Getting Started with Amazon ECR. 
+
+1. Retrieve an authentication token and authenticate your Docker client to your registry.
+Use AWS Tools for PowerShell:
+
+```cmd
+(Get-ECRLoginCommand).Password | docker login --username AWS --password-stdin XXX.dkr.ecr.us-east-1.amazonaws.com
+```
+
+2. Build your Docker image using the following command. For information on building a Docker file from scratch see the instructions here . You can skip this step if your image is already built:
+
+```cmd
+docker build -t NAME_OF_YOUR_IMAGE .
+```
+
+3. After the build completes, tag your image so you can push the image to this repository:
+
+```cmd
+docker tag NAME_OF_YOUR_IMAGE:latest XXX.dkr.ecr.us-east-1.amazonaws.com/NAME_OF_YOUR_IMAGE:latest
+```
+
+4. Run the following command to push this image to your newly created AWS repository:
+
+```cmd
+docker push XXX.dkr.ecr.us-east-1.amazonaws.com/NAME_OF_YOUR_IMAGE:latest
+```
+
+## Create Lambda Function Using Image in ECR
+
+Once you have imaged pushed to a container in ECR on AWS, you can go to `Lambda` to create a new function. You need to find the right `Image URL` and copy that to be able to set up the Image in `Lambda` function. 
+
+After this is done, you can trigger a `Test` in `Lambda` function to see if the function works or if you need to debug. 
