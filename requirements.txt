@@ -5,6 +5,7 @@ pandas                       1.5.3
 Pillow                       9.4.0
 plotly                       5.13.1
 requests                     2.28.2
+sagemaker                    2.141.0
 SCALECAST                    0.17.14
 scipy                        1.10.1
 seaborn                      0.12.2
