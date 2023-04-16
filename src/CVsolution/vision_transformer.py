@@ -1,9 +1,12 @@
+from typing import Any, Dict
+
+import matplotlib.pyplot as plt
 import numpy as np
 import tensorflow as tf
+import tensorflow_addons as tfa
 from tensorflow import keras
 from tensorflow.keras import layers
-import tensorflow_addons as tfa
-import matplotlib.pyplot as plt
+
 
 # learning_rate = 0.001
 # weight_decay = 0.0001
@@ -21,19 +24,50 @@ import matplotlib.pyplot as plt
 # transformer_layers = 10
 # mlp_head_units = [2048, 1024]  # Size of the dense layers of the final classifier
 
-def mlp(x, hidden_units, dropout_rate):
+
+def mlp(x: tf.Tensor, hidden_units: list[int], dropout_rate: float) -> tf.Tensor:
+    """
+    Constructs a multi-layer perceptron with Gelu activation and dropout layers.
+
+    Args:
+        x (tf.Tensor): Input tensor to the MLP.
+        hidden_units (list[int]): A list of integers for the number of units in each hidden layer.
+        dropout_rate (float): The rate of dropout to apply after each hidden layer.
+
+    Returns:
+        A tensor representing the output of the MLP.
+    """
+    # For each specified number of hidden units,
+    # add a dense layer with gelu activation followed by dropout.
     for units in hidden_units:
         x = layers.Dense(units, activation=tf.nn.gelu)(x)
         x = layers.Dropout(dropout_rate)(x)
+
+    # Return the final output after passing through all the hidden layers
     return x
 
 
 class Patches(layers.Layer):
-    def __init__(self, patch_size):
+    def __init__(self, patch_size: int):
+        """
+        A layer that extracts patches from an image tensor.
+
+        Args:
+            patch_size (int): The size of each patch to extract.
+        """
         super(Patches, self).__init__()
         self.patch_size = patch_size
 
-    def call(self, images):
+    def call(self, images: tf.Tensor) -> tf.Tensor:
+        """
+        Extracts patches from the input image tensor.
+
+        Args:
+            images (tf.Tensor): A tensor representing a batch of images.
+
+        Returns:
+            A tensor representing the extracted patches.
+        """
         batch_size = tf.shape(images)[0]
         patches = tf.image.extract_patches(
             images=images,
@@ -47,8 +81,15 @@ class Patches(layers.Layer):
         return patches
 
 
-def plot_patches(sample_index: int):
+def plot_patches(sample_index: int) -> None:
+    """
+    Plots the original image and patches extracted from it.
+
+    Args:
+        sample_index (int): The index of the image to plot from the training set.
+    """
     plt.figure(figsize=(4, 4))
+    # Select a random image from the training set
     image = x_train[np.random.choice(range(x_train.shape[sample_index]))]
     plt.imshow(image.astype("uint8"))
     plt.axis("off")
@@ -56,6 +97,7 @@ def plot_patches(sample_index: int):
     resized_image = tf.image.resize(
         tf.convert_to_tensor([image]), size=(image_size, image_size)
     )
+    # Extract patches from the resized image
     patches = Patches(patch_size)(resized_image)
     print(f"Image size: {image_size} X {image_size}")
     print(f"Patch size: {patch_size} X {patch_size}")
@@ -64,6 +106,7 @@ def plot_patches(sample_index: int):
 
     n = int(np.sqrt(patches.shape[1]))
     plt.figure(figsize=(4, 4))
+    # Plot all patches as subplots on a grid
     for i, patch in enumerate(patches[sample_index]):
         ax = plt.subplot(n, n, i + 1)
         patch_img = tf.reshape(patch, (patch_size, patch_size, 3))
@@ -72,21 +115,46 @@ def plot_patches(sample_index: int):
 
 
 class PatchEncoder(layers.Layer):
-    def __init__(self, num_patches, projection_dim):
+    def __init__(self, num_patches: int, projection_dim: int):
+        """
+        Initializes the PatchEncoder layer.
+
+        Args:
+            num_patches (int): The number of patches to extract from an image.
+            projection_dim (int): The dimensionality of the encoding space.
+        """
         super(PatchEncoder, self).__init__()
         self.num_patches = num_patches
+        # A Dense layer to project the patches into the encoding space
         self.projection = layers.Dense(units=projection_dim)
+        # An Embedding layer to provide position embeddings for each patch
         self.position_embedding = layers.Embedding(
             input_dim=num_patches, output_dim=projection_dim
         )
 
     def call(self, patch):
+        """
+        Encodes a patch by projecting it into the encoding space and adding a
+        position embedding.
+
+        Args:
+            patch (tf.Tensor): A patch extracted from an image.
+
+        Returns:
+            tf.Tensor: The encoded patch, with shape (batch_size, projection_dim).
+        """
         positions = tf.range(start=0, limit=self.num_patches, delta=1)
         encoded = self.projection(patch) + self.position_embedding(positions)
         return encoded
 
 
-def create_vit_classifier():
+def create_vit_classifier() -> keras.Model:
+    """
+    Creates a Vision Transformer (ViT) classifier model.
+
+    Returns:
+        keras.Model: A ViT classifier model.
+    """
     inputs = layers.Input(shape=input_shape)
     # Augment data.
     augmented = data_augmentation(inputs)
@@ -125,7 +193,17 @@ def create_vit_classifier():
     return model
 
 
-def run_experiment(model):
+def run_experiment(model: keras.Model) -> Dict[str, Any]:
+    """
+    Trains a given Keras model on training data, evaluates it on test data,
+    and returns the training history.
+
+    Args:
+        model (keras.Model): A Keras model to train and evaluate.
+
+    Returns:
+        dict: A dictionary containing the training history.
+    """
     optimizer = tfa.optimizers.AdamW(
         learning_rate=learning_rate, weight_decay=weight_decay
     )

@@ -69,7 +69,56 @@ Last, you can directly install the package.
 pip install .
 ```
 
-Do not forget to deactivate virtual environment when you are done. 
+You can load model by using
+
+```py
+from src.CVsolution.multi_output_unet import *
+import numpy as np
+import tensorflow as tf
+```
+
+and then define a model
+
+```py
+model = build_unet(input_shape=(224, 224, 3), output_dim=2)
+model.summary()
+```
+
+you may see the following table
+
+```
+Output exceeds the size limit. Open the full output data in a text editorModel: "UNetClassifier"
+__________________________________________________________________________________________________
+ Layer (type)                   Output Shape         Param #     Connected to                     
+==================================================================================================
+ input_1 (InputLayer)           [(None, 224, 224, 3  0           []                               
+                                )]                                                                
+                                                                                                  
+ conv2d (Conv2D)                (None, 224, 224, 32  896         ['input_1[0][0]']                
+                                )                                                                 
+                                                                                                  
+ batch_normalization (BatchNorm  (None, 224, 224, 32  128        ['conv2d[0][0]']                 
+ alization)                     )                                                                 
+                                                                                                  
+ activation (Activation)        (None, 224, 224, 32  0           ['batch_normalization[0][0]']    
+                                )                                                                 
+                                                                                                  
+ conv2d_1 (Conv2D)              (None, 224, 224, 32  9248        ['activation[0][0]']             
+                                )                                                                 
+                                                                                                  
+ batch_normalization_1 (BatchNo  (None, 224, 224, 32  128        ['conv2d_1[0][0]']               
+ rmalization)                   )                                                                 
+                                                                                                  
+ activation_1 (Activation)      (None, 224, 224, 32  0           ['batch_normalization_1[0][0]']  
+                                )                                                                 
+                                                                                                  
+...
+Total params: 23,855,585
+Trainable params: 23,845,601
+Non-trainable params: 9,984
+```
+
+After you finish the project, do not forget to deactivate virtual environment when you are done. 
 
 ```
 deactivate

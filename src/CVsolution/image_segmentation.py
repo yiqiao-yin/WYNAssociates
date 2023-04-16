@@ -599,28 +599,28 @@ def unetpp(filters, output_channels, width=None, height=None, input_channels=1, 
 
 
 # define unet
-def conv_block(input, num_filters):
-    x = tf.keras.layers.Conv2D(num_filters, 3, padding="same")(input)
-    x = tf.keras.layers.BatchNormalization()(x)
-    x = tf.keras.layers.Activation("relu")(x)
-    
-    x = tf.keras.layers.Conv2D(num_filters, 3, padding="same")(x)
-    x = tf.keras.layers.BatchNormalization()(x)
-    x = tf.keras.layers.Activation("relu")(x)
-    return x
-
-def encoder_block(input, num_filters):
-    x = conv_block(input, num_filters)
-    p = tf.keras.layers.MaxPool2D((2, 2))(x)
-    return x, p
-
-def decoder_block(input, skip_features, num_filters):
-    x = tf.keras.layers.Conv2DTranspose(num_filters, (2, 2), strides=2, padding="same")(input)
-    x = tf.keras.layers.Concatenate()([x, skip_features])
-    x = conv_block(x, num_filters)
-    return x
 
 def build_unet(input_shape):
+    def conv_block(input, num_filters):
+        x = tf.keras.layers.Conv2D(num_filters, 3, padding="same")(input)
+        x = tf.keras.layers.BatchNormalization()(x)
+        x = tf.keras.layers.Activation("relu")(x)
+        
+        x = tf.keras.layers.Conv2D(num_filters, 3, padding="same")(x)
+        x = tf.keras.layers.BatchNormalization()(x)
+        x = tf.keras.layers.Activation("relu")(x)
+        return x
+
+    def encoder_block(input, num_filters):
+        x = conv_block(input, num_filters)
+        p = tf.keras.layers.MaxPool2D((2, 2))(x)
+        return x, p
+
+    def decoder_block(input, skip_features, num_filters):
+        x = tf.keras.layers.Conv2DTranspose(num_filters, (2, 2), strides=2, padding="same")(input)
+        x = tf.keras.layers.Concatenate()([x, skip_features])
+        x = conv_block(x, num_filters)
+        return x
     inputs = tf.keras.Input(input_shape)
 
     s1, p1 = encoder_block(inputs, 32)
