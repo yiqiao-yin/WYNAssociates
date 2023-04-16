@@ -72,7 +72,7 @@ pip install .
 You can load model by using
 
 ```py
-from src.CVsolution.multi_output_unet import *
+from src.cv_solution.multi_output_unet import *
 import numpy as np
 import tensorflow as tf
 ```

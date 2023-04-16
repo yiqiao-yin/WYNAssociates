@@ -4,8 +4,8 @@ setup(
   name='WYNAssociates',
   author='Yiqiao Yin',
   author_email="Yiqiao.Yin@wyn-associates.com",
-  version='1.1',
+  version='2.0',
   license="MIT license",
   description="This package provides AI-driven solutions.",
-  packages=["src/AIsolution", "src/CVsolution", "src/FINsolution", "src/MLsolution", "src/TSFsolution", "src/NLPsolution"]
+  packages=["src/main_solution", "src/cv_solution", "src/fin_solution", "src/ml_solution", "src/ts_solution", "src/nlp_solution"]
 )
