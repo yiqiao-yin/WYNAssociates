@@ -1,0 +1,7 @@
+/docs/ref-deeplearning/.ipynb_checkpoints/*
+.ipynb_checkpoints/*
+.venv
+/WYNAssociates.egg-info/*
+WYNAssociates.egg-info/*
+/build/*
+build/*

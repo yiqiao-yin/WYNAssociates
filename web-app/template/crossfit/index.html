@@ -1,0 +1,397 @@
+<html>
+
+    <style>
+        // Variables
+        $red: #c00;
+    
+        // Placeholder selectors
+        %transition {
+        transition: all .25s;
+        }
+    
+        /*Typography*/
+        body {font: 300 16px 'Roboto', 'Lato', sans-serif;}
+        /*Layout*/
+        html,
+        body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        }
+        *,
+        *:before,
+        *:after {box-sizing: border-box;}
+        .wrapper {
+        width: 100%;
+        height: 100%;
+        }
+        section,
+        footer {
+        width: 100%;
+        }
+        .row {
+        margin: auto;
+        width: 100%;
+        max-width: 60em;/*960px*/
+        &:first-child {padding-top: 3em;}
+        &:last-child {padding-bottom: 3em;}
+        }
+        .col-3,
+        .col-2 {
+        display: inline-block;
+        vertical-align: top;
+        }
+        .col-3 {width: 280px;}
+        .col-2 {width: 49%;}
+        @media screen and (max-width: 768px) {
+        .col-3,
+        .col-2 {width: 49%;}
+        }
+        @media screen and (max-width: 500px) {
+        .col-3,
+        .col-2 {
+            display: block;
+            margin: auto;
+            width: 80%;
+        }
+        }
+        .row h1 {
+        margin: 0;
+        font-weight: 300;
+        text-transform: uppercase;
+        }
+        button {
+        margin-top: 1em;
+        width: 13em;
+        line-height: 2em;
+        text-transform: uppercase;
+        background: #000;
+        color: #fff;
+        border: 0;
+        outline: 0;
+        @extend %transition;
+        &:focus,
+        &:hover {background: lighten(#000, 10%);}
+        &:active {background: lighten(#000, 3%);}
+        }
+        /*Intro*/
+        .sec-intro {position: relative;}
+        /*Navigagtion*/
+        header {}
+        header input {display: none;}
+        header input:checked + label {&:before {content: "\f00d";}}
+        header input:checked ~ nav > .nav {
+        width: 11em;
+        opacity: 10;
+        }
+        .nav {
+        position: absolute;
+        top: 0;
+        left: 2.9em;
+        margin: 0;
+        padding: 0;
+        width: 0;
+        list-style-type: none;
+        background: $red;
+        opacity: 0;
+        overflow: hidden;
+        @extend %transition;
+        }
+        .nav a {
+        display: block;
+        padding: .85em 0;
+        width: 11em;
+        text-align: center;
+        text-decoration: none;
+        color: #fff;
+        @extend %transition;
+        &:focus,
+        &:hover {background: darken($red, 10%);}
+        &:active {background: lighten($red, 1%);}
+        }
+        header label {
+        display: block;
+        padding: .5em;
+        width: 47px;
+        text-align: center;
+        background: $red;
+        color: #fff;
+        cursor: pointer;
+        @extend %transition;
+        &:before {
+            content: "\f0c9";
+            font: 2em fontAwesome;
+        }
+        &:focus,
+        &:hover {background: darken($red, 10%);}
+        &:active {background: lighten($red, 1%);}
+        }
+        .sec-intro {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        background: url(http://www.zeleznakoule.cz/wp-content/uploads/2011/11/kettlebell-graphic.jpg) no-repeat center center fixed;
+        background-size: cover;
+        }
+        .sec-intro h1 {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        margin: auto;
+        width: 10em;
+        height: 3em;
+        font-family: 'Black Ops One';
+        line-height: 3em;
+        text-align: center;
+        background: rgba(0,0,0,.5);
+        color: #c00;
+        cursor: default;
+        }
+        /*About*/
+        .sec-about {text-align: center;}
+        @media screen and (max-width: 768px) {
+        br {display: none;}
+        }
+        .row-red {
+        background: $red;
+        color: #fff;
+        }
+        .row-red .row {
+        padding-left: 1em;
+        padding-right: 1em;
+        }
+        .sec-about p {font-size: .90em;}
+        .row-grey {
+        background: #111;
+        color: #ddd;
+        }
+        .sec-about .row-grey .row {padding: 3em 0;}
+        .sec-about article {padding: 0 1em;}
+        /*News*/
+        .sec-news {text-align: center;}
+        .sec-news .row > h1 {padding-bottom: .5em;}
+        .sec-news .col-2 {padding: 1em;}
+        .post {
+        position: relative;
+        height: 245px;
+        cursor: pointer;
+        @extend %transition;
+        &:hover {opacity: .8;}
+        }
+        .post span,
+        .post h1,
+        .post p {position: absolute;}
+        .post span {
+        padding: .25em .5em;
+        font-weight: bold;
+        background: $red;
+        color: #fff;
+        opacity: .85;
+        }
+        .post h1 {
+        bottom: 0;
+        padding-left: .5em;
+        width: 100%;
+        font-size: 1.15em;
+        line-height: 2em;
+        text-align: left;
+        color: #fff;
+        background: rgba(0,0,0,.75);
+        }
+        .col-2 img {
+        width: 100%;
+        height: 245px;
+        }
+    
+        /*Gallery*/
+        .sec-gallery {
+        text-align: center;
+        background: url(http://crossfitdrakkarhondarribia.com/wp-content/uploads/2011/09/crossfit21.jpg) no-repeat center center;
+        //background-size: 100% 100%;
+        background-size: cover;
+        color: #fff;
+        }
+        .overlay {background: rgba(0,0,0,.75);}
+        .sec-gallery h1:first-of-type {
+        padding: .5em 0;
+        color: #fff;
+        }
+        .col-3 img {
+        width: 100%;
+        cursor: pointer;
+        @extend %transition;
+        &:hover {/*opacity: .8;*/filter: brightness(50%);}
+        }
+        /*Footer*/
+        footer {background: #111;}
+        .soc-media {
+        display: flex;
+        justify-content: center;
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
+        }
+        .soc-media li {margin-right: 1em;}
+        .soc-media a {
+        font-size: 1.5em;
+        text-decoration: none;
+        color: #fff;
+        @extend %transition;
+        &:focus,
+        &:hover {color: $red;}
+        &:active {color: #222;}
+        }
+        footer p {
+        font-size: .85em;
+        text-align: center;
+        color: #aaa;
+        }
+    </style>
+    
+    <div class="wrapper">
+        <section class="sec-intro">
+          <header role="banner">
+            <input id="nav-check" type="checkbox" />
+            <label class="fa" for="nav-check"></label>
+            <nav role="navigation">
+              <ul class="nav">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">About Us</a></li>
+                <li><a href="#">News</a></li>
+                <li><a href="#">Gallery</a></li>
+                <li><a href="#">Contact</a></li>
+              </ul>
+            </nav>
+          </header>
+          <h1>CrossFit Masters</h1>
+          </div>
+        </section>
+        <section class="sec-about">
+          <div class="row-red">
+            <div class="row">
+              <h1>Only those who risk going too far <br /> can possibly know how far one can go</h1>
+              <p>We are an OFFICIAL CrossFit team and also training center. We started in 2008 and since then welcome new memebers a people interested in CrossFit we were one of the very first to introduce and teach CrossFit and in Los Angeles.  No one is btter and has more experience than us PERIOD.</p>
+              <button type="button" value="Read More" role="button">Read More</button>
+            </div>
+          </div>
+          <div class="row-grey">
+            <div class="row">
+              <article class="col-2">
+                <h1>Welcome!</h1>
+                <p>We are known for providing the very best coaching possible in our classes.  All of our Coaches go through an in-house Coach Training Program along with continuous education by learning and obtaining the latest certifications. Safety and proper form is our #1 priority in our classes.</p>
+                <p>We are a CrossFit gym for normal folks!  We are NOT a super competitive ego driven CrossFit gym. We are known for a very friendly, family vibe where everyone is cool and supportive.  If you don’t see a warm smiling face when you first walk in, we did something wrong!</p>
+              </article>
+              <article class="col-2">
+                <h1>What is Crossfit?</h1>
+                <p>CrossFit is a strength and conditioning program with the aim of improving, among other things, cardiovascular/respiratory endurance, stamina, strength, power, speed, coordination, agility, balance, and accuracy. It advocates a perpetually varied mix of aerobic exercise, gymnastics (body weight exercises), and Olympic weight lifting.</p>
+                <p>CrossFit Inc. describes its strength and conditioning program as “constantly varied functional movements executed at high intensity across broad modal and time domains," with the stated goal of improving fitness, which it defines as "work capacity across broad time and modal domains."</p>
+              </article>
+            </div>
+          </div>
+        </section>
+        <section class="sec-news">
+          <div class="row">
+            <h1>Latest News</h1>
+          </div>
+          <div class="row">
+            <div class="col-2">
+              <article class="post">
+                <span>21 <br />JAN</span>
+                <img src="http://games.crossfit.com/sites/default/files/Games2012_AS_Midday1_rotator.jpg" alt="CrossFit Games of Asia" />
+                <h1>CrossFit Games of Asia</h1>
+                <p></p>
+              </article>
+            </div>
+            <div class="col-2">
+              <article class="post">
+                <span>05 <br />FEB</span>
+                <img src="http://crossfit-games.edgesuite.net/sites/default/files/Games2013_NorCal_endday3_rotator_0.jpg" alt="CrossFit Games Nor.Cal" />
+                <h1>CrossFit Games Nor.Cal</h1>
+                <p></p>
+              </article>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-2">
+              <article class="post">
+                <span>18 <br />FEB</span>
+                <img src="http://image.boxrox.com/2014/02/bar-barians-workshop-p360-16-640x387.jpg" alt="CrossFit Aberdeen" />
+                <h1>CrossFit Aberdeen</h1>
+                <p></p>
+              </article>
+            </div>
+            <div class="col-2">
+              <article class="post">
+                <span>11 <br />MAR</span>
+                <img src="https://throwdown.com.au/wp-content/uploads/2013/04/Photograph_02_Throwdown_Event_Management.jpg" alt="CrossFit Throwdown" />
+                <h1>CrossFit Throwdown</h1>
+                <p></p>
+              </article>
+            </div>
+          </div>
+          <div class="row">
+            <button type="button" value="View All News" role="button">View All News</button>
+          </div>
+        </section>
+        <section class="sec-gallery">
+          <div class="overlay">
+            <div class="row">
+              <h1>Latest Photos</h1>
+            </div>
+            <div class="row">
+              <div class="col-3">
+                <img src="http://i.cbc.ca/1.2609253.1404403066!/httpImage/image.jpg_gen/derivatives/16x9_620/image.jpg" alt="" />
+              </div>
+              <div class="col-3">
+                <img src="http://www.t-nation.com/system/publishing/articles/10000419/original/Crossfit.jpg?1407345303" alt="" />
+              </div>
+              <div class="col-3">
+                <img src="http://www.t-nation.com/system/publishing/article_assets/274/original/Jason-Jump.jpg" alt="" />
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-3">
+                <img src="http://cdn2.therxreview.com/wp-content/uploads/2013/03/Joshua-Page-4.jpg" alt="" />
+              </div>
+              <div class="col-3">
+                <img src="http://maxshifman.com/wp-content/uploads/2013/11/10770242923_fa8eab2c80_o2.jpg" alt="" />
+              </div>
+              <div class="col-3">
+                <img src="http://crossfitrough.com/wp-content/blogs.dir/134/files/2014/06/20110814_valley_crossfit_1041_noise_bullet_bamf.jpg" alt="" />
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-3">
+                <img src="https://3.bp.blogspot.com/-4FRiCbaZH6c/T1u0ckIlPkI/AAAAAAAAAJA/qUE15aneQIc/s1600/crossfit-3.jpg" alt="" />
+              </div>
+              <div class="col-3">
+                <img src="http://www.crossfitfuengirola.com/web2013/wp-content/uploads/crossfit-fuengirola-slide03.jpg" alt="" />
+              </div>
+              <div class="col-3">
+                <img src="http://crossfithi.files.wordpress.com/2013/03/crossfit-games-foucher.jpeg" alt="" />
+              </div>
+            </div>
+            <div class="row">
+              <button type="button" value="View All Photos" role="button">View All Photos</button>
+            </div>
+          </div>
+        </section>
+        <footer>
+          <div class="row">
+            <ul class="soc-media">
+              <li><a href="#" class="fa fa-twitter"></a></li>
+              <li><a href="#" class="fa fa-facebook"></a></li>
+              <li><a href="#" class="fa fa-pinterest"></a></li>
+              <li><a href="#" class="fa fa-envelope"></a></li>
+            </ul>
+          </div>
+          <div class="row">
+            <p>&copy; 2014 Alex Devero Design</p>
+          </div>
+        </footer>
+      </div>
+
+</html>
