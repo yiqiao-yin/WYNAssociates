@@ -36,7 +36,7 @@ a:hover { color: rgb(254, 124, 101); }
 .tabs {
     position: absolute;
     display: -webkit-box;
-    width: 76%;
+    width: 80%;
     min-height: 250%;
     border-radius: 0 0 0 0;
     overflow: visible;
@@ -79,9 +79,8 @@ a:hover { color: rgb(254, 124, 101); }
     border-radius: 0 0 8px 8px;
     background: rgb(17, 17, 17);
     transition: 
-    opacity 0.5s ease,
-    transform 0.8s ease;
-    /* show/hide */
+        opacity 0.5s ease,
+        transform 0.8s ease;
     opacity: 0;
     transform: scale(0.1);
     transform-origin: top left;
@@ -156,6 +155,31 @@ a:hover { color: rgb(254, 124, 101); }
     border-radius: 20px 20px 20px 20px;
 }
 
+
+details {
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    padding: 0.5em 0.5em 0;
+    width: 150px;
+}
+
+summary {
+    font-weight: bold;
+    margin: -0.5em -0.5em 0;
+    padding: 0.5em;
+}
+
+details[open] {
+    padding: 0.5em;
+    width: 100%;
+}
+
+details[open] summary {
+    border-bottom: 1px solid #aaa;
+    margin-bottom: 0.5em;
+}
+
+
 </style>
 <head>
     <!-- Add url for website thumbnail -->
@@ -173,11 +197,88 @@ a:hover { color: rgb(254, 124, 101); }
         <p>I am currently a Senior Data Scientist / Machine Learning Engineer at an <a href="https://en.wikipedia.org/wiki/S%26P_500">S&P 500</a> company <a href="https://www.labcorp.com/">LabCorp</a>, developing AI-driven solutions in drug diagnostics, drug development, operations management, and financial decisions for our global leaders in life sciences (see Labcorp SEC filings <a href="https://www.sec.gov/edgar/browse/?CIK=920148&owner=exclude">here</a>). Prior, I have held professional positions such as enterprise-level Data Scientist at <a href="https://www.bayer.com/en/agriculture">Bayer</a> (a <a href="https://en.wikipedia.org/wiki/EURO_STOXX_50">EURO STOXX 50</a> company), Quantitative Researcher at <a href="https://www.aqr.com/">AQR</a> (a global hedge fund pioneering in alternative quantitative strategies to portfolio management and <a href="https://www.blackrock.com/us/individual/investment-ideas/what-is-factor-investing">factor-based trading</a>), and Equity Trader at <a href="https://t3trading.com/">T3 Trading</a> on Wall Street (where I was briefly licensed <a href="https://brokercheck.finra.org/individual/summary/6338834">Series 56</a> by <a href="https://www.finra.org/">FINRA</a>). I supervise a small fund specializing in algorithmic trading (since 2011, performance is <a href="https://yinscapital.com/letters/">here</a>) in equity market, cryptocurrencies, and real estate investment. I also run my own monetarized <a href="https://youtube.com/YiqiaoYin/">YouTube Channel</a>. Please feel free to add me on <a href="https://www.linkedin.com/in/yiqiaoyin/">LinkedIn</a>.</p>
         <button type="button" class="block"><a href="https://calendly.com/eagle0504/1-1-with-yin">Contact Me</a></button>
         <p></p>
+        <details>
+            <summary>WYN Search 🧐</summary>
+            <p>
+                <iframe
+                    src="https://wyn-search.streamlit.app//?embed=true"
+                    title="iframe Example 1"
+                    width="100%"
+                    height="850px">
+                </iframe>
+            </p>
+        </details>
+        <p></p>
+        <details>
+            <summary>WYN Chatbot 🤖</summary>
+            <p>
+                <iframe
+                    src="https://wyn-chatbot-io.streamlit.app/?embed=true"
+                    title="Chatbot"
+                    width="100%"
+                    height="850px">
+                </iframe>
+            </p>
+        </details>
+        <p></p>
+        <p></p>
+        <details>
+            <summary>WYN Advisor 💼</summary>
+            <p>
+                <iframe
+                    src="https://wyn-advisor.streamlit.app/?embed=true"
+                    title="Advisor"
+                    width="100%"
+                    height="850px">
+                </iframe>
+            </p>
+        </details>
+        <p></p>
+        <p></p>
+        <details>
+            <summary>WYN Query 🧐</summary>
+            <p>
+                <iframe
+                    src="https://yy-docquery.streamlit.app/?embed=true"
+                    title="Query"
+                    width="100%"
+                    height="850px">
+                </iframe>
+            </p>
+        </details>
+        <p></p>
+        <p></p>
+        <details>
+            <summary>WYN DataViz ⭐</summary>
+            <p>
+                <iframe
+                    src="https://wyn-datasearch.streamlit.app/?embed=true"
+                    title="DataViz"
+                    width="100%"
+                    height="850px">
+                </iframe>
+            </p>
+        </details>
+        <p></p>
+        <p></p>
+        <details>
+            <summary>WYN Vision 👓</summary>
+            <p>
+                <iframe
+                    src="https://wyn-vision.streamlit.app/?embed=true"
+                    title="Vision"
+                    width="100%"
+                    height="850px">
+                </iframe>
+            </p>
+        </details>
+        <p></p>
         <b>Copyright © 2010-2023 Present Yiqiao Yin</b>
         <p></p>
         <b>Feel free to click on any of the following buttons and view the content.</b>
         <p></p>
 
+        
 
         <div class="tabs">
           <div class="tabby-tab">
@@ -588,7 +689,7 @@ a:hover { color: rgb(254, 124, 101); }
                 </ul>
             </div>
           </div>
-          
+
         </div>
         <!-- <footnote>
             <h4><b>Copyright © 2010-2023 Present Yiqiao Yin</b></h4>
