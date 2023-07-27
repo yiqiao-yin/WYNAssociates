@@ -1,39 +1,59 @@
 # https://github.com/jakugel/unet-variants
-from tensorflow.keras.layers import Conv2D, MaxPooling2D, concatenate, Conv2DTranspose
-from tensorflow.keras.layers import BatchNormalization, Input, Activation, Add, GlobalAveragePooling2D, Reshape, Dense, multiply, Permute, maximum, Concatenate, Multiply
 from tensorflow.keras import backend as K
+from tensorflow.keras.layers import (
+    Activation,
+    Add,
+    BatchNormalization,
+    Concatenate,
+    Conv2D,
+    Conv2DTranspose,
+    Dense,
+    GlobalAveragePooling2D,
+    Input,
+    MaxPooling2D,
+    Multiply,
+    Permute,
+    Reshape,
+    concatenate,
+    maximum,
+    multiply,
+)
 from tensorflow.keras.models import Model
 
 
-def attention_unet(filters, output_channels, width=None, height=None, input_channels=1, conv_layers=2):
+def attention_unet(
+    filters, output_channels, width=None, height=None, input_channels=1, conv_layers=2
+):
     def conv2d(layer_input, filters, conv_layers=2):
-        d = Conv2D(filters, kernel_size=(3, 3), strides=(1, 1), padding='same')(layer_input)
+        d = Conv2D(filters, kernel_size=(3, 3), strides=(1, 1), padding="same")(
+            layer_input
+        )
         d = BatchNormalization()(d)
-        d = Activation('relu')(d)
+        d = Activation("relu")(d)
 
         for i in range(conv_layers - 1):
-            d = Conv2D(filters, kernel_size=(3, 3), strides=(1, 1), padding='same')(d)
+            d = Conv2D(filters, kernel_size=(3, 3), strides=(1, 1), padding="same")(d)
             d = BatchNormalization()(d)
-            d = Activation('relu')(d)
+            d = Activation("relu")(d)
 
         return d
 
     def deconv2d(layer_input, filters):
-        u = Conv2DTranspose(filters, 2, strides=(2, 2), padding='same')(layer_input)
+        u = Conv2DTranspose(filters, 2, strides=(2, 2), padding="same")(layer_input)
         u = BatchNormalization()(u)
-        u = Activation('relu')(u)
+        u = Activation("relu")(u)
         return u
 
     def attention_block(F_g, F_l, F_int):
-        g = Conv2D(F_int, kernel_size=(1, 1), strides=(1, 1), padding='valid')(F_g)
+        g = Conv2D(F_int, kernel_size=(1, 1), strides=(1, 1), padding="valid")(F_g)
         g = BatchNormalization()(g)
-        x = Conv2D(F_int, kernel_size=(1, 1), strides=(1, 1), padding='valid')(F_l)
+        x = Conv2D(F_int, kernel_size=(1, 1), strides=(1, 1), padding="valid")(F_l)
         x = BatchNormalization()(x)
         psi = Add()([g, x])
-        psi = Activation('relu')(psi)
+        psi = Activation("relu")(psi)
 
-        psi = Conv2D(1, kernel_size=(1, 1), strides=(1, 1), padding='valid')(psi)
-        psi = Activation('sigmoid')(psi)
+        psi = Conv2D(1, kernel_size=(1, 1), strides=(1, 1), padding="valid")(psi)
+        psi = Activation("sigmoid")(psi)
 
         return Multiply()([F_l, psi])
 
@@ -73,30 +93,36 @@ def attention_unet(filters, output_channels, width=None, height=None, input_chan
     up9 = Concatenate()([up9, conv9])
     conv9 = conv2d(up9, filters, conv_layers=conv_layers)
 
-    outputs = Conv2D(output_channels, kernel_size=(1, 1), strides=(1, 1), activation='softmax')(conv9)
+    outputs = Conv2D(
+        output_channels, kernel_size=(1, 1), strides=(1, 1), activation="sigmoid"
+    )(conv9)
 
     model = Model(inputs=inputs, outputs=outputs)
 
     return model
 
 
-def base_unet(filters, output_channels, width=None, height=None, input_channels=1, conv_layers=2):
+def base_unet(
+    filters, output_channels, width=None, height=None, input_channels=1, conv_layers=2
+):
     def conv2d(layer_input, filters, conv_layers=2):
-        d = Conv2D(filters, kernel_size=(3, 3), strides=(1, 1), padding='same')(layer_input)
+        d = Conv2D(filters, kernel_size=(3, 3), strides=(1, 1), padding="same")(
+            layer_input
+        )
         d = BatchNormalization()(d)
-        d = Activation('relu')(d)
+        d = Activation("relu")(d)
 
         for i in range(conv_layers - 1):
-            d = Conv2D(filters, kernel_size=(3, 3), strides=(1, 1), padding='same')(d)
+            d = Conv2D(filters, kernel_size=(3, 3), strides=(1, 1), padding="same")(d)
             d = BatchNormalization()(d)
-            d = Activation('relu')(d)
+            d = Activation("relu")(d)
 
         return d
 
     def deconv2d(layer_input, filters):
-        u = Conv2DTranspose(filters, 2, strides=(2, 2), padding='same')(layer_input)
+        u = Conv2DTranspose(filters, 2, strides=(2, 2), padding="same")(layer_input)
         u = BatchNormalization()(u)
-        u = Activation('relu')(u)
+        u = Activation("relu")(u)
         return u
 
     inputs = Input(shape=(width, height, input_channels))
@@ -131,29 +157,35 @@ def base_unet(filters, output_channels, width=None, height=None, input_channels=
     up9 = Concatenate()([up9, conv1])
     conv9 = conv2d(up9, filters, conv_layers=conv_layers)
 
-    # Changed sigmoid to softmax, also changed output from 1 to 4
-    outputs = Conv2D(output_channels, kernel_size=(1, 1), strides=(1, 1), activation='softmax')(conv9)
+    # Changed sigmoid to sigmoid, also changed output from 1 to 4
+    outputs = Conv2D(
+        output_channels, kernel_size=(1, 1), strides=(1, 1), activation="sigmoid"
+    )(conv9)
 
     model = Model(inputs=inputs, outputs=outputs)
 
     return model
 
 
-def dense_unet(filters, output_channels, width=None, height=None, input_channels=1, conv_layers=2):
+def dense_unet(
+    filters, output_channels, width=None, height=None, input_channels=1, conv_layers=2
+):
     def conv2d(layer_input, filters, conv_layers=2):
         concats = []
 
-        d = Conv2D(filters, kernel_size=(3, 3), strides=(1, 1), padding='same')(layer_input)
+        d = Conv2D(filters, kernel_size=(3, 3), strides=(1, 1), padding="same")(
+            layer_input
+        )
         d = BatchNormalization()(d)
-        d = Activation('relu')(d)
+        d = Activation("relu")(d)
 
         concats.append(d)
         M = d
 
         for i in range(conv_layers - 1):
-            d = Conv2D(filters, kernel_size=(3, 3), strides=(1, 1), padding='same')(M)
+            d = Conv2D(filters, kernel_size=(3, 3), strides=(1, 1), padding="same")(M)
             d = BatchNormalization()(d)
-            d = Activation('relu')(d)
+            d = Activation("relu")(d)
 
             concats.append(d)
             M = concatenate(concats)
@@ -161,9 +193,9 @@ def dense_unet(filters, output_channels, width=None, height=None, input_channels
         return M
 
     def deconv2d(layer_input, filters):
-        u = Conv2DTranspose(filters, 2, strides=(2, 2), padding='same')(layer_input)
+        u = Conv2DTranspose(filters, 2, strides=(2, 2), padding="same")(layer_input)
         u = BatchNormalization()(u)
-        u = Activation('relu')(u)
+        u = Activation("relu")(u)
         return u
 
     inputs = Input(shape=(width, height, input_channels))
@@ -198,7 +230,9 @@ def dense_unet(filters, output_channels, width=None, height=None, input_channels
     merge9 = concatenate([conv1, up9])
     conv9 = conv2d(merge9, filters, conv_layers=conv_layers)
 
-    outputs = Conv2D(output_channels, kernel_size=(1, 1), strides=(1, 1), activation='softmax')(conv9)
+    outputs = Conv2D(
+        output_channels, kernel_size=(1, 1), strides=(1, 1), activation="sigmoid"
+    )(conv9)
 
     model = Model(inputs=inputs, outputs=outputs)
 
@@ -207,38 +241,38 @@ def dense_unet(filters, output_channels, width=None, height=None, input_channels
 
 def inception_unet(filters, output_channels, width=None, height=None, input_channels=1):
     def InceptionModule(inputs, filters):
-        tower0 = Conv2D(filters, (1, 1), padding='same')(inputs)
+        tower0 = Conv2D(filters, (1, 1), padding="same")(inputs)
         tower0 = BatchNormalization()(tower0)
-        tower0 = Activation('relu')(tower0)
+        tower0 = Activation("relu")(tower0)
 
-        tower1 = Conv2D(filters, (1, 1), padding='same')(inputs)
+        tower1 = Conv2D(filters, (1, 1), padding="same")(inputs)
         tower1 = BatchNormalization()(tower1)
-        tower1 = Activation('relu')(tower1)
-        tower1 = Conv2D(filters, (3, 3), padding='same')(tower1)
+        tower1 = Activation("relu")(tower1)
+        tower1 = Conv2D(filters, (3, 3), padding="same")(tower1)
         tower1 = BatchNormalization()(tower1)
-        tower1 = Activation('relu')(tower1)
+        tower1 = Activation("relu")(tower1)
 
-        tower2 = Conv2D(filters, (1, 1), padding='same')(inputs)
+        tower2 = Conv2D(filters, (1, 1), padding="same")(inputs)
         tower2 = BatchNormalization()(tower2)
-        tower2 = Activation('relu')(tower2)
-        tower2 = Conv2D(filters, (3, 3), padding='same')(tower2)
-        tower2 = Conv2D(filters, (3, 3), padding='same')(tower2)
+        tower2 = Activation("relu")(tower2)
+        tower2 = Conv2D(filters, (3, 3), padding="same")(tower2)
+        tower2 = Conv2D(filters, (3, 3), padding="same")(tower2)
         tower2 = BatchNormalization()(tower2)
-        tower2 = Activation('relu')(tower2)
+        tower2 = Activation("relu")(tower2)
 
-        tower3 = MaxPooling2D((3, 3), strides=(1, 1), padding='same')(inputs)
-        tower3 = Conv2D(filters, (1, 1), padding='same')(tower3)
+        tower3 = MaxPooling2D((3, 3), strides=(1, 1), padding="same")(inputs)
+        tower3 = Conv2D(filters, (1, 1), padding="same")(tower3)
         tower3 = BatchNormalization()(tower3)
-        tower3 = Activation('relu')(tower3)
+        tower3 = Activation("relu")(tower3)
 
         inception_module = concatenate([tower0, tower1, tower2, tower3], axis=3)
 
         return inception_module
 
     def deconv2d(layer_input, filters):
-        u = Conv2DTranspose(filters, 2, strides=(2, 2), padding='same')(layer_input)
+        u = Conv2DTranspose(filters, 2, strides=(2, 2), padding="same")(layer_input)
         u = BatchNormalization()(u)
-        u = Activation('relu')(u)
+        u = Activation("relu")(u)
 
         return u
 
@@ -274,108 +308,37 @@ def inception_unet(filters, output_channels, width=None, height=None, input_chan
     up9 = InceptionModule(up9, filters)
     merge9 = concatenate([conv1, up9], axis=3)
 
-    outputs = Conv2D(output_channels, kernel_size=(1, 1), strides=(1, 1), activation='softmax')(merge9)
+    outputs = Conv2D(
+        output_channels, kernel_size=(1, 1), strides=(1, 1), activation="sigmoid"
+    )(merge9)
 
     model = Model(inputs=inputs, outputs=outputs)
 
     return model
 
 
-def r2_unet(filters, output_channels, width=None, height=None, input_channels=1, conv_layers=2, rr_layers=2):
-    def recurrent_block(layer_input, filters, conv_layers=2, rr_layers=2):
-        convs = []
-        for i in range(conv_layers - 1):
-            a = Conv2D(filters, kernel_size=(3, 3), strides=(1, 1), padding='same')
-            convs.append(a)
-
-        d = layer_input
-        for i in range(len(convs)):
-            a = convs[i]
-            d = a(d)
-            d = BatchNormalization()(d)
-            d = Activation('relu')(d)
-
-        for j in range(rr_layers):
-            d = Add()([d, layer_input])
-            for i in range(len(convs)):
-                a = convs[i]
-                d = a(d)
-                d = BatchNormalization()(d)
-                d = Activation('relu')(d)
-
-        return d
-
-    def RRCNN_block(layer_input, filters, conv_layers=2, rr_layers=2):
-        d = Conv2D(filters, kernel_size=(3, 3), strides=(1, 1), padding='same')(layer_input)
-        d1 = recurrent_block(d, filters, conv_layers=conv_layers, rr_layers=rr_layers)
-        return Add()([d, d1])
-
-    def deconv2d(layer_input, filters):
-        u = Conv2DTranspose(filters, 2, strides=(2, 2), padding='same')(layer_input)
-        u = BatchNormalization()(u)
-        u = Activation('relu')(u)
-        return u
-
-    inputs = Input(shape=(width, height, input_channels))
-
-    conv1 = RRCNN_block(inputs, filters, conv_layers=conv_layers, rr_layers=rr_layers)
-    pool1 = MaxPooling2D(pool_size=(2, 2))(conv1)
-
-    conv2 = RRCNN_block(pool1, filters * 2, conv_layers=conv_layers, rr_layers=rr_layers)
-    pool2 = MaxPooling2D(pool_size=(2, 2))(conv2)
-
-    conv3 = RRCNN_block(pool2, filters * 4, conv_layers=conv_layers, rr_layers=rr_layers)
-    pool3 = MaxPooling2D(pool_size=(2, 2))(conv3)
-
-    conv4 = RRCNN_block(pool3, filters * 8, conv_layers=conv_layers, rr_layers=rr_layers)
-    pool4 = MaxPooling2D(pool_size=(2, 2))(conv4)
-
-    conv5 = RRCNN_block(pool4, filters * 16, conv_layers=conv_layers, rr_layers=rr_layers)
-
-    conv6 = deconv2d(conv5, filters * 8)
-    up6 = concatenate([conv6, conv4])
-    up6 = RRCNN_block(up6, filters * 8, conv_layers=conv_layers, rr_layers=rr_layers)
-
-    conv7 = Conv2DTranspose(filters * 4, 3, strides=(2, 2), padding='same')(up6)
-    up7 = concatenate([conv7, conv3])
-    up7 = RRCNN_block(up7, filters * 4, conv_layers=conv_layers, rr_layers=rr_layers)
-
-    conv8 = Conv2DTranspose(filters * 2, 3, strides=(2, 2), padding='same')(up7)
-    up8 = concatenate([conv8, conv2])
-    up8 = RRCNN_block(up8, filters * 2, conv_layers=conv_layers, rr_layers=rr_layers)
-
-    conv9 = Conv2DTranspose(filters, 3, strides=(2, 2), padding='same')(up8)
-    up9 = concatenate([conv9, conv1])
-    up9 = RRCNN_block(up9, filters, conv_layers=conv_layers, rr_layers=rr_layers)
-
-    output_layer_noActi = Conv2D(output_channels, (1, 1), padding="same", activation=None)(up9)
-    outputs = Activation('softmax')(output_layer_noActi)
-
-    model = Model(inputs=inputs, outputs=outputs)
-
-    return model
-
-
-def residual_unet(filters, output_channels, width=None, height=None, input_channels=1, conv_layers=2):
+def residual_unet(
+    filters, output_channels, width=None, height=None, input_channels=1, conv_layers=2
+):
     def residual_block(x, filters, conv_layers=2):
-        x = Conv2D(filters, kernel_size=(3, 3), strides=(1, 1), padding='same')(x)
+        x = Conv2D(filters, kernel_size=(3, 3), strides=(1, 1), padding="same")(x)
         x = BatchNormalization()(x)
-        x = Activation('relu')(x)
+        x = Activation("relu")(x)
 
         d = x
         for i in range(conv_layers - 1):
-            d = Conv2D(filters, kernel_size=(3, 3), strides=(1, 1), padding='same')(d)
+            d = Conv2D(filters, kernel_size=(3, 3), strides=(1, 1), padding="same")(d)
             d = BatchNormalization()(d)
-            d = Activation('relu')(d)
+            d = Activation("relu")(d)
 
         x = Add()([d, x])
 
         return x
 
     def deconv2d(layer_input, filters):
-        u = Conv2DTranspose(filters, 2, strides=(2, 2), padding='same')(layer_input)
+        u = Conv2DTranspose(filters, 2, strides=(2, 2), padding="same")(layer_input)
         u = BatchNormalization()(u)
-        u = Activation('relu')(u)
+        u = Activation("relu")(u)
         return u
 
     inputs = Input(shape=(width, height, input_channels))
@@ -410,31 +373,37 @@ def residual_unet(filters, output_channels, width=None, height=None, input_chann
     up9 = concatenate([conv9, conv1])
     up9 = residual_block(up9, filters, conv_layers=conv_layers)
 
-    output_layer_noActi = Conv2D(output_channels, (1, 1), padding="same", activation=None)(up9)
-    outputs = Activation('softmax')(output_layer_noActi)
+    output_layer_noActi = Conv2D(
+        output_channels, (1, 1), padding="same", activation=None
+    )(up9)
+    outputs = Activation("sigmoid")(output_layer_noActi)
 
     model = Model(inputs=inputs, outputs=outputs)
 
     return model
 
 
-def se_unet(filters, output_channels, width=None, height=None, input_channels=1, conv_layers=2):
+def se_unet(
+    filters, output_channels, width=None, height=None, input_channels=1, conv_layers=2
+):
     def conv2d(layer_input, filters, conv_layers=2):
-        d = Conv2D(filters, kernel_size=(3, 3), strides=(1, 1), padding='same')(layer_input)
+        d = Conv2D(filters, kernel_size=(3, 3), strides=(1, 1), padding="same")(
+            layer_input
+        )
         d = BatchNormalization()(d)
-        d = Activation('relu')(d)
+        d = Activation("relu")(d)
 
         for i in range(conv_layers - 1):
-            d = Conv2D(filters, kernel_size=(3, 3), strides=(1, 1), padding='same')(d)
+            d = Conv2D(filters, kernel_size=(3, 3), strides=(1, 1), padding="same")(d)
             d = BatchNormalization()(d)
-            d = Activation('relu')(d)
+            d = Activation("relu")(d)
 
         return d
 
     def deconv2d(layer_input, filters):
-        u = Conv2DTranspose(filters, 2, strides=(2, 2), padding='same')(layer_input)
+        u = Conv2DTranspose(filters, 2, strides=(2, 2), padding="same")(layer_input)
         u = BatchNormalization()(u)
-        u = Activation('relu')(u)
+        u = Activation("relu")(u)
         return u
 
     def cse_block(inp, ratio=2):
@@ -445,17 +414,17 @@ def se_unet(filters, output_channels, width=None, height=None, input_channels=1,
 
         se = GlobalAveragePooling2D()(init)
         se = Reshape(se_shape)(se)
-        se = Dense(filters // ratio, activation='relu', use_bias=False)(se)
-        se = Dense(filters, activation='sigmoid', use_bias=False)(se)
+        se = Dense(filters // ratio, activation="relu", use_bias=False)(se)
+        se = Dense(filters, activation="sigmoid", use_bias=False)(se)
 
-        if K.image_data_format() == 'channels_first':
+        if K.image_data_format() == "channels_first":
             se = Permute((3, 1, 2))(se)
 
         x = multiply([init, se])
         return x
 
     def sse_block(inp):
-        x = Conv2D(1, kernel_size=(1, 1), activation='sigmoid', use_bias=False)(inp)
+        x = Conv2D(1, kernel_size=(1, 1), activation="sigmoid", use_bias=False)(inp)
         x = multiply([inp, x])
 
         return x
@@ -509,30 +478,36 @@ def se_unet(filters, output_channels, width=None, height=None, input_channels=1,
     conv9 = conv2d(up9, filters, conv_layers=conv_layers)
     conv9 = scse_block(conv9)
 
-    outputs = Conv2D(output_channels, kernel_size=(1, 1), strides=(1, 1), activation='softmax')(conv9)
+    outputs = Conv2D(
+        output_channels, kernel_size=(1, 1), strides=(1, 1), activation="sigmoid"
+    )(conv9)
 
     model = Model(inputs=inputs, outputs=outputs)
 
     return model
 
 
-def unetpp(filters, output_channels, width=None, height=None, input_channels=1, conv_layers=2):
+def unetpp(
+    filters, output_channels, width=None, height=None, input_channels=1, conv_layers=2
+):
     def conv2d(layer_input, filters, conv_layers=2):
-        d = Conv2D(filters, kernel_size=(3, 3), strides=(1, 1), padding='same')(layer_input)
+        d = Conv2D(filters, kernel_size=(3, 3), strides=(1, 1), padding="same")(
+            layer_input
+        )
         d = BatchNormalization()(d)
-        d = Activation('relu')(d)
+        d = Activation("relu")(d)
 
         for i in range(conv_layers - 1):
-            d = Conv2D(filters, kernel_size=(3, 3), strides=(1, 1), padding='same')(d)
+            d = Conv2D(filters, kernel_size=(3, 3), strides=(1, 1), padding="same")(d)
             d = BatchNormalization()(d)
-            d = Activation('relu')(d)
+            d = Activation("relu")(d)
 
         return d
 
     def deconv2d(layer_input, filters):
-        u = Conv2DTranspose(filters, 2, strides=(2, 2), padding='same')(layer_input)
+        u = Conv2DTranspose(filters, 2, strides=(2, 2), padding="same")(layer_input)
         u = BatchNormalization()(u)
-        u = Activation('relu')(u)
+        u = Activation("relu")(u)
         return u
 
     inputs = Input(shape=(width, height, input_channels))
@@ -579,7 +554,7 @@ def unetpp(filters, output_channels, width=None, height=None, input_channels=1, 
     conv31 = concatenate([conv31, conv30])
     conv31 = conv2d(conv31, 8 * filters, conv_layers=conv_layers)
 
-    conv22 = deconv2d(conv31, filters* 4)
+    conv22 = deconv2d(conv31, filters * 4)
     conv22 = concatenate([conv22, conv20, conv21])
     conv22 = conv2d(conv22, 4 * filters, conv_layers=conv_layers)
 
@@ -591,7 +566,9 @@ def unetpp(filters, output_channels, width=None, height=None, input_channels=1, 
     conv04 = concatenate([conv04, conv00, conv01, conv02, conv03], axis=3)
     conv04 = conv2d(conv04, filters, conv_layers=conv_layers)
 
-    outputs = Conv2D(output_channels, kernel_size=(1, 1), strides=(1, 1), activation='softmax')(conv04)
+    outputs = Conv2D(
+        output_channels, kernel_size=(1, 1), strides=(1, 1), activation="sigmoid"
+    )(conv04)
 
     model = Model(inputs=inputs, outputs=outputs)
 
@@ -600,12 +577,13 @@ def unetpp(filters, output_channels, width=None, height=None, input_channels=1, 
 
 # define unet
 
+
 def build_unet(input_shape):
     def conv_block(input, num_filters):
         x = tf.keras.layers.Conv2D(num_filters, 3, padding="same")(input)
         x = tf.keras.layers.BatchNormalization()(x)
         x = tf.keras.layers.Activation("relu")(x)
-        
+
         x = tf.keras.layers.Conv2D(num_filters, 3, padding="same")(x)
         x = tf.keras.layers.BatchNormalization()(x)
         x = tf.keras.layers.Activation("relu")(x)
@@ -617,10 +595,13 @@ def build_unet(input_shape):
         return x, p
 
     def decoder_block(input, skip_features, num_filters):
-        x = tf.keras.layers.Conv2DTranspose(num_filters, (2, 2), strides=2, padding="same")(input)
+        x = tf.keras.layers.Conv2DTranspose(
+            num_filters, (2, 2), strides=2, padding="same"
+        )(input)
         x = tf.keras.layers.Concatenate()([x, skip_features])
         x = conv_block(x, num_filters)
         return x
+
     inputs = tf.keras.Input(input_shape)
 
     s1, p1 = encoder_block(inputs, 32)
@@ -631,8 +612,8 @@ def build_unet(input_shape):
 
     b0 = conv_block(p5, 512)
     flt_layer = tf.keras.layers.Flatten()(b0)
-    aux_dense_layer1 = tf.keras.layers.Dense(128, 'relu')(flt_layer)
-    aux_dense_layer2 = tf.keras.layers.Dense(2, 'softmax')(aux_dense_layer1)
+    aux_dense_layer1 = tf.keras.layers.Dense(128, "relu")(flt_layer)
+    aux_dense_layer2 = tf.keras.layers.Dense(2, "sigmoid")(aux_dense_layer1)
 
     d0 = decoder_block(b0, s5, 512)
     d1 = decoder_block(d0, s4, 256)
