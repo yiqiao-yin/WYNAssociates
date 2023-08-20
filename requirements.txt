@@ -15,3 +15,4 @@ setuptools                   == 67.4.0
 tensorflow                   == 2.12.0
 xgboost                      == 1.7.4
 yfinance                     == 0.2.14
+neuralprophet                == 0.6.2
