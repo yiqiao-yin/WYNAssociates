@@ -1,341 +1,424 @@
 <!DOCTYPE html>
 <html>
-<style>
-/* ------------------- */
-/* TEMPLATE        -- */
-/* ----------------- */
 
-@import url(https://fonts.googleapis.com/css?family=Lato:400,700,900,300);
-
-body { 
-    height: 100%;
-    background-color: rgb(17, 17, 17); 
-    color: whitesmoke; 
-    font-size: 16px; 
-    font-family: 'Luminari';
-} 
-h1 { font-size: 32px; }
-h2 { font-size: 26px; }
-h3 { font-size: 18px; }
-p { margin: 0 0 15px; line-height: 24px; color: gainsboro; }
-a { color: dodgerblue; text-decoration: none; border-bottom: 1px dotted; }
-a:hover { color: rgb(254, 124, 101); }
-
-.container { 
-    max-width: 80%;
-    height: 800px;
-    margin: 0 auto; 
-    padding: 20px;
-}
-
-/* ------------------- */
-/* PEN STYLES      -- */
-/* ----------------- */
-
-/* MAKE IT CUTE ----- */
-.tabs {
-    position: absolute;
-    display: -webkit-box;
-    width: 82%;
-    min-height: 250%;
-    border-radius: 0 0 0 0;
-    overflow: visible;
-}
-
-.tabby-tab {
-    flex: grow;
-    width: auto;
-    overflow: left;
-}
-
-.tabby-tab label {
-    display: block;
-    box-sizing: border-box;
-    /* tab content must clear this */
-    /* height: 40px; */
-    width: auto;
-    padding: 10px;
-    text-align: center;
-    font-size: auto;
-    background: #398bff;
-    cursor: pointer;
-    transition: background 0.3s ease;
-
-}
-
-.tabby-tab label:hover {
-  background:  rgb(254, 124, 101);
-  width: auto;
-}
-
-.tabby-content {
-    position: absolute;
-    left: 0; 
-    bottom: 0;
-    right: 0;
-    /* clear the tab labels */
-    top: 40px; 
-    padding: 20px;
-    border-radius: 0 0 8px 8px;
-    background: rgb(17, 17, 17);
-    transition: 
-        opacity 0.5s ease,
-        transform 0.8s ease;
-    opacity: 0;
-    transform: scale(0.1);
-    transform-origin: top left;
-  
-}
-
-.tabby-content img {
-  float: left;
-  margin-right: 5px;
-  border-radius: 8px;
-}
-
-
-/* MAKE IT WORK ----- */
-.tabby-tab [type=radio] {
-    display: none;
-}
-
-[type=radio]:checked ~ label {
-  background: rgb(17, 17, 17);
-  z-index: 2;
-}
-
-[type=radio]:checked ~ label ~ .tabby-content {
-  z-index: 1;
-  
-  /* show/hide */
-    opacity: 1;
-    transform: scale(1);
-}
-
-/* BREAKPOINTS ----- */
-@media screen and (max-width: 767px) {
-  .tabs { min-height: 400px;}
-}
-
-@media screen and (max-width: 480px) {
-  .tabs { min-height: 580px; }
-  .tabby-tab label { height: 60px; }
-  .tabby-content { top: 60px; }
-  .tabby-content img {
-    float: none;
-    margin-right: 0;
-    margin-bottom: 20px;
-  }
-}
-
-/* This is for TradingView Widget */
-/* Style the tab content */
-.tradingview-widget-container {
-    padding: 6px 12px;
-    max-height: 1100px;
-}
-
-.tradingview-widget-container-single-chart  {
-    /* padding: 6px 12px;
-    height: 1000px; */
-    max-height: 1500px;
-}
-
-/* Design for a button */
-.block {
-    display: block;
-    width: auto;
-    border: none;
-    background-color: #a8caf9;
-    padding: 14px 28px;
-    font-size: 20px;
-    font-family: 'Luminari';
-    /* cursor: pointer; */
-    text-align: center;
-    border-radius: 20px 20px 20px 20px;
-}
-
-
-details {
-    border: 1px solid #aaa;
-    border-radius: 4px;
-    padding: 0.5em 0.5em 0;
-    width: 150px;
-}
-
-summary {
-    font-weight: bold;
-    margin: -0.5em -0.5em 0;
-    padding: 0.5em;
-}
-
-details[open] {
-    padding: 0.5em;
-    width: 100%;
-}
-
-details[open] summary {
-    border-bottom: 1px solid #aaa;
-    margin-bottom: 0.5em;
-}
-
-
-</style>
 <head>
     <!-- Add url for website thumbnail -->
     <link rel="icon" href="https://wyn-associates.s3.amazonaws.com/public/yin-thumbnail.jpg">
     <!-- This is to fix emoji -->
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+    <style>
+
+        /* ------------------- */
+        /* TEMPLATE        -- */
+        /* ----------------- */
+
+        @import url(https://fonts.googleapis.com/css?family=Lato:400,700,900,300);
+
+        body { 
+            height: 100%;
+            background-color: rgb(17, 17, 17); 
+            color: whitesmoke; 
+            font-size: 16px; 
+            font-family: 'Luminari';
+        } 
+        h1 { font-size: 32px; }
+        h2 { font-size: 26px; }
+        h3 { font-size: 18px; }
+        p { margin: 0 0 15px; line-height: 24px; color: gainsboro; }
+        a { color: dodgerblue; text-decoration: none; border-bottom: 1px dotted; }
+        a:hover { color: rgb(254, 124, 101); }
+
+        .container { 
+            max-width: 80%;
+            height: 800px;
+            margin: 0 auto; 
+            padding: 20px;
+        }
+
+        /* ------------------- */
+        /* PEN STYLES      -- */
+        /* ----------------- */
+
+        /* MAKE IT CUTE ----- */
+        .tabs {
+            position: absolute;
+            display: -webkit-box;
+            width: 82%;
+            min-height: 250%;
+            border-radius: 0 0 0 0;
+            overflow: visible;
+        }
+
+        .tabby-tab {
+            flex: grow;
+            width: auto;
+            overflow: left;
+        }
+
+        .tabby-tab label {
+            display: block;
+            box-sizing: border-box;
+            /* tab content must clear this */
+            /* height: 40px; */
+            width: auto;
+            padding: 10px;
+            text-align: center;
+            font-size: auto;
+            background: #398bff;
+            cursor: pointer;
+            transition: background 0.3s ease;
+
+        }
+
+        .tabby-tab label:hover {
+        background:  rgb(254, 124, 101);
+        width: auto;
+        }
+
+        .tabby-content {
+            position: absolute;
+            left: 0; 
+            bottom: 0;
+            right: 0;
+            /* clear the tab labels */
+            top: 40px; 
+            padding: 20px;
+            border-radius: 0 0 8px 8px;
+            background: rgb(17, 17, 17);
+            transition: 
+                opacity 0.5s ease,
+                transform 0.8s ease;
+            opacity: 0;
+            transform: scale(0.1);
+            transform-origin: top left;
+        
+        }
+
+        .tabby-content img {
+        float: left;
+        margin-right: 5px;
+        border-radius: 8px;
+        }
+
+
+        /* MAKE IT WORK ----- */
+        .tabby-tab [type=radio] {
+            display: none;
+        }
+
+        [type=radio]:checked ~ label {
+        background: rgb(17, 17, 17);
+        z-index: 2;
+        }
+
+        [type=radio]:checked ~ label ~ .tabby-content {
+        z-index: 1;
+        
+        /* show/hide */
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* BREAKPOINTS ----- */
+        @media screen and (max-width: 767px) {
+        .tabs { min-height: 400px;}
+        }
+
+        @media screen and (max-width: 480px) {
+        .tabs { min-height: 580px; }
+        .tabby-tab label { height: 60px; }
+        .tabby-content { top: 60px; }
+        .tabby-content img {
+            float: none;
+            margin-right: 0;
+            margin-bottom: 20px;
+        }
+        }
+
+        /* This is for TradingView Widget */
+        /* Style the tab content */
+        .tradingview-widget-container {
+            padding: 6px 12px;
+            max-height: 1100px;
+        }
+
+        .tradingview-widget-container-single-chart  {
+            /* padding: 6px 12px;
+            height: 1000px; */
+            max-height: 1500px;
+        }
+
+        /* Design for a button */
+        .block {
+            display: block;
+            width: auto;
+            border: none;
+            background-color: #a8caf9;
+            padding: 14px 28px;
+            font-size: 20px;
+            font-family: 'Luminari';
+            /* cursor: pointer; */
+            text-align: center;
+            border-radius: 20px 20px 20px 20px;
+        }
+
+
+        details {
+            border: 1px solid #aaa;
+            border-radius: 4px;
+            padding: 0.5em 0.5em 0;
+            width: 150px;
+        }
+
+        summary {
+            font-weight: bold;
+            margin: -0.5em -0.5em 0;
+            padding: 0.5em;
+        }
+
+        details[open] {
+            padding: 0.5em;
+            width: 100%;
+        }
+
+        details[open] summary {
+            border-bottom: 1px solid #aaa;
+            margin-bottom: 0.5em;
+        }
+
+        /* Style the tab */
+        .tabforapps {
+            overflow: hidden;
+            border: 1px solid #ccc;
+            background-color: #f1f1f1;
+        }
+
+        /* Style the buttons inside the tab */
+        .tabforapps button {
+            background-color: inherit;
+            float: left;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 14px 16px;
+            transition: 0.3s;
+        }
+
+        /* Change background color of buttons on hover */
+        .tabforapps button:hover {
+            background-color: #ddd;
+        }
+
+        /* Create an active/current tablink class */
+        .tabforapps button.active {
+            background-color: #ccc;
+        }
+
+        /* Style the tab content */
+        .tabcontent {
+            display: none;
+            padding: 6px 12px;
+            border: 1px solid #ccc;
+            border-top: none;
+        }
+    </style>
 </head>
+
+
 <body>
+
+    <script>
+        function openDetails(evt, tabName) {
+          var i, tabcontent, tablinks;
+          tabcontent = document.getElementsByClassName("tabcontent");
+          for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+          }
+          tablinks = document.getElementsByClassName("tablinks");
+          for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+          }
+          document.getElementById(tabName).style.display = "block";
+          evt.currentTarget.className += " active";
+        }
+    </script>
+
     <div class="container">
         <!-- Content -->
         <h2>💼 Yiqiao Yin</h2>
         <p>This is <b>Yiqiao Yin</b>, and welcome to my personal site.</p>
         <h4>Personal Background:</h4>
-        <p>Most recently, I was a Senior Data Scientist / Machine Learning Engineer at an <a href="https://en.wikipedia.org/wiki/S%26P_500">S&P 500</a> company <a href="https://www.labcorp.com/">LabCorp</a>, developing AI-driven solutions in drug diagnostics, drug development, operations management, and financial decisions for our global leaders in life sciences (see Labcorp SEC filings <a href="https://www.sec.gov/edgar/browse/?CIK=920148&owner=exclude">here</a>). Prior, I have held professional positions such as enterprise-level Data Scientist at <a href="https://www.bayer.com/en/agriculture">Bayer</a> (a <a href="https://en.wikipedia.org/wiki/EURO_STOXX_50">EURO STOXX 50</a> company), Quantitative Researcher at <a href="https://www.aqr.com/">AQR</a> (a global hedge fund pioneering in alternative quantitative strategies to portfolio management and <a href="https://www.blackrock.com/us/individual/investment-ideas/what-is-factor-investing">factor-based trading</a>), and Equity Trader at <a href="https://t3trading.com/">T3 Trading</a> on Wall Street (where I was briefly licensed <a href="https://brokercheck.finra.org/individual/summary/6338834">Series 56</a> by <a href="https://www.finra.org/">FINRA</a>). I supervise a small fund specializing in algorithmic trading (since 2011, performance is <a href="https://yinscapital.com/letters/">here</a>) in equity market, cryptocurrencies, and real estate investment. I also run my own monetarized <a href="https://youtube.com/YiqiaoYin/">YouTube Channel</a>. Please feel free to add me on <a href="https://www.linkedin.com/in/yiqiaoyin/">LinkedIn</a>.</p>
-        <p>I am an Executive MBA candidate at the <a href="https://www.chicagobooth.edu/">Booth School of Business</a>, <a href="https://www.uchicago.edu/">University of Chicago</a> from 2023-2025. I was a PhD student in <a href="http://stat.columbia.edu/">Statistics</a> at <a href="https://www.columbia.edu/">Columbia University</a> from September of 2020 to December of 2021. I had a B.A. in <a href="https://www.sas.rochester.edu/mth/">Mathematics</a>, and an M.S. in <a href="https://simon.rochester.edu/programs/full-time-ms-in-finance">Finance</a> from <a href="https://www.rochester.edu/">University of Rochester</a>. I have a wide range of research interests in representation learning: <a href="https://en.wikipedia.org/wiki/Feature_learning">Feature Learning</a>, <a href="https://en.wikipedia.org/wiki/Deep_learning">Deep Learning</a>, <a href="https://en.wikipedia.org/wiki/Computer_vision">Computer Vision (CV)</a>, and <a href="https://en.wikipedia.org/wiki/Natural_language_processing">Natural Language Processing (NLP)</a>. In addition, I have also have some prior research experience in <a href="https://en.wikipedia.org/wiki/Financial_economics">Financial Eonomics</a> and <a href="https://en.wikipedia.org/wiki/Asset_pricing">Asset Pricing</a>.</p>
+        <p>Most recently, I was a Senior Data Scientist / Machine Learning Engineer at an <a href="https://en.wikipedia.org/wiki/S%26P_500">S&P 500</a> company, <a href="https://www.labcorp.com/">LabCorp</a>, developing AI-driven solutions 🧠💻 in drug diagnostics, drug development, operations management, and financial decisions for our global leaders in life sciences 🌍🔬 (see Labcorp SEC filings <a href="https://www.sec.gov/edgar/browse/?CIK=920148&owner=exclude">here</a>). Prior, I've held positions such as enterprise-level Data Scientist at <a href="https://www.bayer.com/en/agriculture">Bayer</a> (a <a href="https://en.wikipedia.org/wiki/EURO_STOXX_50">EURO STOXX 50</a> company), Quantitative Researcher at <a href="https://www.aqr.com/">AQR</a> (a global hedge fund pioneering in alternative quantitative strategies to portfolio management and <a href="https://www.blackrock.com/us/individual/investment-ideas/what-is-factor-investing">factor-based trading</a>), and Equity Trader at <a href="https://t3trading.com/">T3 Trading</a> on Wall Street (where I was briefly licensed <a href="https://brokercheck.finra.org/individual/summary/6338834">Series 56</a> by <a href="https://www.finra.org/">FINRA</a>). I supervise a small fund specializing in algorithmic trading (since 2011, performance is <a href="https://yinscapital.com/letters/">here</a>) in equity market, cryptocurrencies, and real estate investment. I also run my own monetized <a href="https://youtube.com/YiqiaoYin/">YouTube Channel</a>. Feel free to add me on <a href="https://www.linkedin.com/in/yiqiaoyin/">LinkedIn</a>. 🚀📈</p>
+        <p>I am an Executive MBA candidate at the <a href="https://www.chicagobooth.edu/">Booth School of Business</a>, <a href="https://www.uchicago.edu/">University of Chicago</a> from 2023-2025 📚🎓. I was a PhD student in <a href="http://stat.columbia.edu/">Statistics</a> at <a href="https://www.columbia.edu/">Columbia University</a> from September of 2020 to December of 2021 📈🎓. I earned a B.A. in <a href="https://www.sas.rochester.edu/mth/">Mathematics</a>, and an M.S. in <a href="https://simon.rochester.edu/programs/full-time-ms-in-finance">Finance</a> from <a href="https://www.rochester.edu/">University of Rochester</a> 💼📊. My research interests are wide-ranging in representation learning, including <a href="https://en.wikipedia.org/wiki/Feature_learning">Feature Learning</a>, <a href="https://en.wikipedia.org/wiki/Deep_learning">Deep Learning</a>, <a href="https://en.wikipedia.org/wiki/Computer_vision">Computer Vision (CV)</a>, and <a href="https://en.wikipedia.org/wiki/Natural_language_processing">Natural Language Processing (NLP)</a> 🤖👀. Additionally, I have some prior research experience in <a href="https://en.wikipedia.org/wiki/Financial_economics">Financial Economics</a> and <a href="https://en.wikipedia.org/wiki/Asset_pricing">Asset Pricing</a> 💹📉.</p>
         <h4>Passion Project:</h4>
         <p>At leisure, I run <a href="https://wyn-associates.com/">W.Y.N. Associates, LLC</a>, a registered legal entity in the state of New York, to pilot and drive for-profit personal passion projects.</p>
         <button type="button" class="block"><a href="https://calendly.com/eagle0504/1-1-with-yin">Contact Me</a></button>
         <p></p>
         <button type="button" class="block"><a href="https://wyn-education.streamlit.app/">Education Platform</a></button>
 
+        <h4>Deployed Apps:</h4>
+        <p><b>Since diving headfirst into the world of AI/ML back in 2016, I've been cooking up some cool apps to showcase my love for everything AI, ML, NLP, and GenAI! 🚀🤖 If you're keen to give them a whirl, simply hit that dropdown button to expand the app of your choice. Let's explore the future together! 🌟👩‍💻</b></p>
+        <div class="tabforapps">
+            <button class="tablinks" onclick="openDetails(event, 'Gemini1')">IDP Demo 💻</button>
+            <button class="tablinks" onclick="openDetails(event, 'Gemini2')">ChatGPT Clone 👬🏻</button>
+            <button class="tablinks" onclick="openDetails(event, 'Gemini3')">WYN Search 🧐</button>
+            <button class="tablinks" onclick="openDetails(event, 'Gemini4')">WYN Chatbot 🤖</button>
+            <button class="tablinks" onclick="openDetails(event, 'Gemini5')">WYN Advisor 💼</button>
+            <button class="tablinks" onclick="openDetails(event, 'Gemini6')">WYN Query 🧐</button>
+            <button class="tablinks" onclick="openDetails(event, 'Gemini7')">DataViz ⭐</button>
+            <button class="tablinks" onclick="openDetails(event, 'Gemini8')">Vision 👓</button>
+            <button class="tablinks" onclick="openDetails(event, 'Gemini9')">Langchain Query 👓🧐</button>
+            <button class="tablinks" onclick="openDetails(event, 'Gemini10')">Llama 🦙💬</button>
+          </div>
+          
+          <div id="Gemini1" class="tabcontent">
+            <details>
+                <summary>Expand/Collapse</summary>
+                <p>
+                    <iframe
+                        src="https://intelligent-document-processing.streamlit.app/?embed=true"
+                        title="iframe Example 1"
+                        width="100%"
+                        height="850px">
+                    </iframe>
+                </p>
+            </details>
+          </div>
+          
+          <div id="Gemini2" class="tabcontent">
+            <details>
+                <summary>Expand/Collapse</summary>
+                <p>
+                    <iframe
+                        src="https://wyn-chat.streamlit.app/?embed=true"
+                        title="iframe Example 1"
+                        width="100%"
+                        height="850px">
+                    </iframe>
+                </p>
+            </details>
+          </div>
+
+          <div id="Gemini3" class="tabcontent">
+            <details>
+                <summary>Expand/Collapse</summary>
+                <p>
+                    <iframe
+                        src="https://wyn-search.streamlit.app/?embed=true"
+                        title="iframe Example 1"
+                        width="100%"
+                        height="850px">
+                    </iframe>
+                </p>
+            </details>
+          </div>
+
+          <div id="Gemini4" class="tabcontent">
+            <details>
+                <summary>Expand/Collapse</summary>
+                <p>
+                    <iframe
+                        src="https://wyn-chatbot-io.streamlit.app/?embed=true"
+                        title="iframe Example 1"
+                        width="100%"
+                        height="850px">
+                    </iframe>
+                </p>
+            </details>
+          </div>
+
+          <div id="Gemini5" class="tabcontent">
+            <details>
+                <summary>Expand/Collapse</summary>
+                <p>
+                    <iframe
+                        src="https://wyn-advisor.streamlit.app/?embed=true"
+                        title="iframe Example 1"
+                        width="100%"
+                        height="850px">
+                    </iframe>
+                </p>
+            </details>
+          </div>
+
+          <div id="Gemini6" class="tabcontent">
+            <details>
+                <summary>Expand/Collapse</summary>
+                <p>
+                    <iframe
+                        src="https://yy-docquery.streamlit.app/?embed=true"
+                        title="iframe Example 1"
+                        width="100%"
+                        height="850px">
+                    </iframe>
+                </p>
+            </details>
+          </div>
+
+          <div id="Gemini7" class="tabcontent">
+            <details>
+                <summary>Expand/Collapse</summary>
+                <p>
+                    <iframe
+                        src="https://wyn-datasearch.streamlit.app/?embed=true"
+                        title="iframe Example 1"
+                        width="100%"
+                        height="850px">
+                    </iframe>
+                </p>
+            </details>
+          </div>
+
+          <div id="Gemini8" class="tabcontent">
+            <details>
+                <summary>Expand/Collapse</summary>
+                <p>
+                    <iframe
+                        src="https://wyn-vision.streamlit.app/?embed=true"
+                        title="iframe Example 1"
+                        width="100%"
+                        height="850px">
+                    </iframe>
+                </p>
+            </details>
+          </div>
+
+          <div id="Gemini9" class="tabcontent">
+            <details>
+                <summary>Expand/Collapse</summary>
+                <p>
+                    <iframe
+                        src="https://wyn-langchain-docquery.streamlit.app/?embed=true"
+                        title="iframe Example 1"
+                        width="100%"
+                        height="850px">
+                    </iframe>
+                </p>
+            </details>
+          </div>
+
+          <div id="Gemini10" class="tabcontent">
+            <details>
+                <summary>Expand/Collapse</summary>
+                <p>
+                    <iframe
+                        src="https://wyn-llama.streamlit.app/?embed=true"
+                        title="iframe Example 1"
+                        width="100%"
+                        height="850px">
+                    </iframe>
+                </p>
+            </details>
+          </div>
+
         <p></p>
-        <details>
-            <summary>Gemini Test 🚀</summary>
-            <p>
-                <iframe
-                    src="https://intelligent-document-processing.streamlit.app/?embed=true"
-                    title="iframe Example 1"
-                    width="100%"
-                    height="850px">
-                </iframe>
-            </p>
-        </details>
-        <p></p>
-        <p></p>
-        <details>
-            <summary>WYN Chat 🤖</summary>
-            <p>
-                <iframe
-                    src="https://wyn-chat.streamlit.app/?embed=true"
-                    title="iframe Example 1"
-                    width="100%"
-                    height="850px">
-                </iframe>
-            </p>
-        </details>
-        <p></p>
-        <p></p>
-        <details>
-            <summary>WYN Search 🧐</summary>
-            <p>
-                <iframe
-                    src="https://wyn-search.streamlit.app/?embed=true"
-                    title="iframe Example 1"
-                    width="100%"
-                    height="850px">
-                </iframe>
-            </p>
-        </details>
-        <p></p>
-        <details>
-            <summary>WYN Chatbot 🤖</summary>
-            <p>
-                <iframe
-                    src="https://wyn-chatbot-io.streamlit.app/?embed=true"
-                    title="Chatbot"
-                    width="100%"
-                    height="850px">
-                </iframe>
-            </p>
-        </details>
-        <p></p>
-        <p></p>
-        <details>
-            <summary>WYN Advisor 💼</summary>
-            <p>
-                <iframe
-                    src="https://wyn-advisor.streamlit.app/?embed=true"
-                    title="Advisor"
-                    width="100%"
-                    height="850px">
-                </iframe>
-            </p>
-        </details>
-        <p></p>
-        <p></p>
-        <details>
-            <summary>WYN Query 🧐</summary>
-            <p>
-                <iframe
-                    src="https://yy-docquery.streamlit.app/?embed=true"
-                    title="Query"
-                    width="100%"
-                    height="850px">
-                </iframe>
-            </p>
-        </details>
-        <p></p>
-        <p></p>
-        <details>
-            <summary>WYN DataViz ⭐</summary>
-            <p>
-                <iframe
-                    src="https://wyn-datasearch.streamlit.app/?embed=true"
-                    title="DataViz"
-                    width="100%"
-                    height="850px">
-                </iframe>
-            </p>
-        </details>
-        <p></p>
-        <p></p>
-        <details>
-            <summary>WYN Vision 👓</summary>
-            <p>
-                <iframe
-                    src="https://wyn-vision.streamlit.app/?embed=true"
-                    title="Vision"
-                    width="100%"
-                    height="850px">
-                </iframe>
-            </p>
-        </details>
-        <p></p>
-        <p></p>
-        <details>
-            <summary>LC Query 👓🧐</summary>
-            <p>
-                <iframe
-                    src="https://wyn-langchain-docquery.streamlit.app/?embed=true"
-                    title="LangchainQuery"
-                    width="100%"
-                    height="850px">
-                </iframe>
-            </p>
-        </details>
-        <p></p>
-        <p></p>
-        <details>
-            <summary>Llama 🦙💬</summary>
-            <p>
-                <iframe
-                    src="https://wyn-llama.streamlit.app/?embed=true"
-                    title="Llama"
-                    width="100%"
-                    height="850px">
-                </iframe>
-            </p>
-        </details>
         <p></p>
         <b>Copyright © 2010-2024 Present Yiqiao Yin</b>
         <p></p>
         <b>Feel free to click on any of the following buttons and view the content.</b>
         <p></p>
 
-        
 
         <div class="tabs">
           <div class="tabby-tab">
