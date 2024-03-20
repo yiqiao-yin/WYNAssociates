@@ -221,6 +221,18 @@
             border: 1px solid #ccc;
             border-top: none;
         }
+
+        /* Style for div in two columns*/
+        .row {
+            display: flex; /* This enables Flexbox, aligning children in a row */
+        }
+        
+        .column {
+            flex: 1; /* This causes the columns to equally share the horizontal space */
+            padding: 10px; /* Optional: Adds some space inside the columns */
+            border: 1px solid #ccc; /* Optional: Adds a border around each column */
+            margin: 2px; /* Optional: Adds some space between the columns */
+        }
     </style>
 </head>
 
@@ -246,95 +258,195 @@
         <!-- Content -->
         <h2>💼 Yiqiao Yin</h2>
         <h2><b>Portfolio Overview</b></h2>
-        <!-- TradingView Widget BEGIN -->
-        <div class="tradingview-widget-container">
-            <div class="tradingview-widget-container__widget"></div>
-            <div class="tradingview-widget-copyright"><a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank"><span class="blue-text">Track all markets on TradingView</span></a></div>
-            <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-symbol-overview.js" async>
-            {
-            "symbols": [
-            [
-                "Apple",
-                "AAPL|1Y"
-            ],
-            [
-                "Google",
-                "GOOGL|1Y"
-            ],
-            [
-                "Microsoft",
-                "MSFT|1Y"
-            ],
-            [
-                "NASDAQ:NFLX|1Y"
-            ],
-            [
-                "NASDAQ:TSLA|1Y"
-            ],
-            [
-                "NASDAQ:NVDA|1Y"
-            ],
-            [
-                "NYSE:TSM|1Y"
-            ],
-            [
-                "NYSE:DIS|1Y"
-            ],
-            [
-                "NYSE:V|1Y"
-            ],
-            [
-                "NASDAQ:AMD|1Y"
-            ],
-            [
-                "NYSE:BRK.B|1Y"
-            ],
-            [
-                "NYSE:ACHR|1Y"
-            ]
-            ],
-            "chartOnly": false,
-            "width": "100%",
-            "height": 450,
-            "locale": "en",
-            "colorTheme": "dark",
-            "autosize": false,
-            "showVolume": true,
-            "showMA": true,
-            "hideDateRanges": false,
-            "hideMarketStatus": false,
-            "hideSymbolLogo": false,
-            "scalePosition": "right",
-            "scaleMode": "Normal",
-            "fontFamily": "-apple-system, BlinkMacSystemFont, Trebuchet MS, Roboto, Ubuntu, sans-serif",
-            "fontSize": "12",
-            "noTimeScale": false,
-            "valuesTracking": "1",
-            "changeMode": "price-and-percent",
-            "chartType": "candlesticks",
-            "maLineColor": "#2962FF",
-            "maLineWidth": 1,
-            "maLength": 50,
-            "lineType": 0,
-            "dateRanges": [
-            "1d|1",
-            "1m|30",
-            "3m|60",
-            "12m|1D",
-            "60m|1W",
-            "all|1M"
-            ],
-            "upColor": "#22ab94",
-            "downColor": "#f7525f",
-            "borderUpColor": "#22ab94",
-            "borderDownColor": "#f7525f",
-            "wickUpColor": "#22ab94",
-            "wickDownColor": "#f7525f"
-        }
-            </script>
-        </div>
-        <!-- TradingView Widget END -->
+        <details>
+            <summary>Expand/Collapse</summary>
+            <div>
+                <div class="row">
+                    <div class="column">
+                        <!-- TradingView Widget BEGIN -->
+                        <div class="tradingview-widget-container">
+                            <div class="tradingview-widget-container__widget"></div>
+                            <div class="tradingview-widget-copyright"><a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank"><span class="blue-text">Track all markets on TradingView</span></a></div>
+                            <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-symbol-overview.js" async>
+                            {
+                            "symbols": [
+                            [
+                                "Apple",
+                                "AAPL|1D"
+                            ],
+                            [
+                                "Google",
+                                "GOOGL|1D"
+                            ],
+                            [
+                                "Microsoft",
+                                "MSFT|1D"
+                            ],
+                            [
+                                "NASDAQ:NFLX|1D"
+                            ],
+                            [
+                                "NASDAQ:TSLA|1D"
+                            ],
+                            [
+                                "NASDAQ:NVDA|1D"
+                            ],
+                            [
+                                "NYSE:TSM|1D"
+                            ],
+                            [
+                                "NYSE:DIS|1D"
+                            ],
+                            [
+                                "NYSE:V|1D"
+                            ],
+                            [
+                                "NASDAQ:AMD|1D"
+                            ],
+                            [
+                                "NYSE:BRK.B|1D"
+                            ],
+                            [
+                                "NYSE:ACHR|1D"
+                            ]
+                            ],
+                            "chartOnly": false,
+                            "width": "95%",
+                            "height": 450,
+                            "locale": "en",
+                            "colorTheme": "dark",
+                            "autosize": false,
+                            "showVolume": true,
+                            "showMA": true,
+                            "hideDateRanges": false,
+                            "hideMarketStatus": false,
+                            "hideSymbolLogo": false,
+                            "scalePosition": "right",
+                            "scaleMode": "Normal",
+                            "fontFamily": "-apple-system, BlinkMacSystemFont, Trebuchet MS, Roboto, Ubuntu, sans-serif",
+                            "fontSize": "12",
+                            "noTimeScale": false,
+                            "valuesTracking": "1",
+                            "changeMode": "price-and-percent",
+                            "chartType": "candlesticks",
+                            "maLineColor": "#2962FF",
+                            "maLineWidth": 1,
+                            "maLength": 50,
+                            "lineType": 0,
+                            "dateRanges": [
+                            "1d|1",
+                            "1m|30",
+                            "3m|60",
+                            "12m|1D",
+                            "60m|1W",
+                            "all|1M"
+                            ],
+                            "upColor": "#22ab94",
+                            "downColor": "#f7525f",
+                            "borderUpColor": "#22ab94",
+                            "borderDownColor": "#f7525f",
+                            "wickUpColor": "#22ab94",
+                            "wickDownColor": "#f7525f"
+                        }
+                            </script>
+                        </div>
+                        <!-- TradingView Widget END -->
+                    </div>
+                    <div class="column">
+                        <!-- TradingView Widget BEGIN -->
+                        <div class="tradingview-widget-container">
+                            <div class="tradingview-widget-container__widget"></div>
+                            <div class="tradingview-widget-copyright"><a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank"><span class="blue-text">Track all markets on TradingView</span></a></div>
+                            <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-symbol-overview.js" async>
+                            {
+                            "symbols": [
+                            [
+                                "Apple",
+                                "AAPL|1Y"
+                            ],
+                            [
+                                "Google",
+                                "GOOGL|1Y"
+                            ],
+                            [
+                                "Microsoft",
+                                "MSFT|1Y"
+                            ],
+                            [
+                                "NASDAQ:NFLX|1Y"
+                            ],
+                            [
+                                "NASDAQ:TSLA|1Y"
+                            ],
+                            [
+                                "NASDAQ:NVDA|1Y"
+                            ],
+                            [
+                                "NYSE:TSM|1Y"
+                            ],
+                            [
+                                "NYSE:DIS|1Y"
+                            ],
+                            [
+                                "NYSE:V|1Y"
+                            ],
+                            [
+                                "NASDAQ:AMD|1Y"
+                            ],
+                            [
+                                "NYSE:BRK.B|1Y"
+                            ],
+                            [
+                                "NYSE:ACHR|1Y"
+                            ]
+                            ],
+                            "chartOnly": false,
+                            "width": "95%",
+                            "height": 450,
+                            "locale": "en",
+                            "colorTheme": "dark",
+                            "autosize": false,
+                            "showVolume": true,
+                            "showMA": true,
+                            "hideDateRanges": false,
+                            "hideMarketStatus": false,
+                            "hideSymbolLogo": false,
+                            "scalePosition": "right",
+                            "scaleMode": "Normal",
+                            "fontFamily": "-apple-system, BlinkMacSystemFont, Trebuchet MS, Roboto, Ubuntu, sans-serif",
+                            "fontSize": "12",
+                            "noTimeScale": false,
+                            "valuesTracking": "1",
+                            "changeMode": "price-and-percent",
+                            "chartType": "candlesticks",
+                            "maLineColor": "#2962FF",
+                            "maLineWidth": 1,
+                            "maLength": 50,
+                            "lineType": 0,
+                            "dateRanges": [
+                            "1d|1",
+                            "1m|30",
+                            "3m|60",
+                            "12m|1D",
+                            "60m|1W",
+                            "all|1M"
+                            ],
+                            "upColor": "#22ab94",
+                            "downColor": "#f7525f",
+                            "borderUpColor": "#22ab94",
+                            "borderDownColor": "#f7525f",
+                            "wickUpColor": "#22ab94",
+                            "wickDownColor": "#f7525f"
+                        }
+                            </script>
+                        </div>
+                        <!-- TradingView Widget END -->
+                    </div>
+                </div>
+            </div>
+        </details>
 
+        <p></p>
         <p>This is <b>Yiqiao Yin</b>, and welcome to my personal site.</p>
         <!-- <h3>Personal Story:</h3>
         <quote>With over six years dedicated to the AI/ML domain, my journey is deeply rooted in a robust technical foundation, further enriched by my early training as a statistician. My professional path commenced at Columbia University, where I had the privilege of collaborating with esteemed post-docs and senior faculty members in an AI research lab. This role not only allowed me to contribute to the development and publication of innovative models and algorithms but also provided me with invaluable experience that I deeply cherish.
@@ -363,131 +475,35 @@
             <button class="tablinks" onclick="openDetails(event, 'Gemini8')">Vision 👓</button>
             <button class="tablinks" onclick="openDetails(event, 'Gemini9')">Tech Trader 💲</button>
         </div>
-          
-        <div id="Gemini1" class="tabcontent">
-        <details>
-            <summary>Expand/Collapse</summary>
-            <p>
-                <!-- <iframe
-                    src="https://intelligent-document-processing.streamlit.app/?embed=true"
-                    title="iframe Example 1"
-                    width="100%"
-                    height="850px">
-                </iframe> -->
-                <iframe
-                    src="https://eagle0504-idp-demo.hf.space"
-                    frameborder="0"
-                    width="100%"
-                    height="950px"
-                ></iframe>
-            </p>
-        </details>
-        </div>
-        
-        <div id="Gemini2" class="tabcontent">
-        <details>
-            <summary>Expand/Collapse</summary>
-            <p>
-                <iframe
-                    src="https://wyn-chat.streamlit.app/?embed=true"
-                    title="iframe Example 1"
-                    width="100%"
-                    height="950px">
-                </iframe>
-            </p>
-        </details>
-        </div>
 
-        <div id="Gemini3" class="tabcontent">
-        <details>
-            <summary>Expand/Collapse</summary>
-            <p>
-                <iframe
-                    src="https://wyn-search.streamlit.app/?embed=true"
-                    title="iframe Example 1"
-                    width="100%"
-                    height="950px">
-                </iframe>
-            </p>
-        </details>
-        </div>
-
-        <div id="Gemini4" class="tabcontent">
-        <details>
-            <summary>Expand/Collapse</summary>
-            <p>
-                <iframe
-                    src="https://wyn-chatbot-io.streamlit.app/?embed=true"
-                    title="iframe Example 1"
-                    width="100%"
-                    height="950px">
-                </iframe>
-            </p>
-        </details>
-        </div>
-
-        <div id="Gemini5" class="tabcontent">
-        <details>
-            <summary>Expand/Collapse</summary>
-            <p>
-                <iframe
-                    src="https://wyn-advisor.streamlit.app/?embed=true"
-                    title="iframe Example 1"
-                    width="100%"
-                    height="950px">
-                </iframe>
-            </p>
-        </details>
-        </div>
-
-        <div id="Gemini6" class="tabcontent">
-        <details>
-            <summary>Expand/Collapse</summary>
-            <p>
-                <iframe
-                    src="https://yy-docquery.streamlit.app/?embed=true"
-                    title="iframe Example 1"
-                    width="100%"
-                    height="950px">
-                </iframe>
-            </p>
-        </details>
-        </div>
-
-        <div id="Gemini7" class="tabcontent">
-        <details>
-            <summary>Expand/Collapse</summary>
-            <p>
-                <iframe
-                    src="https://wyn-datasearch.streamlit.app/?embed=true"
-                    title="iframe Example 1"
-                    width="100%"
-                    height="950px">
-                </iframe>
-            </p>
-        </details>
-        </div>
-
-        <div id="Gemini8" class="tabcontent">
-        <details>
-            <summary>Expand/Collapse</summary>
-            <p>
-                <iframe
-                    src="https://wyn-vision.streamlit.app/?embed=true"
-                    title="iframe Example 1"
-                    width="100%"
-                    height="950px">
-                </iframe>
-            </p>
-        </details>
-        </div>
-
-        <div id="Gemini9" class="tabcontent">
+        <!-- Event details for Apps above -->
+        <div>
+            <div id="Gemini1" class="tabcontent">
+            <details>
+                <summary>Expand/Collapse</summary>
+                <p>
+                    <!-- <iframe
+                        src="https://intelligent-document-processing.streamlit.app/?embed=true"
+                        title="iframe Example 1"
+                        width="100%"
+                        height="850px">
+                    </iframe> -->
+                    <iframe
+                        src="https://eagle0504-idp-demo.hf.space"
+                        frameborder="0"
+                        width="100%"
+                        height="950px"
+                    ></iframe>
+                </p>
+            </details>
+            </div>
+            
+            <div id="Gemini2" class="tabcontent">
             <details>
                 <summary>Expand/Collapse</summary>
                 <p>
                     <iframe
-                        src="https://technical-trader.streamlit.app//?embed=true"
+                        src="https://wyn-chat.streamlit.app/?embed=true"
                         title="iframe Example 1"
                         width="100%"
                         height="950px">
@@ -495,6 +511,106 @@
                 </p>
             </details>
             </div>
+    
+            <div id="Gemini3" class="tabcontent">
+            <details>
+                <summary>Expand/Collapse</summary>
+                <p>
+                    <iframe
+                        src="https://wyn-search.streamlit.app/?embed=true"
+                        title="iframe Example 1"
+                        width="100%"
+                        height="950px">
+                    </iframe>
+                </p>
+            </details>
+            </div>
+    
+            <div id="Gemini4" class="tabcontent">
+            <details>
+                <summary>Expand/Collapse</summary>
+                <p>
+                    <iframe
+                        src="https://wyn-chatbot-io.streamlit.app/?embed=true"
+                        title="iframe Example 1"
+                        width="100%"
+                        height="950px">
+                    </iframe>
+                </p>
+            </details>
+            </div>
+    
+            <div id="Gemini5" class="tabcontent">
+            <details>
+                <summary>Expand/Collapse</summary>
+                <p>
+                    <iframe
+                        src="https://wyn-advisor.streamlit.app/?embed=true"
+                        title="iframe Example 1"
+                        width="100%"
+                        height="950px">
+                    </iframe>
+                </p>
+            </details>
+            </div>
+    
+            <div id="Gemini6" class="tabcontent">
+            <details>
+                <summary>Expand/Collapse</summary>
+                <p>
+                    <iframe
+                        src="https://yy-docquery.streamlit.app/?embed=true"
+                        title="iframe Example 1"
+                        width="100%"
+                        height="950px">
+                    </iframe>
+                </p>
+            </details>
+            </div>
+    
+            <div id="Gemini7" class="tabcontent">
+            <details>
+                <summary>Expand/Collapse</summary>
+                <p>
+                    <iframe
+                        src="https://wyn-datasearch.streamlit.app/?embed=true"
+                        title="iframe Example 1"
+                        width="100%"
+                        height="950px">
+                    </iframe>
+                </p>
+            </details>
+            </div>
+    
+            <div id="Gemini8" class="tabcontent">
+            <details>
+                <summary>Expand/Collapse</summary>
+                <p>
+                    <iframe
+                        src="https://wyn-vision.streamlit.app/?embed=true"
+                        title="iframe Example 1"
+                        width="100%"
+                        height="950px">
+                    </iframe>
+                </p>
+            </details>
+            </div>
+    
+            <div id="Gemini9" class="tabcontent">
+                <details>
+                    <summary>Expand/Collapse</summary>
+                    <p>
+                        <iframe
+                            src="https://technical-trader.streamlit.app//?embed=true"
+                            title="iframe Example 1"
+                            width="100%"
+                            height="950px">
+                        </iframe>
+                    </p>
+                </details>
+                </div>
+
+        </div>
 
 
         <p></p>
@@ -580,78 +696,41 @@
                 <h2><b>Charts</b></h2>
                 <p>A quick preview of stock charts using TradingView widget. Technical indicators are selected by experience.</p>
                 <!-- TradingView Widget BEGIN -->
-                <div class="tradingview-widget-container-single-chart">
-                    <div id="technical-analysis-chart-demo"></div>
-                    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
-                    <script type="text/javascript">
-                        var studies = [
-                            {
-                                id: "MASimple@tv-basicstudies",
-                                inputs: {
-                                    length: 200
-                                }
-                            },
-                            {
-                                id: "MASimple@tv-basicstudies",
-                                inputs: {
-                                    length: 100
-                                }
-                            },
-                            {
-                                id: "MASimple@tv-basicstudies",
-                                inputs: {
-                                    length: 50
-                                }
-                            },
-                            {
-                                id: "MASimple@tv-basicstudies",
-                                inputs: {
-                                    length: 9
-                                }
-                            },
-                            {
-                                id: "RSI@tv-basicstudies",
-                                inputs: {
-                                    length: 52
-                                }
-                            },
-                            {
-                                id: "RSI@tv-basicstudies",
-                                inputs: {
-                                    length: 26
-                                }
-                            }
-                            
-                        ];
-
-                        new TradingView.widget(
-                            {
-                                "container_id": "technical-analysis-chart-demo",
-                                "width": "120%",
-                                "height": "255%",
-                                "autosize": true,
-                                "symbol": "AAPL",
-                                "interval": "D",
-                                "timezone": "exchange",
-                                "theme": "dark",
-                                "style": "1",
-                                "toolbar_bg": "#f1f3f6",
-                                "withdateranges": true,
-                                "hide_side_toolbar": false,
-                                "allow_symbol_change": true,
-                                "details": true,
-                                "save_image": false,
-                                "studies": studies,
-                                "show_popup_button": true,
-                                "popup_width": "1000",
-                                "popup_height": "650",
-                                "locale": "en"
-                            }
-                        );
+                <div class="tradingview-widget-container" style="height:100%;width:100%">
+                    <div class="tradingview-widget-container__widget" style="height:calc(100% - 32px);width:100%"></div>
+                    <div class="tradingview-widget-copyright"><a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank"><span class="blue-text">Track all markets on TradingView</span></a></div>
+                    <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
+                    {
+                    "autosize": true,
+                    "symbol": "NASDAQ:AAPL",
+                    "interval": "D",
+                    "timezone": "America/New_York",
+                    "theme": "dark",
+                    "style": "1",
+                    "locale": "en",
+                    "enable_publishing": false,
+                    "withdateranges": true,
+                    "hide_side_toolbar": false,
+                    "allow_symbol_change": true,
+                    "details": true,
+                    "hotlist": true,
+                    "calendar": false,
+                    "studies": [
+                    "STD;DEMA",
+                    "STD;Linear_Regression",
+                    "STD;MACD",
+                    "STD;EMA",
+                    "STD;MA%Ribbon",
+                    "STD;SMA",
+                    "STD;WMA",
+                    "STD;RSI"
+                    ],
+                    "support_host": "https://www.tradingview.com"
+                }
                     </script>
                 </div>
                 <!-- TradingView Widget END -->
-
+                
                 <h2><b>Stock Heatmap</b></h2>
                 <!-- TradingView Widget BEGIN -->
                 <div class="tradingview-widget-container">
@@ -672,7 +751,7 @@
                     "isZoomEnabled": true,
                     "hasSymbolTooltip": true,
                     "width": "100%",
-                    "height": "100%"
+                    "height": "80%"
                 }
                     </script>
                 </div>
@@ -764,47 +843,139 @@
             <label for="tab-2"><b>Watchlist</b></label>
             <div class="tabby-content">
                 <h2><b>Watchlist</b></h2>
-                <p>A pool of stocks pitched and held by Mr. Yiqiao Yin. No recommendations provided and is not for profit. This is for presentation only.</p>
+                <p>An overview of Mr. Market himself.</p>
                 <!-- TradingView Widget BEGIN -->
                 <div class="tradingview-widget-container">
-                    <div id="watchlist-chart-demo"></div>
-                    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
-                    <script type="text/javascript">
-                    new TradingView.widget(
+                    <div class="tradingview-widget-container__widget"></div>
+                    <div class="tradingview-widget-copyright"><a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank"><span class="blue-text">Track all markets on TradingView</span></a></div>
+                    <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-market-quotes.js" async>
+                    {
+                    "width": "100%",
+                    "height": "100%",
+                    "symbolsGroups": [
+                    {
+                        "name": "Indices",
+                        "originalName": "Indices",
+                        "symbols": [
                         {
-                            "container_id": "watchlist-chart-demo",
-                            "width": "100%",
-                            "height": "35%",
-                            "autosize": true,
-                            "symbol": "NASDAQ:AAPL",
-                            "interval": "D",
-                            "timezone": "exchange",
-                            "theme": "dark",
-                            "style": "1",
-                            "toolbar_bg": "#f1f3f6",
-                            "withdateranges": true,
-                            "allow_symbol_change": true,
-                            "save_image": false,
-                            "studies": studies,
-                            "watchlist": [
-                                "SPY", "DIA", "NDAQ", "QQQ",
-                                "AAPL", "META", "TSLA", "AMZN", 
-                                "DASH", "SPOT", "BIDU", "PINS", "SNAP", "Z", "YELP",
-                                "AMD", "NVDA", "IBM", "TSM", "META",
-                                "MSFT", "GOOGL", "AMZN", "DIS", "NFLX",
-                                "V", "MA", "AXP", "PYPL", "COF", "DFS",
-                                "WMT", "COST", "TGT", "DG", 
-                                "GD", "GLD", "ZM", "VMW", "AMC", "COUR", 
-                                "LH", "TMO", "IQV", "MRK", "MCK",
-                                "UNH", "ELV", "CI", "CVS", "HUM", "CNC", "MOH", "OSCR",
-                                "BTCUSD"
-                            ],
-                            "show_popup_button": true,
-                            "popup_width": "1000",
-                            "popup_height": "650",
-                            "locale": "en" 
+                            "name": "FOREXCOM:SPXUSD",
+                            "displayName": "S&P 500 Index"
+                        },
+                        {
+                            "name": "FOREXCOM:NSXUSD",
+                            "displayName": "US 100 Cash CFD"
+                        },
+                        {
+                            "name": "FOREXCOM:DJI",
+                            "displayName": "Dow Jones Industrial Average Index"
+                        },
+                        {
+                            "name": "INDEX:NKY",
+                            "displayName": "Nikkei 225"
+                        },
+                        {
+                            "name": "INDEX:DEU40",
+                            "displayName": "DAX Index"
+                        },
+                        {
+                            "name": "FOREXCOM:UKXGBP",
+                            "displayName": "FTSE 100 Index"
                         }
-                    );
+                        ]
+                    },
+                    {
+                        "name": "Futures",
+                        "originalName": "Futures",
+                        "symbols": [
+                        {
+                            "name": "CME_MINI:ES1!",
+                            "displayName": "S&P 500"
+                        },
+                        {
+                            "name": "CME:6E1!",
+                            "displayName": "Euro"
+                        },
+                        {
+                            "name": "COMEX:GC1!",
+                            "displayName": "Gold"
+                        },
+                        {
+                            "name": "NYMEX:CL1!",
+                            "displayName": "WTI Crude Oil"
+                        },
+                        {
+                            "name": "NYMEX:NG1!",
+                            "displayName": "Gas"
+                        },
+                        {
+                            "name": "CBOT:ZC1!",
+                            "displayName": "Corn"
+                        }
+                        ]
+                    },
+                    {
+                        "name": "Bonds",
+                        "originalName": "Bonds",
+                        "symbols": [
+                        {
+                            "name": "CBOT:ZB1!",
+                            "displayName": "T-Bond"
+                        },
+                        {
+                            "name": "CBOT:UB1!",
+                            "displayName": "Ultra T-Bond"
+                        },
+                        {
+                            "name": "EUREX:FGBL1!",
+                            "displayName": "Euro Bund"
+                        },
+                        {
+                            "name": "EUREX:FBTP1!",
+                            "displayName": "Euro BTP"
+                        },
+                        {
+                            "name": "EUREX:FGBM1!",
+                            "displayName": "Euro BOBL"
+                        }
+                        ]
+                    },
+                    {
+                        "name": "Forex",
+                        "originalName": "Forex",
+                        "symbols": [
+                        {
+                            "name": "FX:EURUSD",
+                            "displayName": "EUR to USD"
+                        },
+                        {
+                            "name": "FX:GBPUSD",
+                            "displayName": "GBP to USD"
+                        },
+                        {
+                            "name": "FX:USDJPY",
+                            "displayName": "USD to JPY"
+                        },
+                        {
+                            "name": "FX:USDCHF",
+                            "displayName": "USD to CHF"
+                        },
+                        {
+                            "name": "FX:AUDUSD",
+                            "displayName": "AUD to USD"
+                        },
+                        {
+                            "name": "FX:USDCAD",
+                            "displayName": "USD to CAD"
+                        }
+                        ]
+                    }
+                    ],
+                    "showSymbolLogo": true,
+                    "isTransparent": false,
+                    "colorTheme": "dark",
+                    "locale": "en",
+                    "backgroundColor": "#131722"
+                }
                     </script>
                 </div>
                 <!-- TradingView Widget END -->
@@ -817,8 +988,8 @@
                     <div class="tradingview-widget-copyright"><a href="https://www.tradingview.com/screener/" rel="noopener" target="_blank"><span class="blue-text">Stock screener</span></a> by TradingView</div>
                     <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-screener.js" async>
                     {
-                        "width": "98%",
-                        "height": "95%",
+                        "width": "100%",
+                        "height": "100%",
                         "defaultColumn": "overview",
                         "defaultScreen": "most_capitalized",
                         "showToolbar": true,
