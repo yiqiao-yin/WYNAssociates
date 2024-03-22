@@ -223,7 +223,12 @@
         }
 
         /* Style for div in two columns*/
-        .row {
+        .row_portfolio {
+            display: flex; /* This enables Flexbox, aligning children in a row */
+            height: 500px;
+        }
+
+        .row_heatmap {
             display: flex; /* This enables Flexbox, aligning children in a row */
             height: 1000px;
         }
@@ -262,7 +267,7 @@
         <details>
             <summary>Expand/Collapse</summary>
             <div>
-                <div class="row">
+                <div class="row_portfolio">
                     <div class="column">
                         <!-- TradingView Widget BEGIN -->
                         <div class="tradingview-widget-container">
@@ -630,26 +635,25 @@
             <label for="tab-1"><b>Charts</b></label>
             <div class="tabby-content">
                 <h2><b>Ticker Billboards</b></h2>
-                <!-- TradingView Widget BEGIN -->
 
                 <!-- TradingView Widget BEGIN -->
                 <div class="tradingview-widget-container">
                     <div class="tradingview-widget-container__widget"></div>
-                    <div class="tradingview-widget-copyright"><a href="https://www.tradingview.com/markets/" rel="noopener" target="_blank"><span class="blue-text">Markets today</span></a> by TradingView</div>
+                    <div class="tradingview-widget-copyright"><a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank"><span class="blue-text">Track all markets on TradingView</span></a></div>
                     <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
                     {
                     "symbols": [
                     {
                         "proName": "FOREXCOM:SPXUSD",
-                        "title": "S&P 500"
+                        "title": "S&P 500 Index"
                     },
                     {
                         "proName": "FOREXCOM:NSXUSD",
-                        "title": "US 100"
+                        "title": "US 100 Cash CFD"
                     },
                     {
                         "proName": "FX_IDC:EURUSD",
-                        "title": "EUR/USD"
+                        "title": "EUR to USD"
                     },
                     {
                         "proName": "BITSTAMP:BTCUSD",
@@ -660,38 +664,143 @@
                         "title": "Ethereum"
                     },
                     {
-                        "description": "Powershares",
-                        "proName": "NASDAQ:QQQ"
+                        "description": " Microsoft",
+                        "proName": "MSFT"
                     },
                     {
-                        "description": "Apple",
-                        "proName": "NASDAQ:AAPL"
+                        "description": "Apple Inc",
+                        "proName": "AAPL"
                     },
                     {
-                        "description": "Taiwan Semiconductor",
-                        "proName": "NYSE:TSM"
-                    },
-                    {
-                        "description": "Nvidia",
+                        "description": "NVIDIA Corp",
                         "proName": "NASDAQ:NVDA"
                     },
                     {
-                        "description": "Tesla",
+                        "description": "Amazon.com INc.",
+                        "proName": "AMZN"
+                    },
+                    {
+                        "description": "Alphabet Inc",
+                        "proName": "NASDAQ:GOOGL"
+                    },
+                    {
+                        "description": "Meta Platforms Inc",
+                        "proName": "META"
+                    },
+                    {
+                        "description": "Berkshire Hathaway Inc.",
+                        "proName": "BRK.B"
+                    },
+                    {
+                        "description": "Lilly(Eli) & Co",
+                        "proName": "NYSE:LLY"
+                    },
+                    {
+                        "description": "Broadcom Inc.",
+                        "proName": "AVGO"
+                    },
+                    {
+                        "description": "Visa Inc",
+                        "proName": "V"
+                    },
+                    {
+                        "description": "JPMorgan Chase & CO.",
+                        "proName": "JPM"
+                    },
+                    {
+                        "description": "Tesla Inc",
                         "proName": "TSLA"
                     },
                     {
-                        "description": "Google, Inc.",
-                        "proName": "GOOGL"
+                        "description": "Walmart Inc",
+                        "proName": "WMT"
+                    },
+                    {
+                        "description": "Mastercard Inc",
+                        "proName": "MA"
+                    },
+                    {
+                        "description": "Unitedhealth Group Inc",
+                        "proName": "UNH"
+                    },
+                    {
+                        "description": "Exxon Mobil Copr.",
+                        "proName": "XOM"
+                    },
+                    {
+                        "description": "Home Depot, Inc.",
+                        "proName": "HD"
+                    },
+                    {
+                        "description": "Procter & Gamble Co.",
+                        "proName": "PG"
+                    },
+                    {
+                        "description": "Johnson & Johnson",
+                        "proName": "JNJ"
+                    },
+                    {
+                        "description": "Oracle Corp",
+                        "proName": "ORCL"
+                    },
+                    {
+                        "description": "Costco Wholesale Corp",
+                        "proName": "COST"
+                    },
+                    {
+                        "description": "Abbvie Inc",
+                        "proName": "ABBV"
+                    },
+                    {
+                        "description": "Merck & Co",
+                        "proName": "MRK"
+                    },
+                    {
+                        "description": "Salesforce Inc",
+                        "proName": "CRM"
+                    },
+                    {
+                        "description": "Advanced Micro Devices INc.",
+                        "proName": "AMD"
+                    },
+                    {
+                        "description": "Chevron Corp.",
+                        "proName": "CVX"
+                    },
+                    {
+                        "description": "Netflix Inc.",
+                        "proName": "NFLX"
+                    },
+                    {
+                        "description": "Adobe Inc",
+                        "proName": "ADBE"
+                    },
+                    {
+                        "description": "Thermo Fisher Scientific Inc.",
+                        "proName": "TMO"
+                    },
+                    {
+                        "description": "Walt Disney Co",
+                        "proName": "DIS"
+                    },
+                    {
+                        "description": "McDonald's Corp",
+                        "proName": "MCD"
+                    },
+                    {
+                        "description": "Abbott Laboratories",
+                        "proName": "ABT"
                     }
                     ],
                     "showSymbolLogo": true,
-                    "colorTheme": "dark",
                     "isTransparent": true,
-                    "displayMode": "adaptive",
+                    "displayMode": "compact",
+                    "colorTheme": "dark",
                     "locale": "en"
                 }
                     </script>
                 </div>
+                <!-- TradingView Widget END -->
 
                 <!-- TradingView Widget END -->
                 <h2><b>Charts</b></h2>
@@ -733,10 +842,11 @@
                 <!-- TradingView Widget END -->
 
                 <h2><b>Heatmaps</b></h2>
+                <p>The heatmaps contain large volume of data and may not be present during trading hours.</p>
                 <details>
                     <summary>Expand/Collapse</summary>
                     <div>
-                        <div class="row">
+                        <div class="row_heatmap">
                             <div class="column">
 
                                 <h2><b>Stock Heatmap</b></h2>
