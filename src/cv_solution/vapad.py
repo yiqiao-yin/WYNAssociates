@@ -628,6 +628,44 @@ def train_step(images: tf.Tensor, twoDim: bool = True, print_loss: bool = False)
         tf.print("Total Loss:", total_loss)
 
 
+# Define training process:
+def train(dataset, epochs: int):
+    """
+    Trains a model for a specified number of epochs on the provided dataset.
+
+    Iterates through the dataset for the given number of epochs, processing batches of images.
+    Optionally prints out the loss every two epochs and at the end of each epoch prints out the
+    time taken to complete the epoch.
+
+    Parameters:
+        dataset (iterable): An iterable containing batches of images used for training.
+        epochs (int): The total number of epochs to train the model for.
+
+    """
+
+    print_loss = False  # Initialize print_loss flag
+
+    # Iterate over the number of epochs
+    for epoch in range(epochs):
+        start = time.time()  # Record the start time of the epoch
+
+        # Iterate over each batch in the dataset
+        for image_batch in tqdm(dataset):
+            if epoch % 2 == 0:
+                print_loss = True  # Set print_loss flag to True on even epochs
+            else:
+                print_loss = False  # Set print_loss flag to False on odd epochs
+            train_step(image_batch)  # Perform a training step with the current batch
+
+        # Calculate and print the time taken to complete the epoch
+        print("Time for epoch {} is {} sec".format(epoch + 1, time.time() - start))
+        # The following prints could be placeholders for additional functionality or logging
+        print("...")
+        print("...")
+        print("...")
+        print("...")
+
+
 # Define make_inference function
 def make_inference(
     input_image, generator: tf.keras.Model, twoDim: bool = True
