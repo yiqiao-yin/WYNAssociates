@@ -1,3 +1,4 @@
+import time
 from typing import Any, Dict, List, Tuple
 
 import matplotlib.pyplot as plt
@@ -556,17 +557,20 @@ def _mask_gen_helper_(
 
 
 # create generator model
-BATCH_SIZE = 64
-vapad_model = VapadModel(input_shape=(28, 28, 1))
+vapad_model = VapadModel(input_shape=(28, 28, 1), batch_size=64)
 generator = vapad_model.build_vapad_model()
-# define discriminator
 discriminator = make_discriminator_model()
 
 
 # Notice the use of `tf.function`
 # This annotation causes the function to be "compiled".
 @tf.function
-def train_step(images: tf.Tensor, twoDim: bool = True, print_loss: bool = False):
+def train_step(
+    images: tf.Tensor,
+    BATCH_SIZE: int = 64,
+    twoDim: bool = True,
+    print_loss: bool = False,
+):
     """
     Performs one training step for the generator and discriminator in a GAN setup.
 
@@ -643,6 +647,7 @@ def train(dataset, epochs: int):
 
     """
 
+    i = 0
     print_loss = False  # Initialize print_loss flag
 
     # Iterate over the number of epochs
@@ -651,11 +656,12 @@ def train(dataset, epochs: int):
 
         # Iterate over each batch in the dataset
         for image_batch in tqdm(dataset):
-            if epoch % 2 == 0:
+            if i % 100 == 0:
                 print_loss = True  # Set print_loss flag to True on even epochs
             else:
                 print_loss = False  # Set print_loss flag to False on odd epochs
             train_step(image_batch)  # Perform a training step with the current batch
+            i += 1
 
         # Calculate and print the time taken to complete the epoch
         print("Time for epoch {} is {} sec".format(epoch + 1, time.time() - start))
