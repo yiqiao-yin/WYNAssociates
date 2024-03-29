@@ -557,7 +557,7 @@ def _mask_gen_helper_(
 
 
 # create generator model
-vapad_model = VapadModel(input_shape=(28, 28, 1), batch_size=64)
+vapad_model = VapadModel(input_shape=(28, 28, 1), batch_size=32)
 generator = vapad_model.build_vapad_model()
 discriminator = make_discriminator_model()
 
@@ -567,7 +567,7 @@ discriminator = make_discriminator_model()
 @tf.function
 def train_step(
     images: tf.Tensor,
-    BATCH_SIZE: int = 64,
+    BATCH_SIZE: int = 32,
     twoDim: bool = True,
     print_loss: bool = False,
 ):
