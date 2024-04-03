@@ -576,8 +576,6 @@ def unetpp(
 
 
 # define unet
-
-
 def build_unet(input_shape):
     def conv_block(input, num_filters):
         x = tf.keras.layers.Conv2D(num_filters, 3, padding="same")(input)

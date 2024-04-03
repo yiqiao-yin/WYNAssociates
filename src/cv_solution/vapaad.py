@@ -11,7 +11,7 @@ from tqdm import tqdm
 
 
 # Define VapadModel Class Object:
-class VapadModel:
+class VapaadModel:
     def __init__(
         self,
         num_classes: int = 2,  # Number of output classes
