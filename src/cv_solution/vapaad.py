@@ -1,4 +1,5 @@
 import time
+from datetime import datetime
 from typing import Tuple
 
 import numpy as np
@@ -298,7 +299,7 @@ class VAPAAD:
                 f"> running: current sample {i + 1}, gen_loss={curr_gen_loss}, inst_loss={curr_inst_loss}, time={time.time() - start} sec"
             )
 
-    def __read_me__():
+    def __read_me__(self):
         """
         This function prints a multi-line formatted instruction manual for running a VAPAAD model.
 
@@ -309,6 +310,8 @@ class VAPAAD:
         There are no parameters for this function and it doesn't return anything.
         It simply prints the instructional text to the console when called.
         """
+        now = datetime.now()
+        current_year = now.year
         print(
             f"""
             ## Instructions
@@ -346,5 +349,7 @@ class VAPAAD:
             else:
                 vapaad_model.train(x_train_sub, y_train_sub, batch_size=BATCH_SIZE)
             ```
+
+            Copyright © 2010-{current_year} Present Yiqiao Yin
             """
         )
