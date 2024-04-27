@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Non-Overlapping Rectangle Expanders</title>
+<style>
+    body {
+        margin: 0;
+        height: 100vh;
+        background: linear-gradient(to right, black, silver);
+        position: relative;
+    }
+
+    .expander {
+        background-color: rgba(255, 255, 255, 0.8);
+        border: 1px solid #333;
+        padding: 10px;
+        width: 5px; /* initial width for small rectangles */
+        height: 5px; /* initial height for small rectangles */
+        overflow: hidden;
+        position: absolute;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .top-left { top: 10px; left: 10px; }
+    .top-right { top: 10px; right: 10px; }
+    .bottom-left { bottom: 10px; left: 10px; }
+    .bottom-right { bottom: 10px; right: 10px; }
+
+    .top-right {
+        width: 8px; /* initial width for top right rectangles */
+        height: 5px; /* initial height for top right rectangles */
+    }
+
+    .content {
+        display: none;
+        font-size: 1.2vw; /* responsive font size */
+    }
+</style>
+</head>
+<body>
+
+<!-- Top Left Expanders -->
+<div class="expander top-left" onclick="toggleContent(this)">Top Left 1
+    <div class="content">Content 1</div>
+</div>
+<div class="expander top-left" style="left: 22px;" onclick="toggleContent(this)">Top Left 2
+    <div class="content">Content 2</div>
+</div>
+
+<!-- Top Right Expanders -->
+<div class="expander top-right" onclick="toggleContent(this)">Top Right 1
+    <div class="content">Content 1</div>
+</div>
+<div class="expander top-right" style="right: 16px;" onclick="toggleContent(this)">Top Right 2
+    <div class="content">Content 2</div>
+</div>
+<div class="expander top-right" style="right: 32px;" onclick="toggleContent(this)">Top Right 3
+    <div class="content">Content 3</div>
+</div>
+
+<!-- Bottom Left Expanders -->
+<div class="expander bottom-left" onclick="toggleContent(this)">Bottom Left 1
+    <div class="content">Content 1</div>
+</div>
+<div class="expander bottom-left" style="left: 22px;" onclick="toggleContent(this)">Bottom Left 2
+    <div class="content">Content 2</div>
+</div>
+
+<!-- Bottom Right Expanders -->
+<div class="expander bottom-right" onclick="toggleContent(this)">Bottom Right 1
+    <div class="content">Content 1</div>
+</div>
+<div class="expander bottom-right" style="right: 22px;" onclick="toggleContent(this)">Bottom Right 2
+    <div class="content">Content 2</div>
+</div>
+
+<script>
+function toggleContent(element) {
+    var content = element.querySelector('.content');
+    if (content.style.display === 'block') {
+        content.style.display = 'none';
+        element.style.width = '5px';
+        element.style.height = '5px';
+        if (element.classList.contains('top-right')) {
+            element.style.width = '8px'; // Reset width for top right rectangles
+        }
+    } else {
+        content.style.display = 'block';
+        element.style.width = '30vw'; // expanded width
+        element.style.height = '20vh'; // expanded height
+    }
+}
+
+var expanders = document.querySelectorAll('.expander');
+expanders.forEach(expander => {
+    expander.addEventListener('mouseenter', function() {
+        this.style.width = '30vw'; // width when hovered
+        this.style.height = '20vh'; // height when hovered
+    });
+    expander.addEventListener('mouseleave', function() {
+        if (this.querySelector('.content').style.display !== 'block') {
+            this.style.width = '5px';
+            this.style.height = '5px';
+            if (this.classList.contains('top-right')) {
+                this.style.width = '8px'; // Reset width for top right rectangles
+            }
+        }
+    });
+});
+</script>
+</body>
+</html>
