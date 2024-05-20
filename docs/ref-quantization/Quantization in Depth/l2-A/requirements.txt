@@ -1,0 +1,7 @@
+# requirements file
+# For Python 3.9.18
+
+accelerate==0.26.1
+seaborn==0.13.1
+torch==2.1.1
+transformers==4.35.0
