@@ -75,33 +75,60 @@ def vapaad(input_shape: Tuple[int, int, int], image_size: int = 64) -> keras.Mod
         keras.Model: A compiled keras model ready for training.
     """
     # Initialize the data augmentation pipeline
-    data_augmentation = keras.Sequential([
-        # layers.RandomFlip("horizontal"),  # Randomly flip frames horizontally
-        layers.RandomRotation(factor=0.02),  # Randomly rotate frames by a small angle
-        # layers.RandomZoom(height_factor=0.1, width_factor=0.1),  # Randomly zoom in on frames
-    ], name="data_augmentation")
+    data_augmentation = keras.Sequential(
+        [
+            # layers.RandomFlip("horizontal"),  # Randomly flip frames horizontally
+            layers.RandomRotation(
+                factor=0.02
+            ),  # Randomly rotate frames by a small angle
+            # layers.RandomZoom(height_factor=0.1, width_factor=0.1),  # Randomly zoom in on frames
+        ],
+        name="data_augmentation",
+    )
 
-    inp = layers.Input(shape=input_shape)  # Define the input layer with the specified shape
+    inp = layers.Input(
+        shape=input_shape
+    )  # Define the input layer with the specified shape
 
     # Apply data augmentation to each frame using the TimeDistributed layer
     x = layers.TimeDistributed(data_augmentation)(inp)
 
     # First ConvLSTM2D layer with self-attention
-    x = layers.ConvLSTM2D(filters=64, kernel_size=(5, 5), padding="same", return_sequences=True, activation="relu")(x)
+    x = layers.ConvLSTM2D(
+        filters=64,
+        kernel_size=(5, 5),
+        padding="same",
+        return_sequences=True,
+        activation="relu",
+    )(x)
     x = layers.BatchNormalization()(x)  # Normalize the activations of the first layer
     x = SelfAttention()(x)  # Apply self-attention mechanism
 
     # Second ConvLSTM2D layer with self-attention
-    x = layers.ConvLSTM2D(filters=64, kernel_size=(3, 3), padding="same", return_sequences=True, activation="relu")(x)
+    x = layers.ConvLSTM2D(
+        filters=64,
+        kernel_size=(3, 3),
+        padding="same",
+        return_sequences=True,
+        activation="relu",
+    )(x)
     x = layers.BatchNormalization()(x)  # Normalize the activations of the second layer
     x = SelfAttention()(x)  # Apply self-attention mechanism
 
     # Third ConvLSTM2D layer with self-attention
-    x = layers.ConvLSTM2D(filters=64, kernel_size=(1, 1), padding="same", return_sequences=True, activation="relu")(x)
+    x = layers.ConvLSTM2D(
+        filters=64,
+        kernel_size=(1, 1),
+        padding="same",
+        return_sequences=True,
+        activation="relu",
+    )(x)
     x = SelfAttention()(x)  # Apply self-attention mechanism
 
     # Final Conv3D layer to produce the output
-    x = layers.Conv3D(filters=1, kernel_size=(3, 3, 3), activation="sigmoid", padding="same")(x)
+    x = layers.Conv3D(
+        filters=1, kernel_size=(3, 3, 3), activation="sigmoid", padding="same"
+    )(x)
 
     # Create the model
     model = keras.models.Model(inputs=inp, outputs=x)
@@ -111,7 +138,9 @@ def vapaad(input_shape: Tuple[int, int, int], image_size: int = 64) -> keras.Mod
 
 
 # Instructor model
-def instructor_model(input_shape: Tuple[int, int, int], image_size: int = 64) -> keras.Model:
+def instructor_model(
+    input_shape: Tuple[int, int, int], image_size: int = 64
+) -> keras.Model:
     """
     Builds a video processing model ending with fully connected layers.
 
@@ -123,9 +152,12 @@ def instructor_model(input_shape: Tuple[int, int, int], image_size: int = 64) ->
         keras.Model: A compiled keras model ready for training with a one-dimensional output.
     """
     # Initialize the data augmentation pipeline
-    data_augmentation = keras.Sequential([
-        layers.RandomRotation(factor=0.02),
-    ], name="data_augmentation")
+    data_augmentation = keras.Sequential(
+        [
+            layers.RandomRotation(factor=0.02),
+        ],
+        name="data_augmentation",
+    )
 
     inp = layers.Input(shape=input_shape)
 
@@ -133,26 +165,44 @@ def instructor_model(input_shape: Tuple[int, int, int], image_size: int = 64) ->
     x = layers.TimeDistributed(data_augmentation)(inp)
 
     # ConvLSTM2D layers with self-attention
-    x = layers.ConvLSTM2D(filters=64, kernel_size=(5, 5), padding="same", return_sequences=True, activation="relu")(x)
+    x = layers.ConvLSTM2D(
+        filters=64,
+        kernel_size=(5, 5),
+        padding="same",
+        return_sequences=True,
+        activation="relu",
+    )(x)
     x = layers.BatchNormalization()(x)
     x = SelfAttention()(x)
 
-    x = layers.ConvLSTM2D(filters=64, kernel_size=(3, 3), padding="same", return_sequences=True, activation="relu")(x)
+    x = layers.ConvLSTM2D(
+        filters=64,
+        kernel_size=(3, 3),
+        padding="same",
+        return_sequences=True,
+        activation="relu",
+    )(x)
     x = layers.BatchNormalization()(x)
     x = SelfAttention()(x)
 
-    x = layers.ConvLSTM2D(filters=64, kernel_size=(1, 1), padding="same", return_sequences=True, activation="relu")(x)
+    x = layers.ConvLSTM2D(
+        filters=64,
+        kernel_size=(1, 1),
+        padding="same",
+        return_sequences=True,
+        activation="relu",
+    )(x)
     x = SelfAttention()(x)
 
     # Adding global average pooling to reduce the dimensionality before dense layers
     x = layers.GlobalAveragePooling3D()(x)
 
     # Fully connected dense layers
-    x = layers.Dense(2048, activation='relu')(x)
-    x = layers.Dense(1024, activation='relu')(x)
+    x = layers.Dense(2048, activation="relu")(x)
+    x = layers.Dense(1024, activation="relu")(x)
 
     # Final dense layer for one-dimensional output
-    output = layers.Dense(1, activation='sigmoid')(x)
+    output = layers.Dense(1, activation="sigmoid")(x)
 
     # Create the model
     model = keras.models.Model(inputs=inp, outputs=output)
@@ -178,14 +228,14 @@ cross_entropy = tf.keras.losses.BinaryCrossentropy(from_logits=True)
 def generator_loss(fake_output: tf.Tensor) -> tf.Tensor:
     """
     Calculates the loss for the generator model based on its output for generated (fake) images.
-    
-    The loss encourages the generator to produce images that the instructor model classifies as real. 
-    This is achieved by comparing the generator's output for fake images against a target tensor of ones, 
+
+    The loss encourages the generator to produce images that the instructor model classifies as real.
+    This is achieved by comparing the generator's output for fake images against a target tensor of ones,
     indicating that the ideal output of the generator would be classified as real by the instructor model.
-    
+
     Args:
     fake_output (tf.Tensor): The generator model's output logits for generated (fake) images.
-    
+
     Returns:
     tf.Tensor: The loss for the generator model, encouraging it to generate more realistic images.
     """
@@ -228,6 +278,7 @@ from tqdm import tqdm
 # Ensure the generator and instructor models, as well as their optimizers,
 # are defined outside of this function, at a global level or before calling this train function.
 
+
 @tf.function
 def train_step(images, future_images):
     """
@@ -257,12 +308,18 @@ def train_step(images, future_images):
     # Calculate the gradients of the loss with respect to the generator's variables.
     gradients_of_generator = gen_tape.gradient(gen_loss, generator.trainable_variables)
     # Calculate the gradients of the loss with respect to the instructor's variables.
-    gradients_of_discriminator = disc_tape.gradient(disc_loss, instructor.trainable_variables)
+    gradients_of_discriminator = disc_tape.gradient(
+        disc_loss, instructor.trainable_variables
+    )
 
     # Apply the gradients to the generator's variables to update its weights.
-    generator_optimizer.apply_gradients(zip(gradients_of_generator, generator.trainable_variables))
+    generator_optimizer.apply_gradients(
+        zip(gradients_of_generator, generator.trainable_variables)
+    )
     # Apply the gradients to the instructor's variables to update its weights.
-    instructor_optimizer.apply_gradients(zip(gradients_of_discriminator, instructor.trainable_variables))
+    instructor_optimizer.apply_gradients(
+        zip(gradients_of_discriminator, instructor.trainable_variables)
+    )
 
 
 import numpy as np
@@ -271,7 +328,9 @@ import time
 from typing import Tuple
 
 
-def train(x_train: np.ndarray, y_train: np.ndarray, epochs: int, batch_size: int = 64) -> None:
+def train(
+    x_train: np.ndarray, y_train: np.ndarray, epochs: int, batch_size: int = 64
+) -> None:
     """
     Trains the model for a given number of epochs with specified batch size.
 
@@ -294,15 +353,23 @@ def train(x_train: np.ndarray, y_train: np.ndarray, epochs: int, batch_size: int
     # Iterate over the dataset for the specified number of epochs.
     for epoch in range(epochs):
         start = time.time()  # Record the start time of the epoch.
-        indices = np.arange(n_samples)  # Create an array of indices corresponding to the dataset.
-        np.random.shuffle(indices)  # Shuffle the indices to ensure random batch selection.
+        indices = np.arange(
+            n_samples
+        )  # Create an array of indices corresponding to the dataset.
+        np.random.shuffle(
+            indices
+        )  # Shuffle the indices to ensure random batch selection.
 
         # Iterate over the dataset in batches.
         for i in range(0, n_samples, batch_size):
-            selected_indices = np.random.choice(indices, size=batch_size, replace=False)  # Randomly select indices for the batch.
+            selected_indices = np.random.choice(
+                indices, size=batch_size, replace=False
+            )  # Randomly select indices for the batch.
             x_batch = x_train[selected_indices]  # Extract the batch of input data.
             y_batch = y_train[selected_indices]  # Extract the batch of target data.
-            train_step(x_batch, y_batch)  # Perform a training step with the selected batch.
+            train_step(
+                x_batch, y_batch
+            )  # Perform a training step with the selected batch.
 
         # Print the time taken to complete the epoch.
-        print(f'Time for epoch {epoch + 1} is {time.time() - start} sec')
+        print(f"Time for epoch {epoch + 1} is {time.time() - start} sec")

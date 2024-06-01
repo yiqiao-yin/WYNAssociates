@@ -1,18 +1,18 @@
 import os
-import time
 import pickle
+import time
+
+import matplotlib.pyplot as plt
+import mplfinance as mpf
 import numpy as np
 import pandas as pd
-from tqdm import tqdm
-import matplotlib.pyplot as plt
-from keras.models import Sequential
-from keras.layers import Dense
-from keras.layers import LSTM
-from keras.layers import Dropout
-import mplfinance as mpf
-import plotly.graph_objects as go
 import plotly.express as px
+import plotly.graph_objects as go
+from keras.layers import LSTM, Dense, Dropout
+from keras.models import Sequential
 from plotly.subplots import make_subplots
+from tqdm import tqdm
+
 
 class NST:
     """
@@ -94,8 +94,8 @@ class NST:
             print("------------------------------------------------------------------------------")
 
         # libraries
-        import pandas as pd
         import numpy as np
+        import pandas as pd
 
         # get data
         X_train = X.iloc[0:round(X.shape[0]*cutoff), :]
@@ -115,11 +115,10 @@ class NST:
 
         ### Build RNN
         # Importing the Keras libraries and packages
-        from keras.models import Sequential
-        from keras.layers import Dense
-        from keras.layers import LSTM
-        from keras.layers import Dropout
         import time
+
+        from keras.layers import LSTM, Dense, Dropout
+        from keras.models import Sequential
 
         # Initialize RNN
         begintime = time.time()
@@ -191,8 +190,8 @@ class NST:
             axs[0].plot(real_stock_price, color = 'red', label = f'Real Stock Price')
             axs[1].plot(predicted_stock_price, color = 'blue', label = f'Predicted Stock Price')
         if useMPLFinancePlot:
-            import pandas as pd
             import mplfinance as mpf
+            import pandas as pd
 
             predicted_stock_price = pd.DataFrame(predicted_stock_price)
             predicted_stock_price.columns = real_stock_price.columns

@@ -1,11 +1,13 @@
 import os
+
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
 import plotly.express as px
 import plotly.graph_objects as go
-from tensorflow.keras.callbacks import EarlyStopping
 from scalecast.Forecaster import Forecaster
+from tensorflow.keras.callbacks import EarlyStopping
+
 
 class TSForecast:
     """

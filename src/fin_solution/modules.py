@@ -13,7 +13,6 @@ import math
 
 # class
 class YinsFinancialTools:
-
     """
     Yin's Machine Learning Package for Financial Tools
     Copyright © W.Y.N. Associates, LLC, 2009 – Present

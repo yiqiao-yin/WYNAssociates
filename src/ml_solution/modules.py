@@ -44,7 +44,6 @@ class YinSystem:
 
 
 class YinsML:
-
     """
     Yin's Machine Learning Package
     Copyright © W.Y.N. Associates, LLC, 2009 – Present
