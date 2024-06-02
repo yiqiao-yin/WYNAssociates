@@ -6,7 +6,7 @@
 This is the official quantitative and statistical software package by W.Y.N. Associates, LLC or WYN Associates. Artificial Intelligence (AI) is the logical extension of human will. At WYN, we investigate marketable securities through not only the lens of human experience but also by machine power to discover the undiscovered intrinsic value of securities.
 
 <p align="center">
-  <img width="600" src="https://github.com/yiqiao-yin/WYNAssociates/blob/main/figs/main2.gif">
+  <img width="800" src="https://github.com/yiqiao-yin/WYNAssociates/blob/main/figs/main2.jpeg">
 </p>
 <p align="center">
 	<img src="https://img.shields.io/badge/stars-30+-blue.svg"/>
