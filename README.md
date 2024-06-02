@@ -13,8 +13,8 @@ This is the official quantitative and statistical software package by W.Y.N. Ass
 	<img src="https://img.shields.io/badge/license-CC0-blue.svg"/>
 </p>
 
-- Copyright © Official quantitative and statistical software published by WYN Associates.
-- Copyright © 2010 – Present Yiqiao Yin
+- Copyright © Official quantitative and statistical software published by [W.Y.N. Associates, LLC](https://wyn-associates.com/).
+- Copyright © 2010 – Present [Yiqiao Yin](https://www.y-yin.io/)
 - Contact: Yiqiao Yin
 - Official Site: https://www.WYN-Associates.com
 - Email: Yiqiao.Yin@wyn-associates.com
