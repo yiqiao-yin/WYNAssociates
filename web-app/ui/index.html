@@ -239,6 +239,50 @@
             border: 1px solid #ccc; /* Optional: Adds a border around each column */
             margin: 2px; /* Optional: Adds some space between the columns */
         }
+
+        .widget {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        .widget-btn {
+            background-color: #0059ff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .widget-btn:hover {
+            background-color: #0056b3;
+        }
+        .widget-content {
+            display: none;
+            position: fixed;
+            bottom: 70px;
+            right: 20px;
+            width: 50%;
+            height: 80%;
+            background-color: #2e2e3e;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+        }
+        .widget-content iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        .close-widget {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            font-size: 20px;
+            color: white;
+            cursor: pointer;
+        }
     </style>
 </head>
 
@@ -257,6 +301,15 @@
           }
           document.getElementById(tabName).style.display = "block";
           evt.currentTarget.className += " active";
+        }
+
+        function toggleWidget() {
+            const widgetContent = document.getElementById('widgetContent');
+            if (widgetContent.style.display === 'none' || widgetContent.style.display === '') {
+                widgetContent.style.display = 'block';
+            } else {
+                widgetContent.style.display = 'none';
+            }
         }
     </script>
 
@@ -1730,5 +1783,13 @@
         <!-- <footnote>
             <h4><b>Copyright © 2010-2023 Present Yiqiao Yin</b></h4>
         </footnote> -->
+
+        <div class="widget">
+            <button class="widget-btn" onclick="toggleWidget()">🧐🕵 Copilot</button>
+            <div id="widgetContent" class="widget-content">
+                <span class="close-widget" onclick="toggleWidget()">&times;</span>
+                <iframe src="https://eagle0504-y-yin-homepage.hf.space"></iframe>
+            </div>
+        </div>
 </body>
 </html>
