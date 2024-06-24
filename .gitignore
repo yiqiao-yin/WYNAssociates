@@ -1,4 +1,5 @@
 /docs/ref-deeplearning/.ipynb_checkpoints/*
+/docs/ref-deeplearning/.env
 /docs/git_passcode/*
 .ipynb_checkpoints/*
 .venv
