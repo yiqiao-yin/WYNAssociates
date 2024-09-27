@@ -139,13 +139,13 @@
         /* Style the tab content */
         .tradingview-widget-container {
             padding: 6px 12px;
-            max-height: 1100px;
+            max-height: 1200px;
         }
 
         .tradingview-widget-container-single-chart  {
             /* padding: 6px 12px;
             height: 1000px; */
-            max-height: 1500px;
+            max-height: 1600px;
         }
 
         /* Design for a button */
@@ -396,6 +396,10 @@
             {
                 "description": "Shopify Inc.",
                 "proName": "SHOP"
+            },
+            {
+                "description": "Micron Technology Inc.",
+                "proName": "MU"
             }
             ],
             "showSymbolLogo": true,
@@ -480,6 +484,9 @@
                                 ],
                                 [
                                     "NYSE:SHOP|1D"
+                                ],
+                                [
+                                    "NASDAQ:MU|1D"
                                 ]
                             ],
                             "chartOnly": false,
@@ -588,6 +595,9 @@
                                 ],
                                 [
                                     "NYSE:SHOP|1Y"
+                                ],
+                                [
+                                    "NASDAQ:MU|1Y"
                                 ]
                             ],
                             "chartOnly": false,
@@ -698,6 +708,9 @@
                                 ],
                                 [
                                     "NYSE:SHOP|1M"
+                                ],
+                                [
+                                    "NASDAQ:MU|1M"
                                 ]
                             ],
                             "chartOnly": false,
@@ -806,6 +819,9 @@
                                 ],
                                 [
                                     "NYSE:SHOP|60M"
+                                ],
+                                [
+                                    "NASDAQ:MU|60M"
                                 ]
                             ],
                             "chartOnly": false,
@@ -882,7 +898,6 @@
         <div class="tabforapps">
             <button class="tablinks" onclick="openDetails(event, 'Gemini1')">IDP Demo 💻</button>
             <button class="tablinks" onclick="openDetails(event, 'Gemini7')">DataViz ⭐</button>
-            <button class="tablinks" onclick="openDetails(event, 'Gemini2')">ChatGPT Clone 👬🏻</button>
             <button class="tablinks" onclick="openDetails(event, 'Gemini15')">Llama Clone 🦙</button>
             <button class="tablinks" onclick="openDetails(event, 'Gemini16')">Duel Agents 🦙🦙</button>
             <button class="tablinks" onclick="openDetails(event, 'Gemini4')">Quantized RAG 🤖</button>
@@ -890,7 +905,6 @@
             <button class="tablinks" onclick="openDetails(event, 'Gemini12')">Stock Forecast💲</button>
             <button class="tablinks" onclick="openDetails(event, 'Gemini10')">Momentum Strategy Screener 🧐</button>
             <button class="tablinks" onclick="openDetails(event, 'Gemini5')">WYN Advisor 💼</button>
-            <button class="tablinks" onclick="openDetails(event, 'Gemini11')">YOLO Demo 👀</button>
             <button class="tablinks" onclick="openDetails(event, 'Gemini17')">Claude Sonnet 🧐</button>
         </div>
 
@@ -912,20 +926,6 @@
                         width="100%"
                         height="950px"
                     ></iframe>
-                </p>
-            </details>
-            </div>
-            
-            <div id="Gemini2" class="tabcontent">
-            <details>
-                <summary>Expand/Collapse</summary>
-                <p>
-                    <iframe
-                        src="https://wyn-chat.streamlit.app/?embed=true"
-                        title="iframe Example 1"
-                        width="100%"
-                        height="950px">
-                    </iframe>
                 </p>
             </details>
             </div>
@@ -992,20 +992,6 @@
                     <p>
                         <iframe
                             src="https://eagle0504-momentum-strategy-screener.hf.space"
-                            title="iframe Example 1"
-                            width="100%"
-                            height="950px">
-                        </iframe>
-                    </p>
-                </details>
-            </div>
-
-            <div id="Gemini11" class="tabcontent">
-                <details>
-                    <summary>Expand/Collapse</summary>
-                    <p>
-                        <iframe
-                            src="https://face-detection-demo.streamlit.app/?embed=true"
                             title="iframe Example 1"
                             width="100%"
                             height="950px">
@@ -1088,207 +1074,41 @@
             <input type="radio" id="tab-1" name="tabby-tabs">
             <label for="tab-1"><b>Charts</b></label>
             <div class="tabby-content">
-                <h2><b>Ticker Billboards</b></h2>
-
-                <!-- TradingView Widget BEGIN -->
-                <div class="tradingview-widget-container">
-                    <div class="tradingview-widget-container__widget"></div>
-                    <div class="tradingview-widget-copyright"><a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank"><span class="blue-text">Track all markets on TradingView</span></a></div>
-                    <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
-                    {
-                    "symbols": [
-                    {
-                        "proName": "FOREXCOM:SPXUSD",
-                        "title": "S&P 500 Index"
-                    },
-                    {
-                        "proName": "FOREXCOM:NSXUSD",
-                        "title": "US 100 Cash CFD"
-                    },
-                    {
-                        "proName": "FX_IDC:EURUSD",
-                        "title": "EUR to USD"
-                    },
-                    {
-                        "proName": "BITSTAMP:BTCUSD",
-                        "title": "Bitcoin"
-                    },
-                    {
-                        "proName": "BITSTAMP:ETHUSD",
-                        "title": "Ethereum"
-                    },
-                    {
-                        "description": " Microsoft",
-                        "proName": "MSFT"
-                    },
-                    {
-                        "description": "Apple Inc",
-                        "proName": "AAPL"
-                    },
-                    {
-                        "description": "NVIDIA Corp",
-                        "proName": "NASDAQ:NVDA"
-                    },
-                    {
-                        "description": "Amazon.com INc.",
-                        "proName": "AMZN"
-                    },
-                    {
-                        "description": "Alphabet Inc",
-                        "proName": "NASDAQ:GOOGL"
-                    },
-                    {
-                        "description": "Meta Platforms Inc",
-                        "proName": "META"
-                    },
-                    {
-                        "description": "Berkshire Hathaway Inc.",
-                        "proName": "BRK.B"
-                    },
-                    {
-                        "description": "Lilly(Eli) & Co",
-                        "proName": "NYSE:LLY"
-                    },
-                    {
-                        "description": "Broadcom Inc.",
-                        "proName": "AVGO"
-                    },
-                    {
-                        "description": "Visa Inc",
-                        "proName": "V"
-                    },
-                    {
-                        "description": "JPMorgan Chase & CO.",
-                        "proName": "JPM"
-                    },
-                    {
-                        "description": "Tesla Inc",
-                        "proName": "TSLA"
-                    },
-                    {
-                        "description": "Walmart Inc",
-                        "proName": "WMT"
-                    },
-                    {
-                        "description": "Mastercard Inc",
-                        "proName": "MA"
-                    },
-                    {
-                        "description": "Unitedhealth Group Inc",
-                        "proName": "UNH"
-                    },
-                    {
-                        "description": "Exxon Mobil Copr.",
-                        "proName": "XOM"
-                    },
-                    {
-                        "description": "Home Depot, Inc.",
-                        "proName": "HD"
-                    },
-                    {
-                        "description": "Procter & Gamble Co.",
-                        "proName": "PG"
-                    },
-                    {
-                        "description": "Johnson & Johnson",
-                        "proName": "JNJ"
-                    },
-                    {
-                        "description": "Oracle Corp",
-                        "proName": "ORCL"
-                    },
-                    {
-                        "description": "Costco Wholesale Corp",
-                        "proName": "COST"
-                    },
-                    {
-                        "description": "Abbvie Inc",
-                        "proName": "ABBV"
-                    },
-                    {
-                        "description": "Merck & Co",
-                        "proName": "MRK"
-                    },
-                    {
-                        "description": "Salesforce Inc",
-                        "proName": "CRM"
-                    },
-                    {
-                        "description": "Advanced Micro Devices INc.",
-                        "proName": "AMD"
-                    },
-                    {
-                        "description": "Chevron Corp.",
-                        "proName": "CVX"
-                    },
-                    {
-                        "description": "Netflix Inc.",
-                        "proName": "NFLX"
-                    },
-                    {
-                        "description": "Adobe Inc",
-                        "proName": "ADBE"
-                    },
-                    {
-                        "description": "Thermo Fisher Scientific Inc.",
-                        "proName": "TMO"
-                    },
-                    {
-                        "description": "Walt Disney Co",
-                        "proName": "DIS"
-                    },
-                    {
-                        "description": "McDonald's Corp",
-                        "proName": "MCD"
-                    },
-                    {
-                        "description": "Abbott Laboratories",
-                        "proName": "ABT"
-                    }
-                    ],
-                    "showSymbolLogo": true,
-                    "isTransparent": true,
-                    "displayMode": "compact",
-                    "colorTheme": "dark",
-                    "locale": "en"
-                }
-                    </script>
-                </div>
-                <!-- TradingView Widget END -->
 
                 <!-- TradingView Widget END -->
                 <h2><b>Charts</b></h2>
                 <p>A quick preview of stock charts using TradingView widget. Technical indicators are selected by experience.</p>
+
                 <!-- TradingView Widget BEGIN -->
                 <div class="tradingview-widget-container" style="height:100%;width:100%">
                     <div class="tradingview-widget-container__widget" style="height:calc(100% - 32px);width:100%"></div>
                     <div class="tradingview-widget-copyright"><a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank"><span class="blue-text">Track all markets on TradingView</span></a></div>
                     <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
                     {
-                    "autosize": true,
-                    "symbol": "NASDAQ:AAPL",
-                    "interval": "D",
-                    "timezone": "America/New_York",
-                    "theme": "dark",
-                    "style": "1",
-                    "locale": "en",
-                    "enable_publishing": false,
-                    "withdateranges": true,
-                    "hide_side_toolbar": false,
-                    "allow_symbol_change": true,
-                    "details": true,
-                    "hotlist": true,
-                    "calendar": false,
-                    "studies": [
-                    "STD;DEMA",
-                    "STD;Linear_Regression",
-                    "STD;MACD",
-                    "STD;EMA",
-                    "STD;MA%Ribbon",
-                    "STD;SMA",
-                    "STD;WMA",
-                    "STD;RSI"
-                    ],
+                        "autosize": true,
+                        "symbol": "NASDAQ:TSLA",
+                        "timezone": "America/New_York",
+                        "theme": "dark",
+                        "style": "1",
+                        "locale": "en",
+                        "backgroundColor": "rgba(0, 0, 0, 1)",
+                        "withdateranges": true,
+                        "range": "12M",
+                        "hide_side_toolbar": false,
+                        "allow_symbol_change": true,
+                        "details": true,
+                        "hotlist": true,
+                        "calendar": false,
+                        "studies": [
+                            "STD;DEMA",
+                            "STD;Linear_Regression",
+                            "STD;MA%1Cross",
+                            "STD;EMA",
+                            "STD;RSI"
+                        ],
+                    "show_popup_button": true,
+                    "popup_width": "1000",
+                    "popup_height": "650",
                     "support_host": "https://www.tradingview.com"
                 }
                     </script>
