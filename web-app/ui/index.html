@@ -225,7 +225,7 @@
         /* Style for div in two columns*/
         .row_portfolio {
             display: flex; /* This enables Flexbox, aligning children in a row */
-            height: 500px;
+            height: 1000px;
         }
 
         .row_heatmap {
@@ -311,6 +311,115 @@
                 widgetContent.style.display = 'none';
             }
         }
+
+        // Initialize the list of symbols
+        let symbols = [
+            ["Apple", "AAPL|1D"],
+            ["Google", "GOOGL|1D"],
+            ["Microsoft", "MSFT|1D"],
+            ["Netflix", "NFLX|1D"],
+            ["Tesla", "TSLA|1D"],
+            ["Meta", "META|1D"],
+            ["Nvidia", "NVDA|1D"],
+            ["Taiwan Semiconductor", "TSM|1D"],
+            ["Disney", "DIS|1D"],
+            ["Visa", "V|1D"],
+            ["AMD", "AMD|1D"],
+            ["Berkshire Hathaway", "BRK.B|1D"],
+            ["Archer Aviation", "ACHR|1D"],
+            ["Vertex", "VERX|1D"],
+            ["Joby Aviation", "JOBY|1D"],
+            ["IonQ", "IONQ|1D"],
+            ["D-Wave Quantum", "QBTS|1D"],
+            ["Shopify", "SHOP|1D"],
+            ["Micron Technology", "MU|1D"]
+        ];
+
+
+        // Function to render a TradingView widget for a given container ID and interval
+        function renderTradingViewWidget(containerId, interval) {
+            const widgetContainer = document.getElementById(containerId);
+            widgetContainer.innerHTML = ''; // Clear the existing widget
+
+            // Create a new script element for the TradingView widget
+            const script = document.createElement('script');
+            script.type = 'text/javascript';
+            script.src = "https://s3.tradingview.com/external-embedding/embed-widget-symbol-overview.js";
+            script.async = true;
+
+            // Update each symbol with the specific interval
+            const updatedSymbols = symbols.map(([name, ticker]) => {
+                const baseTicker = ticker.split('|')[0];
+                return [name, `${baseTicker}|${interval}`];
+            });
+
+            script.textContent = JSON.stringify({
+                "symbols": updatedSymbols,
+                "chartOnly": false,
+                "width": "95%",
+                "height": 450,
+                "locale": "en",
+                "colorTheme": "dark",
+                "autosize": false,
+                "showVolume": true,
+                "showMA": true,
+                "hideDateRanges": false,
+                "hideMarketStatus": false,
+                "hideSymbolLogo": false,
+                "scalePosition": "right",
+                "scaleMode": "Normal",
+                "fontFamily": "-apple-system, BlinkMacSystemFont, Trebuchet MS, Roboto, Ubuntu, sans-serif",
+                "fontSize": "12",
+                "noTimeScale": false,
+                "valuesTracking": "1",
+                "changeMode": "price-and-percent",
+                "chartType": "candlesticks",
+                "maLineColor": "#2962FF",
+                "maLineWidth": 1,
+                "maLength": 50,
+                "lineType": 0,
+                "dateRanges": [
+                    "1d|1",
+                    "1m|30",
+                    "3m|60",
+                    "12m|1D",
+                    "60m|1W",
+                    "all|1M"
+                ],
+                "upColor": "#22ab94",
+                "downColor": "#f7525f",
+                "borderUpColor": "#22ab94",
+                "borderDownColor": "#f7525f",
+                "wickUpColor": "#22ab94",
+                "wickDownColor": "#f7525f"
+            });
+
+            // Append the new script to the widget container
+            widgetContainer.appendChild(script);
+        }
+
+        // Function to render all widgets with different time intervals
+        function renderAllWidgets() {
+            renderTradingViewWidget('tradingview-widget-1', '1D');  // Daily
+            renderTradingViewWidget('tradingview-widget-2', '1Y');  // Yearly
+            renderTradingViewWidget('tradingview-widget-3', '1M');  // Monthly
+            renderTradingViewWidget('tradingview-widget-4', '60M'); // 60 Minutes
+        }
+
+        // Function to add a new ticker to the symbols list
+        function addTicker() {
+            const tickerInput = document.getElementById('ticker-input').value.trim().toUpperCase();
+            if (!tickerInput) return;
+
+            // Prepend the new ticker to the symbols list
+            symbols.unshift([tickerInput, `${tickerInput}|1D`]);
+
+            // Re-render all TradingView widgets with the updated symbols list
+            renderAllWidgets();
+        }
+
+        // Initial render of all TradingView widgets
+        renderAllWidgets();
     </script>
 
     <div class="container">
@@ -416,459 +525,44 @@
         <quote>Be aware of the market! Use the following expand/collapse button to see the charts of the stocks on your watchlist. </quote>
         <p></p>
 
+        <div class="input-container">
+            <h3>To see the expanded charts:</h3>
+            <label for="ticker-input">👉Please enter Ticker Symbol:</label>
+            <input type="text" id="ticker-input" placeholder="Enter ticker (e.g., AAPL)">
+            <button onclick="addTicker()">Add Ticker</button>
+        </div>
+        <p></p>
         <details>
             <summary>Expand/Collapse</summary>
             <div>
                 <div class="row_portfolio">
+                    <!-- First Column -->
                     <div class="column">
-                        <!-- TradingView Widget BEGIN -->
+                        <!-- TradingView Widget Container 1 -->
                         <div class="tradingview-widget-container">
-                            <div class="tradingview-widget-container__widget"></div>
-                            <div class="tradingview-widget-copyright"><a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank"><span class="blue-text">Track all markets on TradingView</span></a></div>
-                            <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-symbol-overview.js" async>
-                            {
-                            "symbols": [
-                                [
-                                    "Apple",
-                                    "AAPL|1D"
-                                ],
-                                [
-                                    "Google",
-                                    "GOOGL|1D"
-                                ],
-                                [
-                                    "Microsoft",
-                                    "MSFT|1D"
-                                ],
-                                [
-                                    "NASDAQ:NFLX|1D"
-                                ],
-                                [
-                                    "NASDAQ:TSLA|1D"
-                                ],
-                                [
-                                    "NASDAQ:META|1D"
-                                ],
-                                [
-                                    "NASDAQ:NVDA|1D"
-                                ],
-                                [
-                                    "NYSE:TSM|1D"
-                                ],
-                                [
-                                    "NYSE:DIS|1D"
-                                ],
-                                [
-                                    "NYSE:V|1D"
-                                ],
-                                [
-                                    "NASDAQ:AMD|1D"
-                                ],
-                                [
-                                    "NYSE:BRK.B|1D"
-                                ],
-                                [
-                                    "NYSE:ACHR|1D"
-                                ],
-                                [
-                                    "NASDAQ:VERX|1D"
-                                ],
-                                [
-                                    "NYSE:JOBY|1D"
-                                ],
-                                [
-                                    "NYSE:IONQ|1D"
-                                ],
-                                [
-                                    "NYSE:QBTS|1D"
-                                ],
-                                [
-                                    "NYSE:SHOP|1D"
-                                ],
-                                [
-                                    "NASDAQ:MU|1D"
-                                ]
-                            ],
-                            "chartOnly": false,
-                            "width": "95%",
-                            "height": 450,
-                            "locale": "en",
-                            "colorTheme": "dark",
-                            "autosize": false,
-                            "showVolume": true,
-                            "showMA": true,
-                            "hideDateRanges": false,
-                            "hideMarketStatus": false,
-                            "hideSymbolLogo": false,
-                            "scalePosition": "right",
-                            "scaleMode": "Normal",
-                            "fontFamily": "-apple-system, BlinkMacSystemFont, Trebuchet MS, Roboto, Ubuntu, sans-serif",
-                            "fontSize": "12",
-                            "noTimeScale": false,
-                            "valuesTracking": "1",
-                            "changeMode": "price-and-percent",
-                            "chartType": "candlesticks",
-                            "maLineColor": "#2962FF",
-                            "maLineWidth": 1,
-                            "maLength": 50,
-                            "lineType": 0,
-                            "dateRanges": [
-                            "1d|1",
-                            "1m|30",
-                            "3m|60",
-                            "12m|1D",
-                            "60m|1W",
-                            "all|1M"
-                            ],
-                            "upColor": "#22ab94",
-                            "downColor": "#f7525f",
-                            "borderUpColor": "#22ab94",
-                            "borderDownColor": "#f7525f",
-                            "wickUpColor": "#22ab94",
-                            "wickDownColor": "#f7525f"
-                        }
-                            </script>
+                            <div class="tradingview-widget-container__widget" id="tradingview-widget-1"></div>
                         </div>
-                        <!-- TradingView Widget END -->
+                        <!-- TradingView Widget Container 2 -->
+                        <div class="tradingview-widget-container">
+                            <div class="tradingview-widget-container__widget" id="tradingview-widget-2"></div>
+                        </div>
                     </div>
+    
+                    <!-- Second Column -->
                     <div class="column">
-                        <!-- TradingView Widget BEGIN -->
+                        <!-- TradingView Widget Container 3 -->
                         <div class="tradingview-widget-container">
-                            <div class="tradingview-widget-container__widget"></div>
-                            <div class="tradingview-widget-copyright"><a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank"><span class="blue-text">Track all markets on TradingView</span></a></div>
-                            <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-symbol-overview.js" async>
-                            {
-                            "symbols": [
-                                [
-                                    "Apple",
-                                    "AAPL|1Y"
-                                ],
-                                [
-                                    "Google",
-                                    "GOOGL|1Y"
-                                ],
-                                [
-                                    "Microsoft",
-                                    "MSFT|1Y"
-                                ],
-                                [
-                                    "NASDAQ:NFLX|1Y"
-                                ],
-                                [
-                                    "NASDAQ:TSLA|1Y"
-                                ],
-                                [
-                                    "NASDAQ:META|1Y"
-                                ],
-                                [
-                                    "NASDAQ:NVDA|1Y"
-                                ],
-                                [
-                                    "NYSE:TSM|1Y"
-                                ],
-                                [
-                                    "NYSE:DIS|1Y"
-                                ],
-                                [
-                                    "NYSE:V|1Y"
-                                ],
-                                [
-                                    "NASDAQ:AMD|1Y"
-                                ],
-                                [
-                                    "NYSE:BRK.B|1Y"
-                                ],
-                                [
-                                    "NYSE:ACHR|1Y"
-                                ],
-                                [
-                                    "NASDAQ:VERX|1Y"
-                                ],
-                                [
-                                    "NYSE:JOBY|1Y"
-                                ],
-                                [
-                                    "NYSE:IONQ|1Y"
-                                ],
-                                [
-                                    "NYSE:QBTS|1Y"
-                                ],
-                                [
-                                    "NYSE:SHOP|1Y"
-                                ],
-                                [
-                                    "NASDAQ:MU|1Y"
-                                ]
-                            ],
-                            "chartOnly": false,
-                            "width": "95%",
-                            "height": 450,
-                            "locale": "en",
-                            "colorTheme": "dark",
-                            "autosize": false,
-                            "showVolume": true,
-                            "showMA": true,
-                            "hideDateRanges": false,
-                            "hideMarketStatus": false,
-                            "hideSymbolLogo": false,
-                            "scalePosition": "right",
-                            "scaleMode": "Normal",
-                            "fontFamily": "-apple-system, BlinkMacSystemFont, Trebuchet MS, Roboto, Ubuntu, sans-serif",
-                            "fontSize": "12",
-                            "noTimeScale": false,
-                            "valuesTracking": "1",
-                            "changeMode": "price-and-percent",
-                            "chartType": "candlesticks",
-                            "maLineColor": "#2962FF",
-                            "maLineWidth": 1,
-                            "maLength": 50,
-                            "lineType": 0,
-                            "dateRanges": [
-                            "1d|1",
-                            "1m|30",
-                            "3m|60",
-                            "12m|1D",
-                            "60m|1W",
-                            "all|1M"
-                            ],
-                            "upColor": "#22ab94",
-                            "downColor": "#f7525f",
-                            "borderUpColor": "#22ab94",
-                            "borderDownColor": "#f7525f",
-                            "wickUpColor": "#22ab94",
-                            "wickDownColor": "#f7525f"
-                        }
-                            </script>
+                            <div class="tradingview-widget-container__widget" id="tradingview-widget-3"></div>
                         </div>
-                        <!-- TradingView Widget END -->
-                    </div>
-                </div>
-                <div class="row_portfolio">
-                    <div class="column">
-                        <!-- TradingView Widget BEGIN -->
+                        <!-- TradingView Widget Container 4 -->
                         <div class="tradingview-widget-container">
-                            <div class="tradingview-widget-container__widget"></div>
-                            <div class="tradingview-widget-copyright"><a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank"><span class="blue-text">Track all markets on TradingView</span></a></div>
-                            <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-symbol-overview.js" async>
-                            {
-                            "symbols": [
-                                [
-                                    "Apple",
-                                    "AAPL|1M"
-                                ],
-                                [
-                                    "Google",
-                                    "GOOGL|1M"
-                                ],
-                                [
-                                    "Microsoft",
-                                    "MSFT|1M"
-                                ],
-                                [
-                                    "NASDAQ:NFLX|1M"
-                                ],
-                                [
-                                    "NASDAQ:TSLA|1M"
-                                ],
-                                [
-                                    "NASDAQ:META|1M"
-                                ],
-                                [
-                                    "NASDAQ:NVDA|1M"
-                                ],
-                                [
-                                    "NYSE:TSM|1M"
-                                ],
-                                [
-                                    "NYSE:DIS|1M"
-                                ],
-                                [
-                                    "NYSE:V|1M"
-                                ],
-                                [
-                                    "NASDAQ:AMD|1M"
-                                ],
-                                [
-                                    "NYSE:BRK.B|1M"
-                                ],
-                                [
-                                    "NYSE:ACHR|1M"
-                                ],
-                                [
-                                    "NASDAQ:VERX|1M"
-                                ],
-                                [
-                                    "NYSE:JOBY|1M"
-                                ],
-                                [
-                                    "NYSE:IONQ|1M"
-                                ],
-                                [
-                                    "NYSE:QBTS|1M"
-                                ],
-                                [
-                                    "NYSE:SHOP|1M"
-                                ],
-                                [
-                                    "NASDAQ:MU|1M"
-                                ]
-                            ],
-                            "chartOnly": false,
-                            "width": "95%",
-                            "height": 450,
-                            "locale": "en",
-                            "colorTheme": "dark",
-                            "autosize": false,
-                            "showVolume": true,
-                            "showMA": true,
-                            "hideDateRanges": false,
-                            "hideMarketStatus": false,
-                            "hideSymbolLogo": false,
-                            "scalePosition": "right",
-                            "scaleMode": "Normal",
-                            "fontFamily": "-apple-system, BlinkMacSystemFont, Trebuchet MS, Roboto, Ubuntu, sans-serif",
-                            "fontSize": "12",
-                            "noTimeScale": false,
-                            "valuesTracking": "1",
-                            "changeMode": "price-and-percent",
-                            "chartType": "candlesticks",
-                            "maLineColor": "#2962FF",
-                            "maLineWidth": 1,
-                            "maLength": 50,
-                            "lineType": 0,
-                            "dateRanges": [
-                            "1d|1",
-                            "1m|30",
-                            "3m|60",
-                            "12m|1D",
-                            "60m|1W",
-                            "all|1M"
-                            ],
-                            "upColor": "#22ab94",
-                            "downColor": "#f7525f",
-                            "borderUpColor": "#22ab94",
-                            "borderDownColor": "#f7525f",
-                            "wickUpColor": "#22ab94",
-                            "wickDownColor": "#f7525f"
-                        }
-                            </script>
+                            <div class="tradingview-widget-container__widget" id="tradingview-widget-4"></div>
                         </div>
-                        <!-- TradingView Widget END -->
-                    </div>
-                    <div class="column">
-                        <!-- TradingView Widget BEGIN -->
-                        <div class="tradingview-widget-container">
-                            <div class="tradingview-widget-container__widget"></div>
-                            <div class="tradingview-widget-copyright"><a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank"><span class="blue-text">Track all markets on TradingView</span></a></div>
-                            <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-symbol-overview.js" async>
-                            {
-                            "symbols": [
-                                [
-                                    "Apple",
-                                    "AAPL|60M"
-                                ],
-                                [
-                                    "Google",
-                                    "GOOGL|60M"
-                                ],
-                                [
-                                    "Microsoft",
-                                    "MSFT|60M"
-                                ],
-                                [
-                                    "NASDAQ:NFLX|60M"
-                                ],
-                                [
-                                    "NASDAQ:TSLA|60M"
-                                ],
-                                [
-                                    "NASDAQ:META|60M"
-                                ],
-                                [
-                                    "NASDAQ:NVDA|60M"
-                                ],
-                                [
-                                    "NYSE:TSM|60M"
-                                ],
-                                [
-                                    "NYSE:DIS|60M"
-                                ],
-                                [
-                                    "NYSE:V|60M"
-                                ],
-                                [
-                                    "NASDAQ:AMD|60M"
-                                ],
-                                [
-                                    "NYSE:BRK.B|60M"
-                                ],
-                                [
-                                    "NYSE:ACHR|60M"
-                                ],
-                                [
-                                    "NASDAQ:VERX|60M"
-                                ],
-                                [
-                                    "NYSE:JOBY|60M"
-                                ],
-                                [
-                                    "NYSE:IONQ|60M"
-                                ],
-                                [
-                                    "NYSE:QBTS|60M"
-                                ],
-                                [
-                                    "NYSE:SHOP|60M"
-                                ],
-                                [
-                                    "NASDAQ:MU|60M"
-                                ]
-                            ],
-                            "chartOnly": false,
-                            "width": "95%",
-                            "height": 450,
-                            "locale": "en",
-                            "colorTheme": "dark",
-                            "autosize": false,
-                            "showVolume": true,
-                            "showMA": true,
-                            "hideDateRanges": false,
-                            "hideMarketStatus": false,
-                            "hideSymbolLogo": false,
-                            "scalePosition": "right",
-                            "scaleMode": "Normal",
-                            "fontFamily": "-apple-system, BlinkMacSystemFont, Trebuchet MS, Roboto, Ubuntu, sans-serif",
-                            "fontSize": "12",
-                            "noTimeScale": false,
-                            "valuesTracking": "1",
-                            "changeMode": "price-and-percent",
-                            "chartType": "candlesticks",
-                            "maLineColor": "#2962FF",
-                            "maLineWidth": 1,
-                            "maLength": 50,
-                            "lineType": 0,
-                            "dateRanges": [
-                            "1d|1",
-                            "1m|30",
-                            "3m|60",
-                            "12m|1D",
-                            "60m|1W",
-                            "all|1M"
-                            ],
-                            "upColor": "#22ab94",
-                            "downColor": "#f7525f",
-                            "borderUpColor": "#22ab94",
-                            "borderDownColor": "#f7525f",
-                            "wickUpColor": "#22ab94",
-                            "wickDownColor": "#f7525f"
-                        }
-                            </script>
-                        </div>
-                        <!-- TradingView Widget END -->
                     </div>
                 </div>
             </div>
         </details>
+    
 
         <p></p>
         <p>This is <b>Yiqiao Yin</b>, and welcome to my personal site.</p>
