@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cool Login & Sign Up Page</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="form-container" id="login-form">
+            <h2>Login</h2>
+            <form action="#" method="POST">
+                <div class="input-group">
+                    <input type="text" id="login-username" placeholder="Username" required>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="login-password" placeholder="Password" required>
+                </div>
+                <button type="submit">Login</button>
+                <p class="toggle">Don't have an account? <a href="#" onclick="toggleForms()">Sign up</a></p>
+            </form>
+        </div>
+        
+        <div class="form-container hidden" id="signup-form">
+            <h2>Sign Up</h2>
+            <form action="#" method="POST">
+                <div class="input-group">
+                    <input type="text" id="signup-username" placeholder="Username" required>
+                </div>
+                <div class="input-group">
+                    <input type="email" id="signup-email" placeholder="Email" required>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="signup-password" placeholder="Password" required>
+                </div>
+                <button type="submit">Sign Up</button>
+                <p class="toggle">Already have an account? <a href="#" onclick="toggleForms()">Login</a></p>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function toggleForms() {
+            document.getElementById('login-form').classList.toggle('hidden');
+            document.getElementById('signup-form').classList.toggle('hidden');
+        }
+    </script>
+</body>
+</html>
