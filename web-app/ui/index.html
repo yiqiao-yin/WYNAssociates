@@ -76,6 +76,42 @@
             height: 100%;
             border: none;
         }
+
+        /* Nested tabs (sub-tabs within main tabs) */
+        .sub-navbar {
+            display: flex;
+            background-color: #333;
+            padding: 8px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+        }
+        .sub-navbar button {
+            background: none;
+            border: 1px solid #555;
+            color: #aaa;
+            margin-right: 8px;
+            padding: 6px 12px;
+            font-family: "Times New Roman", serif;
+            font-size: 10pt;
+            cursor: pointer;
+            border-radius: 3px;
+            transition: all 0.2s;
+        }
+        .sub-navbar button:hover {
+            background-color: #444;
+            color: white;
+        }
+        .sub-navbar button.active {
+            background-color: #555;
+            color: white;
+            border-color: #777;
+        }
+        .sub-tab-content {
+            display: none;
+        }
+        .sub-tab-content.active {
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -204,6 +240,15 @@
 
   <div id="watchlist" class="tab-content">
     <h2>Watchlist</h2>
+
+    <!-- Sub-navigation for Watchlist -->
+    <div class="sub-navbar">
+      <button class="active" onclick="showSubTab('watchlist', 'watchlist-stocks', this)">Stocks</button>
+      <button onclick="showSubTab('watchlist', 'watchlist-tab2', this)">Tab 2</button>
+    </div>
+
+    <!-- Sub-tab: Stocks (existing watchlist content) -->
+    <div id="watchlist-stocks" class="sub-tab-content active">
     <p>Your watchlist will be shown here.</p>
 
     <div class="grid-container">
@@ -701,6 +746,78 @@
         </div>
         <!-- TradingView Widget END -->
     </details>
+    </div>
+    <!-- End Sub-tab: Stocks -->
+
+    <!-- Sub-tab: Tab 2 - AI Stack Tickers -->
+    <div id="watchlist-tab2" class="sub-tab-content">
+      <script type="module" src="https://widgets.tradingview-widget.com/w/en/tv-ticker-tag.js"></script>
+
+      <h3>Energy Layer</h3>
+      <tv-ticker-tag symbol="NASDAQ:CEG"></tv-ticker-tag>
+      <tv-ticker-tag symbol="NYSE:VST"></tv-ticker-tag>
+      <tv-ticker-tag symbol="NYSE:GEV"></tv-ticker-tag>
+      <tv-ticker-tag symbol="NYSE:NEE"></tv-ticker-tag>
+      <tv-ticker-tag symbol="NASDAQ:TLN"></tv-ticker-tag>
+      <tv-ticker-tag symbol="NYSE:D"></tv-ticker-tag>
+      <tv-ticker-tag symbol="NYSE:SO"></tv-ticker-tag>
+      <tv-ticker-tag symbol="NYSE:ETN"></tv-ticker-tag>
+
+      <h3>Chips Layer</h3>
+      <tv-ticker-tag symbol="NASDAQ:NVDA"></tv-ticker-tag>
+      <tv-ticker-tag symbol="NASDAQ:AVGO"></tv-ticker-tag>
+      <tv-ticker-tag symbol="NYSE:TSM"></tv-ticker-tag>
+      <tv-ticker-tag symbol="NASDAQ:AMD"></tv-ticker-tag>
+      <tv-ticker-tag symbol="NASDAQ:INTC"></tv-ticker-tag>
+      <tv-ticker-tag symbol="NASDAQ:MU"></tv-ticker-tag>
+      <tv-ticker-tag symbol="NASDAQ:MRVL"></tv-ticker-tag>
+      <tv-ticker-tag symbol="NASDAQ:ARM"></tv-ticker-tag>
+
+      <h3>Infrastructure</h3>
+      <tv-ticker-tag symbol="NASDAQ:MSFT"></tv-ticker-tag>
+      <tv-ticker-tag symbol="NASDAQ:AMZN"></tv-ticker-tag>
+      <tv-ticker-tag symbol="NASDAQ:GOOGL"></tv-ticker-tag>
+      <tv-ticker-tag symbol="NASDAQ:EQIX"></tv-ticker-tag>
+      <tv-ticker-tag symbol="NYSE:DLR"></tv-ticker-tag>
+      <tv-ticker-tag symbol="NYSE:ANET"></tv-ticker-tag>
+      <tv-ticker-tag symbol="NYSE:VRT"></tv-ticker-tag>
+      <tv-ticker-tag symbol="NASDAQ:SMCI"></tv-ticker-tag>
+
+      <h3>Models</h3>
+      <tv-ticker-tag symbol="NASDAQ:MSFT"></tv-ticker-tag>
+      <tv-ticker-tag symbol="NASDAQ:GOOGL"></tv-ticker-tag>
+      <tv-ticker-tag symbol="NASDAQ:META"></tv-ticker-tag>
+      <tv-ticker-tag symbol="NASDAQ:AMZN"></tv-ticker-tag>
+      <tv-ticker-tag symbol="NYSE:ORCL"></tv-ticker-tag>
+      <tv-ticker-tag symbol="NYSE:IBM"></tv-ticker-tag>
+      <tv-ticker-tag symbol="NYSE:AI"></tv-ticker-tag>
+      <tv-ticker-tag symbol="NYSE:COHR"></tv-ticker-tag>
+
+      <h3>Application</h3>
+      <tv-ticker-tag symbol="NYSE:CRM"></tv-ticker-tag>
+      <tv-ticker-tag symbol="NASDAQ:ADBE"></tv-ticker-tag>
+      <tv-ticker-tag symbol="NYSE:NOW"></tv-ticker-tag>
+      <tv-ticker-tag symbol="NASDAQ:PLTR"></tv-ticker-tag>
+      <tv-ticker-tag symbol="NASDAQ:PANW"></tv-ticker-tag>
+      <tv-ticker-tag symbol="NASDAQ:CRWD"></tv-ticker-tag>
+      <tv-ticker-tag symbol="NASDAQ:WDAY"></tv-ticker-tag>
+      <tv-ticker-tag symbol="NASDAQ:TTD"></tv-ticker-tag>
+      <tv-ticker-tag symbol="NYSE:SNOW"></tv-ticker-tag>
+      <tv-ticker-tag symbol="NASDAQ:TEAM"></tv-ticker-tag>
+      <tv-ticker-tag symbol="NASDAQ:DDOG"></tv-ticker-tag>
+      <tv-ticker-tag symbol="NYSE:NET"></tv-ticker-tag>
+      <tv-ticker-tag symbol="NYSE:HUBS"></tv-ticker-tag>
+      <tv-ticker-tag symbol="NYSE:VEEV"></tv-ticker-tag>
+      <tv-ticker-tag symbol="NASDAQ:ZS"></tv-ticker-tag>
+      <tv-ticker-tag symbol="NASDAQ:MDB"></tv-ticker-tag>
+      <tv-ticker-tag symbol="NASDAQ:MNDY"></tv-ticker-tag>
+      <tv-ticker-tag symbol="NASDAQ:OKTA"></tv-ticker-tag>
+      <tv-ticker-tag symbol="NASDAQ:GTLB"></tv-ticker-tag>
+      <tv-ticker-tag symbol="NYSE:PATH"></tv-ticker-tag>
+      <tv-ticker-tag symbol="NYSE:S"></tv-ticker-tag>
+      <tv-ticker-tag symbol="NASDAQ:CFLT"></tv-ticker-tag>
+    </div>
+
   </div>
 
   <div id="portfolio" class="tab-content">
@@ -1215,6 +1332,20 @@
         const contents = document.querySelectorAll('.tab-content');
         contents.forEach(c => c.classList.remove('active'));
         document.getElementById(tabId).classList.add('active');
+    }
+
+    function showSubTab(parentId, subTabId, clickedBtn) {
+        // Get the parent tab container
+        const parent = document.getElementById(parentId);
+        // Hide all sub-tab contents within this parent
+        const subContents = parent.querySelectorAll('.sub-tab-content');
+        subContents.forEach(c => c.classList.remove('active'));
+        // Show the selected sub-tab
+        document.getElementById(subTabId).classList.add('active');
+        // Update button states
+        const buttons = parent.querySelectorAll('.sub-navbar button');
+        buttons.forEach(btn => btn.classList.remove('active'));
+        clickedBtn.classList.add('active');
     }
     </script>
 
