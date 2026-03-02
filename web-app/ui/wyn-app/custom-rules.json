@@ -1,0 +1,6 @@
+[
+  {"source":"https://y-yin.io","target":"https://www.y-yin.io","status":"302"},
+  {"source":"https://wyn-associates.io","target":"https://www.wyn-associates.io","status":"302"},
+  {"source":"/amplify/staging","target":"https://us-east-1.admin.amplifyapp.com/admin/d2a1siddtuo6tc/staging/home","status":"301"},
+  {"source":"</^[^.]+$|\\.(?!(css|gif|ico|jpg|js|png|txt|svg|woff|woff2|ttf|map|json)$)([^.]+$)/>","target":"/index.html","status":"200"}
+]

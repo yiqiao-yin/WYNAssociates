@@ -7,3 +7,10 @@
 WYNAssociates.egg-info/*
 /build/*
 build/*
+# Web app artifacts
+web-app/ui/wyn-app/node_modules/
+web-app/ui/wyn-app/dist/
+web-app/ui/wyn-app/dist.zip
+web-app/ui/lambda_function.zip
+web-app/ui/wyn-app-dist.tar.gz
+web-app/ui/wyn-app-dist.zip
