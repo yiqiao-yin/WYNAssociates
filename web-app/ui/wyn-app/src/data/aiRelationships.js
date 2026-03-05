@@ -57,7 +57,7 @@ export const TICKER_NAMES = {
   CRWD: 'CrowdStrike', WDAY: 'Workday', TTD: 'Trade Desk', TEAM: 'Atlassian',
   DDOG: 'Datadog', HUBS: 'HubSpot', VEEV: 'Veeva', ZS: 'Zscaler',
   MDB: 'MongoDB', MNDY: 'monday.com', OKTA: 'Okta', GTLB: 'GitLab', PATH: 'UiPath',
-  S: 'SentinelOne', CFLT: 'Confluent',
+  S: 'SentinelOne', CFLT: 'Confluent', FICO: 'Fair Isaac (FICO)',
   // Application (private)
   DATABRICKS: 'Databricks', SCALEAI: 'Scale AI', FIGMA: 'Figma', CANVA: 'Canva',
 };
@@ -253,6 +253,13 @@ export const EDGES = [
   { from: 'AI',    to: 'PLTR',        reason: 'C3.ai enterprise AI platform',             confidence: 'low' },
   { from: 'COHR',  to: 'NET',         reason: 'Optical networking for Cloudflare',        confidence: 'medium' },
   { from: 'MSFT',  to: 'ADBE',        reason: 'Copilot integration with Adobe',           confidence: 'high' },
+  // Anthropic -> FICO
+  { from: 'ANTHROPIC', to: 'FICO',    reason: 'Claude AI powers FICO fraud/credit decisioning', confidence: 'high' },
+  // Amazon -> FICO
+  { from: 'AMZN',  to: 'FICO',        reason: 'AWS cloud infrastructure for FICO Platform',     confidence: 'high' },
+  // Other -> FICO
+  { from: 'MSFT',  to: 'FICO',        reason: 'Azure AI services for FICO analytics',           confidence: 'medium' },
+  { from: 'ORCL',  to: 'FICO',        reason: 'Oracle databases for FICO data processing',      confidence: 'medium' },
   // xAI -> apps
   { from: 'XAI',   to: 'SCALEAI',     reason: 'Scale AI provides data for xAI/Grok',     confidence: 'medium' },
   // Scale AI -> model training support
