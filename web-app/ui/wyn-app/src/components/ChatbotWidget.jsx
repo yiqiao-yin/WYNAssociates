@@ -35,6 +35,15 @@ export default function ChatbotWidget({ onTabChange, activeTab }) {
           );
         }, delay);
         delay += 500;
+      } else if (action.type === 'switch_ai_view' && action.view) {
+        setTimeout(() => {
+          window.dispatchEvent(
+            new CustomEvent('wyn-ai-view-navigate', {
+              detail: { view: action.view },
+            })
+          );
+        }, delay);
+        delay += 500;
       } else if (action.type === 'spotlight' && action.target) {
         setTimeout(() => triggerSpotlight(action.target), delay);
         delay += 300;

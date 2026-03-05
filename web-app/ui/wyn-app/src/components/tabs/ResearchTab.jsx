@@ -2,10 +2,10 @@ export default function ResearchTab() {
   return (
     <>
       <h2 data-spotlight="research-title">Research</h2>
-      <p>Research notes, links, and content will appear here.</p>
+      <div>Research notes, links, and content will appear here.</div>
 
       <h2 data-spotlight="research-industry-reports">Yiqiao Yin's Industry Report:</h2>
-      <p>
+      <div>
         <ul>
           <li>2025-07 Double Snake Game | <a href="https://staging.d23a14qf444pti.amplifyapp.com/">Link</a></li>
           <li>2025-06 Real Estate Analysis | <a href="https://staging.d3u63gm7ajus2m.amplifyapp.com/">Link</a></li>
@@ -17,10 +17,10 @@ export default function ResearchTab() {
           <li>2025-06 Robotaxi Market Analysis | <a href="https://staging.d3ex7nh8kfo2b4.amplifyapp.com/">Link</a></li>
           <li>2025-02 Financial Literacy Calculator | <a href="https://staging.d2j638wpxfyqux.amplifyapp.com/">Link</a></li>
         </ul>
-      </p>
+      </div>
 
       <h2>Yiqiao Yin's Research:</h2>
-      <p>
+      <div>
         <ul>
           <li><h4>Representation Learning</h4></li>
           <ul>
@@ -89,10 +89,10 @@ export default function ResearchTab() {
             <li><i><strong>Yiqiao Yin</strong></i> (2015), Absolute Alpha by Beta Manipulation, <a href="https://wyn-associates.s3.amazonaws.com/public/research/trading/absolute-alpha-by-beta-manipulation.pdf">PDF</a></li>
           </ul>
         </ul>
-      </p>
+      </div>
 
       <h2 data-spotlight="research-useful-resources">Yiqiao Yin's Watchlist:</h2>
-      <p>
+      <div>
         <ul>
           <li><h4>Other useful resources:</h4>
             <ul>
@@ -126,7 +126,7 @@ export default function ResearchTab() {
             </ul>
           </li>
         </ul>
-      </p>
+      </div>
     </>
   );
 }

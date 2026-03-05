@@ -18,7 +18,7 @@ export default function WatchlistTab() {
     <>
       <h2 data-spotlight="watchlist-title">Watchlist</h2>
 
-      <div className="sub-navbar">
+      <div className="sub-navbar" data-spotlight="watchlist-sub-navbar">
         <button
           data-spotlight="watchlist-stocks-btn"
           className={activeSubTab === 'stocks' ? 'active' : ''}
@@ -35,10 +35,16 @@ export default function WatchlistTab() {
         </button>
       </div>
 
-      <div className={`sub-tab-content${activeSubTab === 'stocks' ? ' active' : ''}`}>
+      <div
+        className={`sub-tab-content${activeSubTab === 'stocks' ? ' active' : ''}`}
+        data-spotlight="watchlist-stocks-content"
+      >
         <StocksSubTab />
       </div>
-      <div className={`sub-tab-content${activeSubTab === 'ai' ? ' active' : ''}`}>
+      <div
+        className={`sub-tab-content${activeSubTab === 'ai' ? ' active' : ''}`}
+        data-spotlight="watchlist-ai-content"
+      >
         <AIWatchlistSubTab />
       </div>
     </>

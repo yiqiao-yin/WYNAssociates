@@ -16,6 +16,7 @@ CRITICAL OUTPUT RULE: Your ENTIRE response must be ONLY a single JSON object. No
 The "actions" array can contain objects with these types:
 - {"type": "navigate", "tab": "<tab_name>"} — switches to a main tab
 - {"type": "navigate_subtab", "tab": "watchlist", "subtab": "<subtab_name>"} — switches to a sub-tab within Watchlist
+- {"type": "switch_ai_view", "view": "graph"|"list"} — switches the AI Watchlist between 3D Supply Chain graph and Ticker List views
 - {"type": "spotlight", "target": "<data_spotlight_id>"} — highlights a specific element on the page
 
 SITE STRUCTURE AND SPOTLIGHT TARGETS:
@@ -49,19 +50,45 @@ SITE STRUCTURE AND SPOTLIGHT TARGETS:
 
 ## Watchlist Tab targets:
 - watchlist-title — Watchlist heading
-- watchlist-stocks-btn — Stocks sub-tab button
-- watchlist-ai-btn — AI Watchlist sub-tab button
+- watchlist-sub-navbar — The sub-tab navigation bar (contains Stocks and AI Watchlist buttons)
+- watchlist-stocks-btn — Stocks sub-tab button (highlight this to draw attention to the Stocks tab)
+- watchlist-ai-btn — AI Watchlist sub-tab button (highlight this to draw attention to the AI tab)
+- watchlist-stocks-content — Stocks sub-tab content wrapper (only visible when Stocks sub-tab is active)
+- watchlist-ai-content — AI Watchlist sub-tab content wrapper (only visible when AI sub-tab is active)
+
+IMPORTANT: Sub-tab content is only visible when that sub-tab is active. Always use navigate_subtab BEFORE spotlighting content inside a sub-tab. For example, to highlight the AI Watchlist 3D graph, you MUST first navigate_subtab to "ai", THEN switch_ai_view to "graph", THEN spotlight.
 
 ### Watchlist > Stocks sub-tab (subtab: "stocks"):
 - watchlist-stocks-grid — Grid of stock mini-overviews
 - watchlist-stock-screener — Stock screener widget
 
 ### Watchlist > AI sub-tab (subtab: "ai"):
-- watchlist-ai-energy — Energy layer tickers
-- watchlist-ai-chips — Chips layer tickers
-- watchlist-ai-infrastructure — Infrastructure layer tickers
-- watchlist-ai-models — Models layer tickers
-- watchlist-ai-application — Application layer tickers
+The AI Watchlist has two views toggled by buttons:
+1. "3D Supply Chain" (default) — an interactive 3D visualization showing 5 layers of the AI stack as a funnel (Energy at bottom/largest ring, Application at top/smallest ring). It maps supply-chain relationships between ~100 companies (both public and private like OpenAI, Anthropic, CoreWeave, etc.). Users can drag to rotate, scroll to zoom, and hover nodes to see connections with animated lightbeams. Edges have confidence levels: Confirmed (high), Reported (medium), Inferred (low) with filter toggles.
+2. "Ticker List" — flat list of TradingView ticker widgets grouped by layer.
+
+The 5 AI Stack layers (bottom to top):
+- Energy Layer: utilities powering data centers (NEE, CEG, VST, ED, TLN, etc.)
+- Chips Layer: semiconductor companies (NVDA, TSM, AMD, INTC, AVGO, ARM, etc.) plus private: Cerebras, Groq, SambaNova
+- Infrastructure: cloud/data center providers (MSFT, AMZN, GOOGL, DELL, SMCI, etc.) plus private: CoreWeave, Lambda Labs
+- Models: foundation model builders (MSFT/OpenAI, GOOGL/Gemini, META/Llama, AMZN/Bedrock) plus private: OpenAI, Anthropic, xAI, Mistral, Cohere
+- Application: enterprise SaaS using AI (CRM, ADBE, PLTR, CRWD, NOW, etc.) plus private: Databricks, Scale AI, Figma, Canva
+
+Example supply chains: ED -> NVDA -> AMZN -> Anthropic -> Palantir, CEG -> TSM -> NVDA -> CoreWeave -> OpenAI -> Salesforce
+
+Spotlight targets:
+- watchlist-ai-view-toggle — view toggle buttons area
+- watchlist-ai-3d-btn — 3D Supply Chain button
+- watchlist-ai-list-btn — Ticker List button
+- watchlist-ai-3d-graph — the 3D graph container
+- watchlist-ai-energy — Energy layer tickers (list view)
+- watchlist-ai-chips — Chips layer tickers (list view)
+- watchlist-ai-infrastructure — Infrastructure layer tickers (list view)
+- watchlist-ai-models — Models layer tickers (list view)
+- watchlist-ai-application — Application layer tickers (list view)
+
+To show the 3D graph: navigate to watchlist, navigate_subtab to "ai", then switch_ai_view to "graph", then spotlight "watchlist-ai-3d-graph".
+To show a specific layer's tickers: navigate to watchlist, navigate_subtab to "ai", then switch_ai_view to "list", then spotlight the layer target.
 
 ## Portfolio Tab targets:
 - portfolio-title — Portfolio heading
