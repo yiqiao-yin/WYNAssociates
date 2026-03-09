@@ -3,8 +3,24 @@
   <head>
     <link rel="icon" href="https://wyn-associates.s3.amazonaws.com/public/yin-thumbnail.jpg">
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>W.Y.N. Associates</title>
+
+    <!-- PWA / iOS Web App -->
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="WYN" />
+    <link rel="apple-touch-icon" href="https://wyn-associates.s3.amazonaws.com/public/yin-thumbnail.jpg" />
+    <meta name="theme-color" content="#0a0a1a" />
+
+    <!-- UTaaS Tracking (isolated AWS pipeline) -->
+    <script
+      src="https://utaas-sdk-public.s3.amazonaws.com/v1.js"
+      data-site="sk_yyin_homepage_109ff4"
+      data-endpoint="https://r5s1gsmf1d.execute-api.us-east-1.amazonaws.com/prod/tracking"
+      async
+    ></script>
   </head>
   <body>
     <div id="root"></div>

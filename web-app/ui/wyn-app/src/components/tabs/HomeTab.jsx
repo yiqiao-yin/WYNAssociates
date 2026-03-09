@@ -36,7 +36,6 @@ export default function HomeTab() {
       <h3 data-spotlight="home-deployed-apps">Deployed Apps:</h3>
       <p><b>Since diving headfirst into the world of AI/ML back in 2016, I've been cooking up some cool apps to showcase my love for everything AI, ML, NLP, and GenAI! If you're keen to give them a whirl, simply hit that dropdown button to expand the app of your choice. Let's explore the future together!</b></p>
       <ul>
-        <li><p><i>WYN Associates Apps</i>: please click <a href="https://wyn-associates.com/software/" data-spotlight="home-wyn-apps-link">here</a>.</p></li>
         <li><p><i>HuggingFace Apps</i>: please click <a href="https://huggingface.co/eagle0504" data-spotlight="home-hf-apps-link">here</a>.</p></li>
       </ul>
     </>

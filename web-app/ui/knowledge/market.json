@@ -1,0 +1,6 @@
+{
+  "tab": "market",
+  "topic": "market",
+  "keywords": ["market", "heatmap", "stock", "crypto", "cryptocurrency", "bitcoin", "trading"],
+  "content": "The Market tab shows real-time stock and crypto heatmaps powered by TradingView widgets. There are two heatmaps: a Stock Heatmap showing the major equity market, and a Crypto Coins Heatmap showing the cryptocurrency market. The heatmaps contain large volumes of data and may not load during peak trading hours. They are inside a collapsible Expand/Collapse section."
+}

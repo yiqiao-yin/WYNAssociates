@@ -1,0 +1,22 @@
+{
+  "name": "W.Y.N. Associates",
+  "short_name": "WYN",
+  "description": "Yiqiao Yin's personal homepage — AI, research, teaching, and portfolio.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0a1a",
+  "theme_color": "#0a0a1a",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "https://wyn-associates.s3.amazonaws.com/public/yin-thumbnail.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "https://wyn-associates.s3.amazonaws.com/public/yin-thumbnail.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg"
+    }
+  ]
+}

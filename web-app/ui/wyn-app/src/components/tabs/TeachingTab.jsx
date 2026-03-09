@@ -79,7 +79,7 @@ export default function TeachingTab() {
         </ul>
         <h2 data-spotlight="teaching-textbooks">List of AI and ML Textbooks</h2>
         <div style={{ overflowX: 'auto' }}>
-        <table border="1">
+        <table >
           <thead>
             <tr>
               <th>Author</th>
@@ -158,7 +158,7 @@ export default function TeachingTab() {
         </div>
         <h2 data-spotlight="teaching-collected-notes">Collected Notes</h2>
         <div style={{ overflowX: 'auto' }}>
-        <table border="1">
+        <table >
           <thead>
             <tr>
               <th>Category</th>

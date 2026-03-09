@@ -2,15 +2,101 @@ import json
 import os
 import re
 import boto3
+import urllib.request
+import urllib.parse
 
 BEDROCK_MODEL_ID = os.environ.get("BEDROCK_MODEL_ID", "anthropic.claude-3-haiku-20240307-v1:0")
 BEDROCK_REGION = os.environ.get("BEDROCK_REGION", "us-east-1")
+KNOWLEDGE_BUCKET = os.environ.get("KNOWLEDGE_BUCKET", "wyn-associates")
+KNOWLEDGE_PREFIX = os.environ.get("KNOWLEDGE_PREFIX", "knowledge/")
 
 bedrock = boto3.client("bedrock-runtime", region_name=BEDROCK_REGION)
+s3 = boto3.client("s3", region_name=BEDROCK_REGION)
 
-SYSTEM_PROMPT = """You are WYN Assistant, the AI chatbot for Yiqiao Yin's personal homepage at wyn-associates.com. You help visitors navigate the site, learn about Yiqiao's background, research, teaching, and deployed apps.
+# Cache knowledge chunks in memory (Lambda container reuse)
+_knowledge_cache = {}
 
-CRITICAL OUTPUT RULE: Your ENTIRE response must be ONLY a single JSON object. No preamble, no explanation, no text before or after the JSON. Do not say "Here is..." or anything else. Output ONLY this:
+
+def _load_knowledge():
+    """Load all knowledge chunks from S3 into memory (cached across invocations)."""
+    if _knowledge_cache:
+        return _knowledge_cache
+
+    try:
+        resp = s3.list_objects_v2(Bucket=KNOWLEDGE_BUCKET, Prefix=KNOWLEDGE_PREFIX)
+        for obj in resp.get("Contents", []):
+            key = obj["Key"]
+            if not key.endswith(".json"):
+                continue
+            body = s3.get_object(Bucket=KNOWLEDGE_BUCKET, Key=key)["Body"].read()
+            chunk = json.loads(body)
+            name = key.split("/")[-1].replace(".json", "")
+            _knowledge_cache[name] = chunk
+    except Exception as e:
+        print(f"Error loading knowledge: {e}")
+
+    return _knowledge_cache
+
+
+def _retrieve_chunks(query, max_chunks=3):
+    """Retrieve the most relevant knowledge chunks based on keyword overlap."""
+    chunks = _load_knowledge()
+    if not chunks:
+        return []
+
+    query_lower = query.lower()
+    query_words = set(re.findall(r'[a-z0-9]+', query_lower))
+
+    scored = []
+    for name, chunk in chunks.items():
+        keywords = [k.lower() for k in chunk.get("keywords", [])]
+        # Score: count matching keywords + partial matches in query
+        score = 0
+        for kw in keywords:
+            if kw in query_lower:
+                score += 3  # exact substring match in query
+            elif any(w == kw for w in query_words):
+                score += 2  # exact word match
+            elif any(kw.startswith(w) or w.startswith(kw) for w in query_words if len(w) > 2):
+                score += 1  # partial match
+
+        # Also check if the topic name matches
+        if chunk.get("topic", "").lower() in query_lower:
+            score += 2
+        if chunk.get("tab", "").lower() in query_lower:
+            score += 1
+
+        if score > 0:
+            scored.append((score, name, chunk))
+
+    # Sort by score descending, return top N
+    scored.sort(key=lambda x: x[0], reverse=True)
+    return [item[2] for item in scored[:max_chunks]]
+
+
+def _ddg_search(query, max_results=3):
+    """Search DuckDuckGo Instant Answer API for supplemental context."""
+    try:
+        encoded = urllib.parse.urlencode({"q": query, "format": "json", "no_html": "1", "skip_disambig": "1"})
+        url = f"https://api.duckduckgo.com/?{encoded}"
+        req = urllib.request.Request(url, headers={"User-Agent": "WYNAssistant/1.0"})
+        with urllib.request.urlopen(req, timeout=3) as resp:
+            data = json.loads(resp.read().decode())
+        results = []
+        if data.get("AbstractText"):
+            results.append(data["AbstractText"])
+        for topic in (data.get("RelatedTopics") or [])[:max_results]:
+            if isinstance(topic, dict) and topic.get("Text"):
+                results.append(topic["Text"])
+        return " | ".join(results[:max_results]) if results else ""
+    except Exception:
+        return ""
+
+
+# Lean system prompt: only navigation rules + spotlight targets (no content)
+SYSTEM_PROMPT = """You are WYN Assistant, the AI chatbot for Yiqiao Yin's personal homepage at y-yin.io. You help visitors navigate the site and answer questions using the KNOWLEDGE CONTEXT provided below.
+
+CRITICAL OUTPUT RULE: Your ENTIRE response must be ONLY a single JSON object. No preamble, no explanation, no text before or after the JSON. Output ONLY this:
 {"reply": "your message here", "actions": []}
 
 The "actions" array can contain objects with these types:
@@ -19,133 +105,36 @@ The "actions" array can contain objects with these types:
 - {"type": "switch_ai_view", "view": "graph"|"list"} — switches the AI Watchlist between 3D Supply Chain graph and Ticker List views
 - {"type": "spotlight", "target": "<data_spotlight_id>"} — highlights a specific element on the page
 
-SITE STRUCTURE AND SPOTLIGHT TARGETS:
-
 ## Main Tabs (use with "navigate" action):
-- "home" — Home tab with personal background, passion project, deployed apps
-- "market" — Market tab with stock and crypto heatmaps
-- "watchlist" — Watchlist tab with Stocks and AI sub-tabs
-- "portfolio" — Portfolio tab with ticker tape and advanced chart
-- "research" — Research tab with papers, conferences, books, resources
-- "teaching" — Teaching tab with courses, textbooks, collected notes
+home, market, watchlist, portfolio, letters, research, teaching
 
-## Navbar targets:
-- nav-home, nav-market, nav-watchlist, nav-portfolio, nav-research, nav-teaching
+## Navbar spotlight targets:
+nav-home, nav-market, nav-watchlist, nav-portfolio, nav-letters, nav-research, nav-teaching
 
-## Home Tab targets:
-- home-title — Main heading
-- home-background — Personal background section
-- home-passion-project — Passion project section (W.Y.N. Associates LLC)
-- home-deployed-apps — Deployed apps section
-- home-wyn-apps-link — Link to WYN Associates apps
-- home-hf-apps-link — Link to HuggingFace apps
-- home-youtube-link — YouTube channel link
-- home-linkedin-link — LinkedIn profile link
+## Spotlight targets by tab:
+Home: home-title, home-background, home-passion-project, home-deployed-apps, home-hf-apps-link, home-youtube-link, home-linkedin-link
+Market: market-title, market-heatmaps, market-stock-heatmap, market-crypto-heatmap
+Watchlist: watchlist-title, watchlist-sub-navbar, watchlist-stocks-btn, watchlist-ai-btn, watchlist-stocks-content, watchlist-ai-content, watchlist-stocks-grid, watchlist-stock-screener, watchlist-ai-view-toggle, watchlist-ai-3d-btn, watchlist-ai-list-btn, watchlist-ai-3d-graph, watchlist-ai-energy, watchlist-ai-chips, watchlist-ai-infrastructure, watchlist-ai-models, watchlist-ai-application
+Portfolio: portfolio-title, portfolio-tape, portfolio-chart
+Letters: letters-title, letters-description, letters-table, letters-2025 through letters-2012
+Research: research-title, research-industry-reports, research-papers, research-conferences, research-student-awards, research-books, research-economics, research-asset-pricing, research-trading, research-useful-resources, research-hedge-fund-filings
+Teaching: teaching-title, teaching-grad-appointments, teaching-chicago-booth, teaching-pace, teaching-pace-courses, teaching-columbia, teaching-columbia-courses, teaching-precollege, teaching-ai4all, teaching-udemy-courses, teaching-packt-courses, teaching-software-engineer, teaching-textbooks, teaching-collected-notes
 
-## Market Tab targets:
-- market-title — Market heading
-- market-heatmaps — Heatmaps section
-- market-stock-heatmap — Stock heatmap widget
-- market-crypto-heatmap — Crypto heatmap widget
+## Navigation rules:
+- Sub-tab content is only visible when active. Always navigate_subtab BEFORE spotlighting content inside a sub-tab.
+- To show 3D graph: navigate watchlist -> navigate_subtab "ai" -> switch_ai_view "graph" -> spotlight "watchlist-ai-3d-graph".
+- To show a layer's tickers: navigate watchlist -> navigate_subtab "ai" -> switch_ai_view "list" -> spotlight the layer.
+- Order actions: navigate first, then navigate_subtab, then switch_ai_view, then spotlight.
 
-## Watchlist Tab targets:
-- watchlist-title — Watchlist heading
-- watchlist-sub-navbar — The sub-tab navigation bar (contains Stocks and AI Watchlist buttons)
-- watchlist-stocks-btn — Stocks sub-tab button (highlight this to draw attention to the Stocks tab)
-- watchlist-ai-btn — AI Watchlist sub-tab button (highlight this to draw attention to the AI tab)
-- watchlist-stocks-content — Stocks sub-tab content wrapper (only visible when Stocks sub-tab is active)
-- watchlist-ai-content — AI Watchlist sub-tab content wrapper (only visible when AI sub-tab is active)
+## Behavior:
+1. ENTIRE output = ONLY the JSON object. No text outside JSON.
+2. Use navigate/spotlight actions when user asks to see something.
+3. Use KNOWLEDGE CONTEXT below to answer questions about the site.
+4. If SEARCH CONTEXT is provided, use it for general knowledge questions not covered by the site.
+5. Keep replies conversational, brief (1-3 sentences). Replies are spoken aloud via TTS, so keep them natural.
+6. NEVER nest JSON in the "reply" field — plain text only.
 
-IMPORTANT: Sub-tab content is only visible when that sub-tab is active. Always use navigate_subtab BEFORE spotlighting content inside a sub-tab. For example, to highlight the AI Watchlist 3D graph, you MUST first navigate_subtab to "ai", THEN switch_ai_view to "graph", THEN spotlight.
-
-### Watchlist > Stocks sub-tab (subtab: "stocks"):
-- watchlist-stocks-grid — Grid of stock mini-overviews
-- watchlist-stock-screener — Stock screener widget
-
-### Watchlist > AI sub-tab (subtab: "ai"):
-The AI Watchlist has two views toggled by buttons:
-1. "3D Supply Chain" (default) — an interactive 3D visualization showing 5 layers of the AI stack as a funnel (Energy at bottom/largest ring, Application at top/smallest ring). It maps supply-chain relationships between ~100 companies (both public and private like OpenAI, Anthropic, CoreWeave, etc.). Users can drag to rotate, scroll to zoom, and hover nodes to see connections with animated lightbeams. Edges have confidence levels: Confirmed (high), Reported (medium), Inferred (low) with filter toggles.
-2. "Ticker List" — flat list of TradingView ticker widgets grouped by layer.
-
-The 5 AI Stack layers (bottom to top):
-- Energy Layer: utilities powering data centers (NEE, CEG, VST, ED, TLN, etc.)
-- Chips Layer: semiconductor companies (NVDA, TSM, AMD, INTC, AVGO, ARM, etc.) plus private: Cerebras, Groq, SambaNova
-- Infrastructure: cloud/data center providers (MSFT, AMZN, GOOGL, DELL, SMCI, etc.) plus private: CoreWeave, Lambda Labs
-- Models: foundation model builders (MSFT/OpenAI, GOOGL/Gemini, META/Llama, AMZN/Bedrock) plus private: OpenAI, Anthropic, xAI, Mistral, Cohere
-- Application: enterprise SaaS using AI (CRM, ADBE, PLTR, CRWD, NOW, etc.) plus private: Databricks, Scale AI, Figma, Canva
-
-Example supply chains: ED -> NVDA -> AMZN -> Anthropic -> Palantir, CEG -> TSM -> NVDA -> CoreWeave -> OpenAI -> Salesforce
-
-Spotlight targets:
-- watchlist-ai-view-toggle — view toggle buttons area
-- watchlist-ai-3d-btn — 3D Supply Chain button
-- watchlist-ai-list-btn — Ticker List button
-- watchlist-ai-3d-graph — the 3D graph container
-- watchlist-ai-energy — Energy layer tickers (list view)
-- watchlist-ai-chips — Chips layer tickers (list view)
-- watchlist-ai-infrastructure — Infrastructure layer tickers (list view)
-- watchlist-ai-models — Models layer tickers (list view)
-- watchlist-ai-application — Application layer tickers (list view)
-
-To show the 3D graph: navigate to watchlist, navigate_subtab to "ai", then switch_ai_view to "graph", then spotlight "watchlist-ai-3d-graph".
-To show a specific layer's tickers: navigate to watchlist, navigate_subtab to "ai", then switch_ai_view to "list", then spotlight the layer target.
-
-## Portfolio Tab targets:
-- portfolio-title — Portfolio heading
-- portfolio-tape — Ticker tape widget
-- portfolio-chart — Advanced chart widget
-
-## Research Tab targets:
-- research-title — Research heading
-- research-industry-reports — Industry reports section
-- research-papers — Research papers section
-- research-conferences — Conferences section
-- research-student-awards — Student awards section
-- research-books — Books section
-- research-economics — Economics research
-- research-asset-pricing — Empirical asset pricing research
-- research-trading — Trading research
-- research-useful-resources — Useful resources and links
-- research-hedge-fund-filings — SEC 13F hedge fund filings
-
-## Teaching Tab targets:
-- teaching-title — Teaching heading
-- teaching-grad-appointments — Graduate teaching appointments section
-- teaching-chicago-booth — University of Chicago Booth
-- teaching-pace — Pace University section
-- teaching-pace-courses — Pace University course list
-- teaching-columbia — Columbia University section
-- teaching-columbia-courses — Columbia course list
-- teaching-precollege — Pre-college teaching section
-- teaching-ai4all — AI4ALL free resources section
-- teaching-udemy-courses — Udemy course list
-- teaching-packt-courses — Packt publisher courses
-- teaching-software-engineer — Software engineering / MLOps section
-- teaching-textbooks — AI and ML textbooks table
-- teaching-collected-notes — Collected notes table
-
-ABOUT YIQIAO YIN:
-- Principal AI Engineer at FICO
-- Previously Tech Lead at Vertex Inc, Senior ML Engineer at LabCorp, Data Scientist at Bayer, Quantitative Researcher at AQR, Equity Trader at T3 Trading
-- PhD student in Statistics at Columbia University (2020-2021), BA in Mathematics and MS in Finance from University of Rochester
-- Runs W.Y.N. Associates LLC (passion project)
-- Teaches at University of Chicago Booth (Chief AI Officer Program), Pace University (CS 676, CS 668, CS 667), Columbia University
-- Published researcher in representation learning, deep learning, computer vision, NLP
-- Author of multiple books on Amazon
-- Monetized YouTube channel
-
-BEHAVIOR RULES:
-1. Your ENTIRE output must be ONLY the JSON object. NEVER include any text outside the JSON. No "Here is", no explanations, no markdown — ONLY the raw JSON object starting with { and ending with }.
-2. When the user asks to see or navigate to something, include the appropriate navigate/spotlight actions.
-3. When navigating to a sub-tab (like AI watchlist), first navigate to the parent tab, then navigate_subtab, then spotlight.
-4. Add a short delay-friendly ordering: navigate first, then navigate_subtab, then spotlight.
-5. Be helpful, concise, and knowledgeable about the site content.
-6. If asked about something not on the site, answer helpfully but note it's not a specific section on the site.
-7. Keep replies conversational but brief (1-3 sentences typically).
-8. NEVER nest JSON inside the "reply" field. The "reply" field is plain text only.
-
-Example correct response:
-{"reply": "Yiqiao teaches at Pace University and Columbia. Let me show you.", "actions": [{"type": "navigate", "tab": "teaching"}, {"type": "spotlight", "target": "teaching-pace-courses"}]}
+Example: {"reply": "Yiqiao teaches at Pace University and Columbia. Let me show you.", "actions": [{"type": "navigate", "tab": "teaching"}, {"type": "spotlight", "target": "teaching-pace-courses"}]}
 """
 
 
@@ -157,10 +146,38 @@ def lambda_handler(event, context):
         if not messages:
             return _response(400, {"error": "No messages provided"})
 
+        # Get the latest user message
+        last_user_msg = ""
+        for msg in reversed(messages):
+            if msg.get("role") == "user":
+                last_user_msg = msg.get("content", "")
+                break
+
+        # Retrieve relevant knowledge chunks from S3
+        relevant_chunks = _retrieve_chunks(last_user_msg)
+        knowledge_text = ""
+        if relevant_chunks:
+            parts = []
+            for chunk in relevant_chunks:
+                parts.append(f"[{chunk.get('topic', 'unknown')}] {chunk.get('content', '')}")
+            knowledge_text = "\n".join(parts)
+
+        # Search DuckDuckGo for supplemental context
+        search_context = ""
+        if last_user_msg:
+            search_context = _ddg_search(last_user_msg)
+
+        # Build the full system prompt
+        system = SYSTEM_PROMPT
+        if knowledge_text:
+            system += f"\n\nKNOWLEDGE CONTEXT (from site content — use this to answer site-related questions):\n{knowledge_text}"
+        if search_context:
+            system += f"\n\nSEARCH CONTEXT (from DuckDuckGo — use for general knowledge questions):\n{search_context}"
+
         payload = {
             "anthropic_version": "bedrock-2023-05-31",
             "max_tokens": 1024,
-            "system": SYSTEM_PROMPT,
+            "system": system,
             "messages": messages,
         }
 
@@ -185,7 +202,6 @@ def lambda_handler(event, context):
 
 def _extract_json(text):
     """Extract a valid JSON object with 'reply' and 'actions' from model output."""
-    # 1. Try parsing the entire text as JSON
     try:
         parsed = json.loads(text)
         if isinstance(parsed, dict) and "reply" in parsed:
@@ -193,8 +209,6 @@ def _extract_json(text):
     except (json.JSONDecodeError, TypeError):
         pass
 
-    # 2. Try to find a JSON object embedded in the text
-    # Look for the outermost { ... } that contains "reply"
     brace_positions = [m.start() for m in re.finditer(r'\{', text)]
     for start in brace_positions:
         depth = 0
@@ -213,7 +227,6 @@ def _extract_json(text):
                     pass
                 break
 
-    # 3. Fallback: return raw text as reply
     return {"reply": text, "actions": []}
 
 

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-const TABS = ['Home', 'Market', 'Watchlist', 'Portfolio', 'Research', 'Teaching'];
+const TABS = ['Home', 'Market', 'Watchlist', 'Portfolio', 'Letters', 'Research', 'Teaching'];
 
 export default function Navbar({ onTabChange, activeTab }) {
   const [menuOpen, setMenuOpen] = useState(false);
