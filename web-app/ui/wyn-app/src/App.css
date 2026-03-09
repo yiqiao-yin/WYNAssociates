@@ -1,3 +1,8 @@
+/* ===== App wrapper — shrinks when chatbot sidebar opens ===== */
+.app-wrapper {
+    transition: margin-right 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 /* ===== Mobile-first base styles ===== */
 body {
     margin: 0;
@@ -539,6 +544,11 @@ li {
         right: 0;
     }
 
+    /* Shrink main content when chat sidebar is open */
+    .app-wrapper.chat-open {
+        margin-right: 400px;
+    }
+
     .chatbot-overlay {
         display: none;
     }
@@ -583,5 +593,10 @@ li {
     }
     #chatbot-panel.open {
         right: 0;
+    }
+
+    /* Shrink main content when chat sidebar is open */
+    .app-wrapper.chat-open {
+        margin-right: 420px;
     }
 }

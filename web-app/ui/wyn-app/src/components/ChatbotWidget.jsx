@@ -37,8 +37,13 @@ const SpeakerIcon = ({ playing }) => (
   </svg>
 );
 
-export default function ChatbotWidget({ onTabChange, activeTab }) {
+export default function ChatbotWidget({ onTabChange, activeTab, onOpenChange }) {
   const [open, setOpen] = useState(false);
+
+  const toggleOpen = (val) => {
+    setOpen(val);
+    onOpenChange?.(val);
+  };
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
@@ -130,7 +135,29 @@ export default function ChatbotWidget({ onTabChange, activeTab }) {
         body: JSON.stringify({ messages: updated }),
       });
 
-      const data = await res.json();
+      const raw = await res.json();
+      // Recursively unwrap until we get { reply: "<plain text>", actions: [...] }
+      const unwrap = (d) => {
+        if (typeof d === 'string') {
+          try { return unwrap(JSON.parse(d)); } catch { return { reply: d, actions: [] }; }
+        }
+        if (d && typeof d === 'object') {
+          // API Gateway wrapper: { statusCode, body: "..." }
+          if (typeof d.body === 'string') {
+            try { return unwrap(JSON.parse(d.body)); } catch { /* fall through */ }
+          }
+          // reply itself might be a JSON string with reply/actions
+          if (typeof d.reply === 'string' && d.reply.trim().startsWith('{')) {
+            try {
+              const inner = JSON.parse(d.reply);
+              if (inner && typeof inner.reply === 'string') return unwrap(inner);
+            } catch { /* reply is plain text */ }
+          }
+          if (typeof d.reply === 'string') return d;
+        }
+        return { reply: String(d), actions: [] };
+      };
+      const data = unwrap(raw);
       const reply = data.reply || 'Sorry, I could not process that.';
       const actions = data.actions || [];
 
@@ -168,10 +195,10 @@ export default function ChatbotWidget({ onTabChange, activeTab }) {
   return (
     <>
       {/* Overlay for mobile */}
-      {open && <div className="chatbot-overlay" onClick={() => setOpen(false)} />}
+      {open && <div className="chatbot-overlay" onClick={() => toggleOpen(false)} />}
 
       {!open && (
-        <button id="chatbot-toggle" onClick={() => setOpen(true)} aria-label="Open WYN Assistant">
+        <button id="chatbot-toggle" onClick={() => toggleOpen(true)} aria-label="Open WYN Assistant">
           <BotIcon />
         </button>
       )}
@@ -182,7 +209,7 @@ export default function ChatbotWidget({ onTabChange, activeTab }) {
             <BotIcon />
             <strong>WYN Assistant</strong>
           </div>
-          <button className="chatbot-close-btn" onClick={() => setOpen(false)} aria-label="Close WYN Assistant">
+          <button className="chatbot-close-btn" onClick={() => toggleOpen(false)} aria-label="Close WYN Assistant">
             <CloseIcon />
           </button>
         </div>

@@ -11,9 +11,10 @@ import TeachingTab from './components/tabs/TeachingTab';
 
 function App() {
   const [activeTab, setActiveTab] = useState('home');
+  const [chatOpen, setChatOpen] = useState(false);
 
   return (
-    <>
+    <div className={`app-wrapper${chatOpen ? ' chat-open' : ''}`}>
       <Navbar onTabChange={setActiveTab} activeTab={activeTab} />
 
       <div id="home" className={`tab-content${activeTab === 'home' ? ' active' : ''}`}>
@@ -42,8 +43,8 @@ function App() {
         <p>&copy; 2010–{new Date().getFullYear()} Yiqiao Yin. All rights reserved.</p>
       </footer>
 
-      <ChatbotWidget onTabChange={setActiveTab} activeTab={activeTab} />
-    </>
+      <ChatbotWidget onTabChange={setActiveTab} activeTab={activeTab} onOpenChange={setChatOpen} />
+    </div>
   );
 }
 
