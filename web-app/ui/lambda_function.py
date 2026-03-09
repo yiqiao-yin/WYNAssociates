@@ -131,10 +131,13 @@ Teaching: teaching-title, teaching-grad-appointments, teaching-chicago-booth, te
 2. Use navigate/spotlight actions when user asks to see something.
 3. Use KNOWLEDGE CONTEXT below to answer questions about the site.
 4. If SEARCH CONTEXT is provided, use it for general knowledge questions not covered by the site.
-5. Keep replies conversational, brief (1-3 sentences). Replies are spoken aloud via TTS, so keep them natural.
+5. Keep replies conversational, brief (1-3 sentences). Replies are spoken aloud via TTS, so keep them natural and self-contained.
 6. NEVER nest JSON in the "reply" field — plain text only.
+7. NEVER use bullet points, dashes, numbered lists, or newlines in the "reply" field. Write everything as flowing prose in one paragraph. Do NOT end a reply with a colon.
+8. The "reply" must be a COMPLETE sentence or thought. Never leave it dangling or incomplete.
 
 Example: {"reply": "Yiqiao teaches at Pace University and Columbia. Let me show you.", "actions": [{"type": "navigate", "tab": "teaching"}, {"type": "spotlight", "target": "teaching-pace-courses"}]}
+Example: {"reply": "Yiqiao has published papers in Nature Scientific Reports, arXiv, and Artificial Intelligence in Medicine, covering topics like neural networks, Green AI, and cognitive impairment detection. Let me take you to the Research tab.", "actions": [{"type": "navigate", "tab": "research"}, {"type": "spotlight", "target": "research-papers"}]}
 """
 
 
@@ -202,13 +205,25 @@ def lambda_handler(event, context):
 
 def _extract_json(text):
     """Extract a valid JSON object with 'reply' and 'actions' from model output."""
+    # Try direct parse first
+    for attempt in (text, text.strip()):
+        try:
+            parsed = json.loads(attempt)
+            if isinstance(parsed, dict) and "reply" in parsed:
+                return parsed
+        except (json.JSONDecodeError, TypeError):
+            pass
+
+    # Try fixing unescaped newlines inside JSON strings
+    sanitized = re.sub(r'(?<=": ")(.*?)(?="[,}])', lambda m: m.group(0).replace('\n', ' ').replace('\r', ''), text, flags=re.DOTALL)
     try:
-        parsed = json.loads(text)
+        parsed = json.loads(sanitized)
         if isinstance(parsed, dict) and "reply" in parsed:
             return parsed
     except (json.JSONDecodeError, TypeError):
         pass
 
+    # Brace-matching fallback
     brace_positions = [m.start() for m in re.finditer(r'\{', text)]
     for start in brace_positions:
         depth = 0
@@ -219,12 +234,14 @@ def _extract_json(text):
                 depth -= 1
             if depth == 0:
                 candidate = text[start:i + 1]
-                try:
-                    parsed = json.loads(candidate)
-                    if isinstance(parsed, dict) and "reply" in parsed:
-                        return parsed
-                except (json.JSONDecodeError, TypeError):
-                    pass
+                # Try raw, then sanitized
+                for c in (candidate, candidate.replace('\n', ' ').replace('\r', '')):
+                    try:
+                        parsed = json.loads(c)
+                        if isinstance(parsed, dict) and "reply" in parsed:
+                            return parsed
+                    except (json.JSONDecodeError, TypeError):
+                        pass
                 break
 
     return {"reply": text, "actions": []}
