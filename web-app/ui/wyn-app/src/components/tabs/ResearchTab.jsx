@@ -26,6 +26,7 @@ export default function ResearchTab() {
           <ul>
             <li><h5 data-spotlight="research-papers">Papers</h5></li>
             <ul>
+              <li>2026-03 | <i><strong>Yiqiao Yin</strong></i> (2026), Rethink context engineering using an attention-based architecture, <em>Scientific Reports</em>: [<a href="https://www.nature.com/articles/s41598-026-43111-9">Print</a>]</li>
               <li>2026-02 | <i><strong>Yiqiao Yin</strong></i> (2026), Use large language model to enhance reasoning of another large language model through reward updated GRPO, <em>Scientific Reports</em>: [<a href="https://www.nature.com/articles/s41598-026-39296-8">Print</a>]</li>
               <li>2024-04 | <i><strong>Yiqiao Yin</strong></i> (2024), Vision Augmentation Prediction Autoencoder with Attention Design (VAPAAD), <em>arXiv preprint arXiv:2404.10096</em>: [<a href="https://arxiv.org/abs/2404.10096">ArXiv</a>]</li>
               <li>2024-04 | Vivian Liu, <i><strong>Yiqiao Yin</strong></i> (2024), Green AI: Exploring Carbon Footprints, Mitigation Strategies, and Trade Offs in Large Language Model Training, <em>arXiv preprint arXiv:2404.01157</em>: [<a href="https://link.springer.com/article/10.1007/s44163-024-00149-w">Print</a>, <a href="https://arxiv.org/abs/2404.01157">ArXiv</a>]</li>
